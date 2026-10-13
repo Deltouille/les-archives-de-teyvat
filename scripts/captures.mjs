@@ -25,10 +25,61 @@ const THEMES = ['clair', 'sombre'];
 
 // Une scène : une page, des actions éventuelles, puis une capture (pleine page ou fenêtre) et des vérifications.
 // `tabulations` : nombre de vraies frappes de Tab envoyées après les actions (un .focus() par script ne déclenche pas
-// :focus-visible). `verifier` est du JavaScript évalué dans la page, qui renvoie la liste des problèmes (vide si tout va bien).
+// :focus-visible). `mouvement: true` : pas d'émulation du mouvement réduit (pour tester une animation). `verifier` est du JavaScript évalué dans la page, qui renvoie la liste des problèmes (vide si tout va bien).
 const SCENES = [
   { nom: 'accueil', url: '/' },
   { nom: 'demo', url: '/demo', largeurs: [1440, 390] },
+  {
+    nom: 'accueil-haut',
+    url: '/',
+    fenetre: true,
+    verifier: `(() => document.querySelector('[data-navbar]').hasAttribute('data-sur-image') ? [] : ['la barre devrait être transparente sur la bannière d’accueil'])()`,
+  },
+  {
+    nom: 'machine-a-ecrire',
+    url: '/',
+    largeurs: [1440],
+    fenetre: true,
+    mouvement: true,
+    actions: `
+      const sujet = () => document.querySelector('[data-sujets]').textContent;
+      window.__debut = sujet();
+      // On attend que le texte soit en train de s'écrire (deux relevés successifs différents) : cliquer pendant
+      // une attente entre deux sujets ne prouverait rien, le texte y est immobile de toute façon.
+      let precedent = sujet();
+      for (let t = 0; t < 8000; t += 20) { await attendre(20); if (sujet() !== precedent) break; precedent = sujet(); }
+      window.__apres = sujet();
+      document.querySelector('[data-pause]').click();
+      window.__fige = sujet();
+      await attendre(1500);
+      window.__toujours = sujet();`,
+    verifier: `(() => {
+      const p = [];
+      const machine = document.querySelector('[data-machine]');
+      const pause = machine.querySelector('[data-pause]');
+      if (pause.hidden) p.push('le bouton pause devrait être visible pendant l’animation');
+      if (window.__apres === window.__debut) p.push('le sujet devrait changer');
+      if (window.__toujours !== window.__fige) p.push('la pause devrait figer le texte (' + window.__fige + ' → ' + window.__toujours + ')');
+      if (pause.getAttribute('aria-pressed') !== 'true') p.push('aria-pressed devrait passer à true en pause');
+      if (getComputedStyle(machine.querySelector('[data-sujets] + span')).animationName !== 'none') p.push('le curseur ne devrait plus clignoter en pause');
+      return p;
+    })()`,
+  },
+  {
+    nom: 'machine-a-ecrire-mouvement-reduit',
+    url: '/',
+    largeurs: [1440],
+    fenetre: true,
+    actions: `await attendre(3500);`,
+    verifier: `(() => {
+      const p = [];
+      const machine = document.querySelector('[data-machine]');
+      if (machine.querySelector('[data-sujets]').textContent !== 'les sept Archontes') p.push('en mouvement réduit, le premier sujet devrait rester affiché');
+      if (!machine.querySelector('[data-pause]').hidden) p.push('sans animation, pas de bouton pause');
+      if (getComputedStyle(machine.querySelector('[data-sujets] + span')).animationName !== 'none') p.push('le curseur ne devrait pas clignoter');
+      return p;
+    })()`,
+  },
   { nom: 'bibliotheque', url: '/lore' },
   { nom: 'article', url: '/lore/venti' },
   {
@@ -212,7 +263,7 @@ try {
         const hauteurFenetre = largeur < 600 ? 844 : 900;
         await cdp.envoyer('Emulation.setDeviceMetricsOverride', { width: largeur, height: hauteurFenetre, deviceScaleFactor: 1, mobile: largeur < 600 });
         // Mouvement réduit : les transitions sont instantanées, la capture ne tombe pas au milieu d'une animation.
-        await cdp.envoyer('Emulation.setEmulatedMedia', { features: [{ name: 'prefers-color-scheme', value: theme === 'sombre' ? 'dark' : 'light' }, { name: 'prefers-reduced-motion', value: 'reduce' }] });
+        await cdp.envoyer('Emulation.setEmulatedMedia', { features: [{ name: 'prefers-color-scheme', value: theme === 'sombre' ? 'dark' : 'light' }, { name: 'prefers-reduced-motion', value: scene.mouvement ? 'no-preference' : 'reduce' }] });
         // En dev, Vite peut recharger la page au premier passage (optimisation des dépendances) : on rejoue la scène.
         let trouves;
         for (let essai = 1; ; essai++) {
@@ -239,6 +290,8 @@ try {
         if (!scene.fenetre) {
           const { cssContentSize } = await cdp.envoyer('Page.getLayoutMetrics');
           await cdp.envoyer('Emulation.setDeviceMetricsOverride', { width: largeur, height: Math.ceil(cssContentSize.height), deviceScaleFactor: 1, mobile: largeur < 600 });
+          // Les images en loading="lazy" ne partent qu'une fois la fenêtre agrandie : on attend qu'elles soient toutes là.
+          await evaluer(cdp, `Promise.race([Promise.all([...document.images].map(i => i.complete ? null : new Promise(r => { i.onload = i.onerror = r; }))), new Promise(r => setTimeout(r, 5000))]).then(() => new Promise(r => setTimeout(r, 100)))`);
         }
         const { data } = await cdp.envoyer('Page.captureScreenshot', { format: 'png' });
         const octets = Buffer.from(data, 'base64');

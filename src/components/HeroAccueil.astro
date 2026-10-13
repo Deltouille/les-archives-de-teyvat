@@ -1,0 +1,83 @@
+---
+import Icon from './Icon.astro';
+import Banniere from './Banniere.astro';
+import { cheminTag, imageDe } from '../lib/contenu';
+
+interface Props { lectures: number; themes: number; }
+const { lectures, themes } = Astro.props;
+
+// Sujets de la machine à écrire. Le premier est écrit en dur dans le HTML : c'est ce que lisent les moteurs,
+// les visiteurs sans JavaScript et ceux qui demandent moins d'animations.
+const sujets = ['les sept Archontes', 'le Cataclysme', 'l’Ordre de l’Abysse', 'la liberté de Mondstadt', 'les pas du Voyageur'];
+// Un lecteur d'écran lit la phrase entière une fois, jamais les lettres qui défilent.
+const phrase = `${sujets.slice(0, -1).join(', ')} et ${sujets.at(-1)}`;
+const bouton = 'text-etiquette-g inline-flex h-12 items-center justify-center gap-2 rounded-full px-6 transition-colors duration-200 ease-standard';
+---
+<Banniere image={imageDe('fond-d-ecran')} titre="accueil-titre" class="h-[clamp(37.5rem,100svh,68.75rem)]">
+  {/* pt-28 : la barre de navigation fixe (64 px) recouvre le haut de la bannière. */}
+  <div class="mx-auto mt-auto w-full max-w-site px-4 pt-28 pb-32 sm:px-6 md:pb-44 lg:px-10">
+    <p class="sur-titre flex items-center gap-2 text-ambre"><Icon nom="etincelle" taille={16} /> Bienvenue, voyageur</p>
+    <h1 id="accueil-titre" class="mt-4 mb-6 max-w-[14ch] text-shadow-lg [&_em]:text-ciel">Chaque voyage commence par une <em>histoire.</em></h1>
+
+    <p class="group/machine text-titre-g flex min-h-8 flex-wrap items-center gap-x-1 text-white/85" data-machine>
+      <span>Ici, on vous raconte <span class="sr-only">{phrase}.</span></span>
+      <span class="font-semibold text-white" aria-hidden="true" data-sujets={JSON.stringify(sujets)}>{sujets[0]}</span>
+      {/* Curseur : il ne clignote que pendant l'animation, jamais en pause ni en mouvement réduit. */}
+      <span class="inline-block h-[1.1em] w-0.5 bg-ambre group-data-[anime]/machine:animate-clignote" aria-hidden="true"></span>
+      {/* WCAG 2.2.2 : une animation de plus de 5 secondes doit pouvoir être mise en pause. Révélé par le script
+           seulement si l'animation tourne. Libellé fixe, l'état passe par aria-pressed. */}
+      <button type="button" class="ml-2 grid size-10 place-items-center rounded-full border border-white/20 bg-white/8 text-white backdrop-blur-md transition-colors hover:bg-white/16" aria-label="Pause de l’animation" aria-pressed="false" data-pause hidden>
+        <Icon nom="pause" taille={20} class="group-data-[pause]/machine:hidden" />
+        <Icon nom="lecture" taille={20} class="hidden group-data-[pause]/machine:block" />
+      </button>
+    </p>
+
+    <div class="mt-8 flex flex-col gap-3 sm:flex-row">
+      <a class:list={[bouton, 'bg-ciel text-nuit hover:bg-ciel-clair']} href={cheminTag('premiers-pas')}>Commencer le voyage <Icon nom="fleche" taille={20} /></a>
+      <a class:list={[bouton, 'border border-white/25 bg-white/10 text-white backdrop-blur-md hover:bg-white/20']} href="/lore">Explorer le lore</a>
+    </div>
+
+    <ul class="text-corps-m mt-10 flex gap-8 text-white/75" aria-label="En quelques chiffres" data-chiffres>
+      <li><strong class="text-grand-titre-g block font-serif font-medium text-white">{lectures}</strong> lectures</li>
+      <li><strong class="text-grand-titre-g block font-serif font-medium text-white">{themes}</strong> thèmes</li>
+      <li><strong class="text-grand-titre-g block font-serif font-medium text-white">7</strong> nations</li>
+    </ul>
+  </div>
+
+  {/* Flèche fixe : l'ancienne flèche flottante bougeait sans fin (WCAG 2.2.2), pour un simple repère. */}
+  <a class="absolute bottom-24 left-1/2 hidden size-11 -translate-x-1/2 place-items-center rounded-full border border-white/25 bg-white/8 text-white backdrop-blur-sm transition-colors hover:bg-white/16 md:grid" href="#contenu" aria-label="Aller au contenu"><Icon nom="chevron" taille={22} class="rotate-90" /></a>
+</Banniere>
+
+<script>
+  // Machine à écrire, façon Mizuki. Rien ne bouge si le visiteur demande moins d'animations.
+  const machine = document.querySelector<HTMLElement>('[data-machine]');
+  const cible = machine?.querySelector<HTMLElement>('[data-sujets]');
+  const pause = machine?.querySelector<HTMLButtonElement>('[data-pause]');
+  if (machine && cible && pause && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    const sujets: string[] = JSON.parse(cible.dataset.sujets ?? '[]');
+    let enPause = false;
+    let reprendre: () => void = () => {};
+    const attendre = (ms: number) => new Promise<void>(r => setTimeout(r, ms));
+    // Attente qui se prolonge tant que l'animation est en pause.
+    const pas = async (ms: number) => { await attendre(ms); while (enPause) await new Promise<void>(r => { reprendre = r; }); };
+    pause.hidden = false;
+    machine.toggleAttribute('data-anime', true);
+    pause.addEventListener('click', () => {
+      enPause = !enPause;
+      pause.setAttribute('aria-pressed', String(enPause));
+      machine.toggleAttribute('data-pause', enPause);
+      machine.toggleAttribute('data-anime', !enPause);
+      if (!enPause) reprendre();
+    });
+    (async () => {
+      let i = 0;
+      for (;;) {
+        await pas(2600);
+        for (let n = sujets[i].length; n >= 0; n--) { cible.textContent = sujets[i].slice(0, n); await pas(28); }
+        i = (i + 1) % sujets.length;
+        await pas(250);
+        for (let n = 1; n <= sujets[i].length; n++) { cible.textContent = sujets[i].slice(0, n); await pas(62); }
+      }
+    })();
+  }
+</script>

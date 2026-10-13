@@ -37,7 +37,11 @@ export async function bibliotheque() {
   validerContenus(tous, tags, new Set(Object.keys(images)));
   const articles = articlesPublies(tous, { dev: import.meta.env.DEV });
   const parId = new Map(tags.map(t => [t.id, t]));
-  const tag = (id: string) => parId.get(id)!;
+  const tag = (id: string) => {
+    const trouve = parId.get(id);
+    if (!trouve) throw new Error(`Tag inconnu « ${id} » : déclarez-le dans src/content/tags.yaml`);
+    return trouve;
+  };
   return {
     articles,
     tags,

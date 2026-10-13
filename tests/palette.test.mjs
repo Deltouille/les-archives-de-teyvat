@@ -1,7 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
-import { genererPalette, cssPalette, contraste, CHEMIN_CSS } from '../scripts/palette.mjs';
+import { genererPalette, cssPalette, contraste, CHEMIN_CSS, PERSONNALISEES } from '../scripts/palette.mjs';
 
 const palette = genererPalette();
 
@@ -21,10 +21,9 @@ const PAIRES = [
   ['sur-primaire', 'primaire', 4.5],
   ['sur-tonal', 'tonal', 4.5],
   ['sur-conteneur-primaire', 'conteneur-primaire', 4.5],
-  ['or', 'fond', 4.5],
-  ['or', 'surface', 4.5],
-  ['sur-or', 'or', 4.5],
-  ['sur-conteneur-or', 'conteneur-or', 4.5],
+  ['sur-conteneur-tertiaire', 'conteneur-tertiaire', 4.5],
+  // Chaque couleur personnalisée : lisible en texte sur le fond, et ses rôles « sur » lisibles sur leur conteneur.
+  ...Object.keys(PERSONNALISEES).flatMap(c => [[c, 'fond', 4.5], [c, 'surface', 4.5], [`sur-${c}`, c, 4.5], [`sur-conteneur-${c}`, `conteneur-${c}`, 4.5]]),
   ['contour', 'fond', 3],
   ['contour', 'surface', 3],
 ];

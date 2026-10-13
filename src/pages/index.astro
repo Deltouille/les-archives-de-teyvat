@@ -1,24 +1,55 @@
 ---
-// Accueil provisoire : la vraie page d'accueil (bannière, sections) arrive à l'étape 5 du plan.
-// Il appelle déjà bibliotheque(), ce qui fait passer la validation du contenu à chaque build.
 import Site from '../layouts/Site.astro';
+import Icon from '../components/Icon.astro';
+import HeroAccueil from '../components/HeroAccueil.astro';
+import EnTeteSection from '../components/EnTeteSection.astro';
+import CarteALaUne from '../components/CarteALaUne.astro';
+import CartePremiersPas from '../components/CartePremiersPas.astro';
+import TuileTheme from '../components/TuileTheme.astro';
+import GrilleArticles from '../components/GrilleArticles.astro';
+import BandeauTags from '../components/BandeauTags.astro';
 import { bibliotheque } from '../lib/contenu';
-import { dateFr } from '../lib/bibliotheque.mjs';
 
-const { articles, themeDe } = await bibliotheque();
+const { articles, themes, tag, avecTag } = await bibliotheque();
+
+// Choix éditoriaux de l'accueil. Un identifiant inconnu fait échouer le build (tag() et la recherche ci-dessous).
+const A_LA_UNE = 'mondstadt';
+const aLaUne = articles.find(a => a.id === A_LA_UNE);
+if (!aLaUne) throw new Error(`Article « à la une » introuvable : src/content/articles/${A_LA_UNE}.md (cf. src/pages/index.astro)`);
+// Quatre entrées par thème, chacune avec une teinte M3 (conteneur + « sur ») pour les distinguer d'un coup d'œil.
+const entrees = [
+  { id: 'quetes', accroche: 'Revivez l’aventure', teinte: 'bg-conteneur-primaire text-sur-conteneur-primaire' },
+  { id: 'concepts', accroche: 'Reliez les idées', teinte: 'bg-conteneur-tertiaire text-sur-conteneur-tertiaire' },
+  { id: 'personnages', accroche: 'Rencontrez leurs histoires', teinte: 'bg-conteneur-or text-sur-conteneur-or' },
+  { id: 'regions', accroche: 'Parcourez les nations', teinte: 'bg-conteneur-jade text-sur-conteneur-jade' },
+];
+const NOMBRE_RECENTS = 6;
+const recents = articles.slice(0, NOMBRE_RECENTS);
 ---
-<Site titre="Accueil">
-  <p class="sur-titre">Bienvenue, voyageur</p>
-  <h1 class="mt-2">L’Histoire de Genshin</h1>
-  <p class="mt-4 max-w-prose text-discret">Le lore de Genshin Impact, raconté simplement. Le site est en cours de reconstruction.</p>
-  <h2 class="mt-12 mb-4">{articles.length} lectures</h2>
-  <ul class="space-y-3" data-articles>
-    {articles.map(article => (
-      <li class="rounded-grand bg-surface p-4">
-        <span class="pastille">{themeDe(article).data.singulier}</span>
-        <strong class="text-titre-m mt-2 block">{article.data.titre}</strong>
-        <span class="text-corps-m text-discret">{dateFr(article.data.publieLe)}</span>
-      </li>
-    ))}
-  </ul>
+<Site titre="Les histoires de Teyvat commencent ici">
+  <HeroAccueil slot="hero" lectures={articles.length} themes={themes.length} />
+
+  <EnTeteSection surTitre="À la une" titre="Par où commencer ?" class="mt-4" />
+  <section class="grid gap-4 md:grid-cols-[minmax(0,1.7fr)_minmax(16rem,1fr)] lg:gap-6" aria-label="À découvrir" data-a-la-une>
+    <CarteALaUne article={aLaUne} badge="Carnet de voyage" surTitre="Là où le vent nous mène" titre="La liberté a une histoire." chapeau="Entrez dans Mondstadt, la cité où les dieux laissent les hommes choisir leur chemin." action="Découvrir Mondstadt" />
+    <CartePremiersPas lectures={avecTag('premiers-pas').length} />
+  </section>
+
+  <section aria-labelledby="explorer-titre">
+    <EnTeteSection surTitre="Suivez votre curiosité" titre="Une envie d’explorer ?" id="explorer-titre">
+      <a class="lien-texte shrink-0" href="/lore">Toute la bibliothèque <Icon nom="fleche" taille={18} /></a>
+    </EnTeteSection>
+    <div class="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4" data-entrees>
+      {entrees.map(({ id, accroche, teinte }) => <TuileTheme theme={tag(id)} accroche={accroche} teinte={teinte} />)}
+    </div>
+  </section>
+
+  <section aria-labelledby="recents-titre">
+    <EnTeteSection surTitre="Il était une fois Teyvat" titre="Des histoires à découvrir" id="recents-titre">
+      {articles.length > NOMBRE_RECENTS && <a class="lien-texte shrink-0" href="/lore">Les {articles.length} lectures <Icon nom="fleche" taille={18} /></a>}
+    </EnTeteSection>
+    <GrilleArticles articles={recents} />
+  </section>
+
+  <BandeauTags />
 </Site>

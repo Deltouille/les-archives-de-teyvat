@@ -1,11 +1,11 @@
 /* Généré par scripts/palette.mjs depuis #355f98 : ne pas modifier à la main (npm run palette). */
 
-:root { color-scheme: light; --fond: #f9f9ff; --surface: #f3f3fa; --doux: #e7e8ee; --tonal: #d9e3f8; --sur-tonal: #3d4758; --ligne: #c4c6cf; --contour: #74777f; --texte: #191c20; --discret: #43474e; --primaire: #3e5f90; --sur-primaire: #ffffff; --conteneur-primaire: #d5e3ff; --sur-conteneur-primaire: #244777; --or: #7d571d; --sur-or: #ffffff; --conteneur-or: #ffddb3; --sur-conteneur-or: #291800; }
+:root { color-scheme: light; --fond: #f9f9ff; --surface: #f3f3fa; --doux: #e7e8ee; --tonal: #d9e3f8; --sur-tonal: #3d4758; --ligne: #c4c6cf; --contour: #74777f; --texte: #191c20; --discret: #43474e; --primaire: #3e5f90; --sur-primaire: #ffffff; --conteneur-primaire: #d5e3ff; --sur-conteneur-primaire: #244777; --conteneur-tertiaire: #f8d8fe; --sur-conteneur-tertiaire: #553e5d; --or: #7d571d; --sur-or: #ffffff; --conteneur-or: #ffddb3; --sur-conteneur-or: #291800; --jade: #3b6755; --sur-jade: #ffffff; --conteneur-jade: #bdedd6; --sur-conteneur-jade: #002116; }
 /* Sans JavaScript, data-theme est absent : on suit alors la préférence système. */
 @media (prefers-color-scheme: dark) {
-  :root:not([data-theme]) { color-scheme: dark; --fond: #111318; --surface: #191c20; --doux: #282a2f; --tonal: #3d4758; --sur-tonal: #d9e3f8; --ligne: #43474e; --contour: #8e9199; --texte: #e1e2e9; --discret: #c4c6cf; --primaire: #a7c8ff; --sur-primaire: #03305f; --conteneur-primaire: #244777; --sur-conteneur-primaire: #d5e3ff; --or: #f0be7a; --sur-or: #452b00; --conteneur-or: #624005; --sur-conteneur-or: #ffddb3; }
+  :root:not([data-theme]) { color-scheme: dark; --fond: #111318; --surface: #191c20; --doux: #282a2f; --tonal: #3d4758; --sur-tonal: #d9e3f8; --ligne: #43474e; --contour: #8e9199; --texte: #e1e2e9; --discret: #c4c6cf; --primaire: #a7c8ff; --sur-primaire: #03305f; --conteneur-primaire: #244777; --sur-conteneur-primaire: #d5e3ff; --conteneur-tertiaire: #553e5d; --sur-conteneur-tertiaire: #f8d8fe; --or: #f0be7a; --sur-or: #452b00; --conteneur-or: #624005; --sur-conteneur-or: #ffddb3; --jade: #a2d1bb; --sur-jade: #073828; --conteneur-jade: #234f3e; --sur-conteneur-jade: #bdedd6; }
 }
-:root[data-theme="dark"] { color-scheme: dark; --fond: #111318; --surface: #191c20; --doux: #282a2f; --tonal: #3d4758; --sur-tonal: #d9e3f8; --ligne: #43474e; --contour: #8e9199; --texte: #e1e2e9; --discret: #c4c6cf; --primaire: #a7c8ff; --sur-primaire: #03305f; --conteneur-primaire: #244777; --sur-conteneur-primaire: #d5e3ff; --or: #f0be7a; --sur-or: #452b00; --conteneur-or: #624005; --sur-conteneur-or: #ffddb3; }
+:root[data-theme="dark"] { color-scheme: dark; --fond: #111318; --surface: #191c20; --doux: #282a2f; --tonal: #3d4758; --sur-tonal: #d9e3f8; --ligne: #43474e; --contour: #8e9199; --texte: #e1e2e9; --discret: #c4c6cf; --primaire: #a7c8ff; --sur-primaire: #03305f; --conteneur-primaire: #244777; --sur-conteneur-primaire: #d5e3ff; --conteneur-tertiaire: #553e5d; --sur-conteneur-tertiaire: #f8d8fe; --or: #f0be7a; --sur-or: #452b00; --conteneur-or: #624005; --sur-conteneur-or: #ffddb3; --jade: #a2d1bb; --sur-jade: #073828; --conteneur-jade: #234f3e; --sur-conteneur-jade: #bdedd6; }
 
 @theme inline {
   /* Seules nos couleurs existent : la palette Tailwind (bg-blue-500…) est supprimée. */
@@ -23,10 +23,16 @@
   --color-sur-primaire: var(--sur-primaire);
   --color-conteneur-primaire: var(--conteneur-primaire);
   --color-sur-conteneur-primaire: var(--sur-conteneur-primaire);
+  --color-conteneur-tertiaire: var(--conteneur-tertiaire);
+  --color-sur-conteneur-tertiaire: var(--sur-conteneur-tertiaire);
   --color-or: var(--or);
   --color-sur-or: var(--sur-or);
   --color-conteneur-or: var(--conteneur-or);
   --color-sur-conteneur-or: var(--sur-conteneur-or);
+  --color-jade: var(--jade);
+  --color-sur-jade: var(--sur-jade);
+  --color-conteneur-jade: var(--conteneur-jade);
+  --color-sur-conteneur-jade: var(--sur-conteneur-jade);
 }
 
 @theme {

@@ -78,11 +78,12 @@ Chaque étape se termine seulement quand :
 - **Tests** : build — chaque lien et chaque ancre a une cible ; chaque article affiche ses tags et chaque tag a sa page ; encadrés absents quand vides ; captures.
 - **Décision** : D11.
 
-## Étape 5 — Page d'accueil
+## Étape 5 — Page d'accueil ✅
 
-- [ ] Hero plein écran plafonné, sur-titre, titre, machine à écrire (premier sujet en dur dans le HTML, immobile sous `prefers-reduced-motion`), boutons « Commencer le voyage » / « Explorer le lore », chiffres.
-- [ ] Sections « À la une », « Une envie d'explorer ? », « Des histoires à découvrir », bandeau vers les tags — en composants.
+- [x] Hero plein écran plafonné, sur-titre, titre, machine à écrire (premier sujet en dur dans le HTML, immobile sous `prefers-reduced-motion`), boutons « Commencer le voyage » / « Explorer le lore », chiffres.
+- [x] Sections « À la une », « Une envie d'explorer ? », « Des histoires à découvrir », bandeau vers les tags — en composants.
 - **Tests** : build (le premier sujet est dans le HTML, les boutons pointent vers des pages existantes, chiffres cohérents avec le contenu) ; captures, y compris en mouvement réduit.
+- **Décision** : D12.
 
 ## Étape 6 — Recherche
 
@@ -110,6 +111,6 @@ Chaque étape se termine seulement quand :
 À trancher quand l'étape concernée arrive ; la réponse va dans `decisions.md`.
 
 - ~~Parallaxe au défilement sur les bannières ?~~ Non par défaut, bannière fixe (D11).
-- Curseur clignotant et flèche flottante de l'accueil : garder ? (étape 5)
+- ~~Curseur clignotant et flèche flottante de l'accueil : garder ?~~ Curseur gardé pendant l'animation seulement, flèche fixe, bouton pause (D12).
 - ~~Ligne « fil d'Ariane / type » de l'article : pleine largeur ?~~ Alignée sur la colonne de lecture (D11).
 - Reprendre du site Nuxt : infobox des régions/personnages, listes curatées, mise en avant, page théories ? (après l'étape 8)

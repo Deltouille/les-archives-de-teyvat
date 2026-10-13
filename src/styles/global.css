@@ -60,6 +60,10 @@
   --ease-emphase-entree: cubic-bezier(0.05, 0.7, 0.1, 1);
   --ease-emphase-sortie: cubic-bezier(0.3, 0, 0.8, 0.15);
 
+  /* Curseur de la machine à écrire (accueil). */
+  --animate-clignote: clignote 1s steps(1) infinite;
+  @keyframes clignote { 50% { opacity: 0; } }
+
   /* Classes de fenêtre M3, en mobile d'abord : compacte < 600, moyenne (sm), étendue (md), grande (lg), très grande (xl). */
   --breakpoint-*: initial;
   --breakpoint-sm: 600px;

@@ -120,3 +120,20 @@
 - **Vérifié à la main** : sans `resume`, `spoilers` ni `sources`, les trois encadrés disparaissent et l'entrée « Sources dans le jeu » quitte le sommaire.
 - **Captures** : 74 captures (bibliothèque, article, index des tags, tag thème et simple, À propos, 404) ; nouvelles vérifications : barre transparente sur la bannière d'article, contour de focus sur une carte.
   - Piège découvert : un `.focus()` par script, même avec `focusVisible: true`, ne déclenche pas `:focus-visible` dans Brave headless. Les scènes peuvent maintenant envoyer de **vraies frappes de Tab** (`tabulations`, via `Input.dispatchKeyEvent`). Vérification vue en échec en retirant le contour de la carte.
+
+## D12 — Page d'accueil (13 oct. 2026)
+
+- **Structure reprise du prototype** (CDC §5) : bannière plein écran plafonnée (`clamp(37.5rem, 100svh, 68.75rem)`), sur-titre, titre, machine à écrire, boutons « Commencer le voyage » (→ `premiers-pas`) et « Explorer le lore », trois chiffres ; puis « À la une » (Mondstadt + « Un peu perdu dans le lore ? »), « Une envie d'explorer ? » (4 thèmes), « Des histoires à découvrir », bandeau vers les tags. Chaque bloc est un composant (`HeroAccueil`, `CarteALaUne`, `CartePremiersPas`, `TuileTheme`, `BandeauTags`).
+- **Accessibilité du mouvement (WCAG 2.2.2)** — *écarts au prototype* :
+  - la machine à écrire a un **bouton pause** (libellé fixe « Pause de l'animation » + `aria-pressed`), révélé seulement quand l'animation tourne ; le curseur ne clignote que pendant l'animation ;
+  - les lecteurs d'écran lisent une **phrase complète** (`sr-only` : « les sept Archontes, le Cataclysme, … et les pas du Voyageur ») ; le texte animé est `aria-hidden` ;
+  - **question ouverte tranchée** : la flèche « aller au contenu » ne flotte plus (animation infinie pour un simple repère) ; le curseur clignotant est gardé, mais lié à l'animation.
+  - Inchangé : premier sujet écrit en dur dans le HTML, rien ne bouge sous `prefers-reduced-motion`.
+- **Teintes des tuiles de thème tirées de la palette** (le prototype : six hexadécimaux et leurs variantes `dark:` écrits à la main) : `conteneur-primaire` (Quêtes), `conteneur-tertiaire` (Concepts), `conteneur-or` (Personnages), `conteneur-jade` (Régions).
+  - Palette : ajout du rôle **tertiaire** (le violet que Tonal Spot dérive de la source) et d'une couleur personnalisée **jade** `#507c69`. Les couleurs personnalisées sont désormais une liste (`PERSONNALISEES` dans `scripts/palette.mjs`), chacune déclinée en quatre rôles et ajoutée d'office aux tests de contraste.
+- **Lectures récentes limitées à 6**, avec un lien « Les N lectures » vers la bibliothèque dès qu'il y en a plus : l'accueil ne grossit pas avec le contenu. (Le prototype affichait tout.)
+- **Choix éditoriaux nommés dans la page** (`A_LA_UNE`, `entrees`) ; un article ou un tag inconnu fait échouer le build avec un message clair (`tag()` lève désormais au lieu de renvoyer `undefined`).
+- **Tests** : titre unique, premier sujet en dur, phrase complète pour les lecteurs d'écran, bouton pause caché dans le HTML ; chiffres = contenu ; à la une, entrées par thème, nombre de lectures récentes. Le test « barre opaque sans bannière » porte désormais sur `/lore`.
+- **Captures** : option `mouvement: true` (pas d'émulation du mouvement réduit). Scène animée : le texte change, la pause le fige, `aria-pressed` suit, le curseur s'arrête ; scène en mouvement réduit : texte fixe, pas de bouton, pas de clignotement.
+  - Leçon : la première version de la vérification de pause **passait même sabotée**, parce qu'elle cliquait pendant l'attente de 2,6 s entre deux sujets, où le texte est immobile de toute façon. Elle attend maintenant que le texte soit en train de s'écrire ; vue en échec en neutralisant la pause.
+  - Les captures pleine page attendent les images `loading="lazy"` (elles manquaient en bas de l'accueil).

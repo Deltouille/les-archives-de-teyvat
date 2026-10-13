@@ -1,0 +1,24 @@
+---
+import Icon from './Icon.astro';
+import Marque from './Marque.astro';
+import { cheminTag } from '../lib/contenu';
+interface Props { lectures: number; }
+const { lectures } = Astro.props;
+---
+<a href={cheminTag('premiers-pas')} class="group flex flex-col justify-between gap-6 rounded-carte bg-conteneur-primaire p-6 text-sur-conteneur-primaire sm:p-8">
+  <p class="sur-titre text-sur-conteneur-primaire">Votre première escale</p>
+  {/* Emblème décoratif : l'étoile du site dans deux orbites. */}
+  <div class="relative grid h-28 place-items-center" aria-hidden="true">
+    <span class="absolute h-18 w-28 -rotate-30 rounded-full border border-current opacity-25"></span>
+    <span class="absolute size-24 rotate-45 rounded-full border border-current opacity-25"></span>
+    <Marque taille={64} />
+  </div>
+  <div>
+    <h2 class="mb-3">Un peu perdu dans le lore ?</h2>
+    <p class="text-corps-m">Quelques lectures pour retrouver le fil. On vous accompagne ?</p>
+  </div>
+  <div>
+    <span class="text-etiquette-g flex h-12 items-center justify-between rounded-full bg-primaire px-6 text-sur-primaire transition-colors group-hover:bg-primaire-survol">Commencer le voyage <Icon nom="fleche" taille={20} /></span>
+    <p class="text-corps-p mt-3 text-center">{lectures} lectures · À votre rythme</p>
+  </div>
+</a>

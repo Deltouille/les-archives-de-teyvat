@@ -61,7 +61,7 @@ test('la navigation : lien actif signalé, thèmes du registre dans le menu, bou
 });
 
 test('sans bannière, la barre reste dans le flux (sticky) et opaque', async () => {
-  const entete = (await lire('index.html')).match(/<header[^>]*data-navbar[^>]*>/)[0];
+  const entete = (await lire('lore/index.html')).match(/<header[^>]*data-navbar[^>]*>/)[0];
   assert.match(entete, /\bsticky\b/);
   assert.doesNotMatch(entete, /data-sur-image/);
 });
@@ -72,10 +72,3 @@ test('les icônes sont des tracés SVG insérés dans le HTML (aucune webfont)',
   assert.doesNotMatch(html, /fonts\.(googleapis|gstatic)\.com/);
 });
 
-test('l’accueil provisoire liste tous les articles publiés', async () => {
-  const { lireArticlesPublies } = await import('./sources.mjs');
-  const publies = await lireArticlesPublies();
-  const liste = (await lire('index.html')).split('data-articles')[1].split('</ul>')[0];
-  assert.equal((liste.match(/<li\b/g) ?? []).length, publies.length);
-  for (const { titre } of publies) assert.ok(liste.includes(titre), titre);
-});

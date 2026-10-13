@@ -99,3 +99,32 @@ test('les pages éditoriales existent ; la 404 n’est pas indexée ni dans le s
   for (const a of articles) assert.match(sitemap, new RegExp(`/lore/${a.id}/</loc>`), a.id);
   assert.doesNotMatch(await lire('a-propos/index.html'), /Shirone/);
 });
+
+test('accueil : bannière, titre unique, sujets de la machine à écrire lisibles sans JavaScript', async () => {
+  const html = await lire('index.html');
+  assert.equal((html.match(/<h1\b/g) ?? []).length, 1);
+  assert.match(html, /data-hero/);
+  const machine = html.split('data-machine')[1].split('</p>')[0];
+  assert.match(machine, /data-sujets="[^"]*"[^>]*>les sept Archontes</, 'premier sujet écrit en dur');
+  assert.match(machine, /class="sr-only">les sept Archontes, le Cataclysme, .+ et les pas du Voyageur\.</, 'phrase complète pour les lecteurs d’écran');
+  assert.match(machine, /<button[^>]*aria-label="Pause de l’animation"[^>]*aria-pressed="false"[^>]*hidden/, 'bouton pause caché tant que l’animation ne tourne pas');
+});
+
+test('accueil : les chiffres suivent le contenu', async () => {
+  const chiffres = (await lire('index.html')).split('data-chiffres')[1].split('</ul>')[0];
+  const nombres = [...chiffres.matchAll(/<strong[^>]*>(\d+)<\/strong>/g)].map(m => Number(m[1]));
+  assert.deepEqual(nombres, [articles.length, tags.filter(t => t.theme).length, 7]);
+});
+
+test('accueil : à la une, entrées par thème, lectures récentes', async () => {
+  const html = await lire('index.html');
+  const aLaUne = html.split('data-a-la-une')[1].split('</section>')[0];
+  assert.match(aLaUne, /href="\/lore\/mondstadt"/);
+  assert.match(aLaUne, /href="\/lore\/tags\/premiers-pas"/);
+  assert.match(aLaUne, new RegExp(`${articles.filter(a => a.tags.includes('premiers-pas')).length} lectures`));
+  const entrees = html.split('data-entrees')[1].split('</section>')[0];
+  for (const id of ['quetes', 'concepts', 'personnages', 'regions']) assert.match(entrees, new RegExp(`href="/lore/tags/${id}"`), id);
+  const recents = html.split('id="recents-titre"')[1];
+  assert.equal(cartes(recents), Math.min(6, articles.length));
+  assert.match(html, /href="\/lore\/tags"[^>]*>[\s\S]*Tirez un fil, suivez une histoire/);
+});

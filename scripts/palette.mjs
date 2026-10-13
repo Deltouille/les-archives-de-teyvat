@@ -10,9 +10,15 @@ import { Hct, SchemeTonalSpot, MaterialDynamicColors as M, TonalPalette, argbFro
 
 // Le bleu « Primogemme » du prototype.
 export const SOURCE = '#355f98';
-// Couleur d'accent hors schéma (encadré spoilers, ambre sur image). Volontairement non harmonisée avec SOURCE :
-// l'harmonisation M3 la tirait vers l'orangé, on perdait le doré de Genshin.
-export const OR = '#986f33';
+// Couleurs d'accent hors schéma (« couleurs personnalisées » M3), déclinées chacune en quatre rôles :
+// <nom>, sur-<nom>, conteneur-<nom>, sur-conteneur-<nom>. Volontairement non harmonisées avec SOURCE :
+// l'harmonisation M3 tirait l'or vers l'orangé, on perdait le doré de Genshin.
+export const PERSONNALISEES = {
+  // Encadré spoilers, ambre sur image, tuile « Personnages ».
+  or: '#986f33',
+  // Tuile « Régions » de l'accueil (le vert du prototype).
+  jade: '#507c69',
+};
 
 // Jeton français → rôle M3. Les jetons gardent les noms du prototype pour que le balisage n'ait pas à changer
 // si la palette change.
@@ -30,17 +36,22 @@ const JETONS = {
   'sur-primaire': M.onPrimary,
   'conteneur-primaire': M.primaryContainer,
   'sur-conteneur-primaire': M.onPrimaryContainer,
+  // Tertiaire : la teinte que Tonal Spot dérive de la source (un violet pour notre bleu).
+  'conteneur-tertiaire': M.tertiaryContainer,
+  'sur-conteneur-tertiaire': M.onTertiaryContainer,
 };
-// Rôles de « couleur personnalisée » M3, en tons de la palette tonale de OR : [clair, sombre].
-const TONS_OR = { or: [40, 80], 'sur-or': [100, 20], 'conteneur-or': [90, 30], 'sur-conteneur-or': [10, 90] };
+// Rôles d'une couleur personnalisée M3, en tons de sa palette tonale : [clair, sombre].
+const TONS_PERSONNALISES = { '': [40, 80], 'sur-': [100, 20], 'conteneur-': [90, 30], 'sur-conteneur-': [10, 90] };
 
-export function genererPalette(source = SOURCE, or = OR) {
+export function genererPalette(source = SOURCE, personnalisees = PERSONNALISEES) {
   const hct = Hct.fromInt(argbFromHex(source));
-  const tonsOr = TonalPalette.fromInt(argbFromHex(or));
+  const tons = Object.fromEntries(Object.entries(personnalisees).map(([nom, hex]) => [nom, TonalPalette.fromInt(argbFromHex(hex))]));
   const theme = sombre => {
     const schema = new SchemeTonalSpot(hct, sombre, 0);
     const couleurs = Object.fromEntries(Object.entries(JETONS).map(([nom, role]) => [nom, hexFromArgb(role.getArgb(schema))]));
-    for (const [nom, [clair, fonce]] of Object.entries(TONS_OR)) couleurs[nom] = hexFromArgb(tonsOr.tone(sombre ? fonce : clair));
+    for (const [nom, palette] of Object.entries(tons)) {
+      for (const [prefixe, [clair, fonce]] of Object.entries(TONS_PERSONNALISES)) couleurs[`${prefixe}${nom}`] = hexFromArgb(palette.tone(sombre ? fonce : clair));
+    }
     return couleurs;
   };
   const clair = new SchemeTonalSpot(hct, false, 0);
@@ -52,7 +63,7 @@ export function genererPalette(source = SOURCE, or = OR) {
       ciel: hexFromArgb(M.primaryFixedDim.getArgb(clair)),
       'ciel-clair': hexFromArgb(M.primaryFixed.getArgb(clair)),
       nuit: hexFromArgb(M.onPrimaryFixed.getArgb(clair)),
-      ambre: hexFromArgb(tonsOr.tone(80)),
+      ambre: hexFromArgb(tons.or.tone(80)),
     },
   };
 }
