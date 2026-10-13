@@ -1,0 +1,27 @@
+---
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+// Bannière pleine largeur (accueil, articles), façon Mizuki. La passer dans le slot « hero » de Site.astro suffit
+// à faire passer la barre de navigation en surimpression transparente.
+interface Props {
+  image: ImageMetadata;
+  alt?: string;
+  /** id du titre de la bannière, pour aria-labelledby. */
+  titre: string;
+  class?: string;
+}
+const { image, alt = '', titre, class: classe } = Astro.props;
+---
+{/* data-hero : repère lu par la barre de navigation pour savoir quand quitter son état transparent.
+     Fond « nuit » le temps que l'image arrive, pour que le texte blanc reste lisible. */}
+<section class:list={['relative isolate flex flex-col overflow-hidden bg-nuit text-white', classe]} aria-labelledby={titre} data-hero>
+  {/* Image volontairement fixe : un zoom lent en continu (essayé dans le prototype) faisait trembler la bannière. */}
+  <Image class="absolute inset-0 -z-20 size-full object-cover" src={image} alt={alt} widths={[960, 1600, 2400]} sizes="100vw" loading="eager" fetchpriority="high" />
+  <div class="voile-banniere absolute inset-0 -z-10" aria-hidden="true"></div>
+  <slot />
+  {/* La vague prend la couleur du fond de page : elle suit le thème sans règle dédiée. */}
+  <svg class="absolute inset-x-0 -bottom-px h-16 w-full fill-fond md:h-28" viewBox="0 0 1440 120" preserveAspectRatio="none" aria-hidden="true">
+    <path class="opacity-45" d="M0 64c160 30 320 44 480 30s320-58 480-58 320 46 480 58v26H0Z" />
+    <path d="M0 86c200-22 360-34 540-18s340 46 520 40 260-36 380-40v52H0Z" />
+  </svg>
+</section>

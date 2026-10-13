@@ -1,0 +1,22 @@
+---
+import Site from '../../layouts/Site.astro';
+import EnTetePage from '../../components/EnTetePage.astro';
+import Puces from '../../components/Puces.astro';
+import GrilleArticles from '../../components/GrilleArticles.astro';
+import { bibliotheque, cheminTag } from '../../lib/contenu';
+
+const { articles, themes, avecTag } = await bibliotheque();
+const puces = [
+  { href: '/lore', libelle: 'Tout explorer', compte: articles.length, actif: true },
+  ...themes.map(t => ({ href: cheminTag(t.id), libelle: t.data.libelle, icone: t.data.icone, compte: avecTag(t.id).length })),
+  { href: '/lore/tags', libelle: 'Tous les tags', icone: 'tag' as const },
+];
+---
+<Site titre="Explorer le lore" description="Tous les articles sur le lore de Genshin Impact : quêtes, personnages, régions, factions et événements de Teyvat.">
+  <EnTetePage surTitre="La bibliothèque de Teyvat">
+    Suivez le fil de votre <em>curiosité.</em>
+    <Fragment slot="chapeau">Une quête à éclaircir, un personnage à comprendre, un monde à explorer.</Fragment>
+  </EnTetePage>
+  <Puces puces={puces} libelle="Filtrer par thème" />
+  <GrilleArticles articles={articles} niveau="h2" />
+</Site>

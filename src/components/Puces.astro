@@ -1,0 +1,21 @@
+---
+import Icon from './Icon.astro';
+import type { NomIcone } from '../lib/icones';
+// Puces de filtre M3 (bibliothèque et pages de thème). Ce sont des liens : la puce active est la page courante.
+interface Puce { href: string; libelle: string; icone?: NomIcone; compte?: number; actif?: boolean; }
+interface Props { puces: Puce[]; libelle: string; }
+const { puces, libelle } = Astro.props;
+---
+<nav class="mb-8 flex flex-wrap gap-2" aria-label={libelle}>
+  {puces.map(p => (
+    <a
+      href={p.href}
+      aria-current={p.actif ? 'page' : undefined}
+      class="text-etiquette-g flex h-8 items-center gap-2 rounded-petit border border-contour px-3 transition-colors hover:bg-texte/8 aria-[current=page]:border-transparent aria-[current=page]:bg-tonal aria-[current=page]:text-sur-tonal"
+    >
+      {p.actif ? <Icon nom="coche" taille={18} /> : p.icone && <Icon nom={p.icone} taille={18} />}
+      {p.libelle}
+      {p.compte !== undefined && <span class="text-discret" aria-label={`${p.compte} lecture${p.compte > 1 ? 's' : ''}`}>{p.compte}</span>}
+    </a>
+  ))}
+</nav>

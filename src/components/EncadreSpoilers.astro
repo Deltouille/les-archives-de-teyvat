@@ -1,0 +1,9 @@
+---
+import Icon from './Icon.astro';
+// Périmètre des révélations, en tête d'article. Hors de l'index de recherche : ce n'est pas le contenu.
+interface Props { perimetre: string; }
+---
+<div class="mb-6 flex items-start gap-3 rounded-grand bg-conteneur-or px-5 py-4 text-sur-conteneur-or" data-pagefind-ignore data-encadre="spoilers">
+  <Icon nom="oeil" class="mt-0.5" />
+  <p class="text-corps-m"><strong class="text-titre-p block">Avant de lire</strong>Spoilers : {Astro.props.perimetre}</p>
+</div>

@@ -24,10 +24,38 @@ const LARGEURS = [1440, 1024, 390];
 const THEMES = ['clair', 'sombre'];
 
 // Une scène : une page, des actions éventuelles, puis une capture (pleine page ou fenêtre) et des vérifications.
-// `verifier` est du JavaScript évalué dans la page, qui renvoie la liste des problèmes (vide si tout va bien).
+// `tabulations` : nombre de vraies frappes de Tab envoyées après les actions (un .focus() par script ne déclenche pas
+// :focus-visible). `verifier` est du JavaScript évalué dans la page, qui renvoie la liste des problèmes (vide si tout va bien).
 const SCENES = [
   { nom: 'accueil', url: '/' },
   { nom: 'demo', url: '/demo', largeurs: [1440, 390] },
+  { nom: 'bibliotheque', url: '/lore' },
+  { nom: 'article', url: '/lore/venti' },
+  {
+    nom: 'article-haut',
+    url: '/lore/venti',
+    fenetre: true,
+    verifier: `(() => document.querySelector('[data-navbar]').hasAttribute('data-sur-image') ? [] : ['la barre devrait être transparente sur la bannière de l’article'])()`,
+  },
+  { nom: 'index-des-tags', url: '/lore/tags' },
+  { nom: 'tag-theme', url: '/lore/tags/regions', largeurs: [1440, 390] },
+  { nom: 'tag-simple', url: '/lore/tags/mondstadt', largeurs: [1440, 390] },
+  { nom: 'a-propos', url: '/a-propos', largeurs: [1440, 390] },
+  { nom: 'page-introuvable', url: '/cette-page-n-existe-pas', largeurs: [1440, 390] },
+  {
+    nom: 'carte-au-clavier',
+    url: '/lore',
+    largeurs: [1440],
+    fenetre: true,
+    // On part de la dernière puce de filtre : une tabulation mène au lien de la première carte.
+    actions: `document.querySelector('nav[aria-label="Filtrer par thème"] a:last-child').focus();`,
+    tabulations: 1,
+    verifier: `(() => {
+      const carte = document.querySelector('[data-grille-articles] article');
+      const style = getComputedStyle(carte);
+      return style.outlineStyle !== 'none' && parseFloat(style.outlineWidth) >= 2 ? [] : ['le focus clavier sur une carte devrait dessiner un contour (' + style.outlineStyle + ' ' + style.outlineWidth + ')'];
+    })()`,
+  },
   {
     nom: 'navigation-sur-banniere',
     url: '/demo/navigation',
@@ -194,6 +222,10 @@ try {
             await charge;
             await evaluer(cdp, `document.fonts.ready.then(() => new Promise(r => setTimeout(r, 150)))`);
             if (scene.actions) await evaluer(cdp, `(async () => { const attendre = ms => new Promise(r => setTimeout(r, ms)); ${scene.actions} })()`);
+            for (let n = 0; n < (scene.tabulations ?? 0); n++) {
+              for (const type of ['keyDown', 'keyUp']) await cdp.envoyer('Input.dispatchKeyEvent', { type, key: 'Tab', code: 'Tab', windowsVirtualKeyCode: 9 });
+            }
+            if (scene.tabulations) await evaluer(cdp, `new Promise(r => setTimeout(r, 200))`);
             trouves = [];
             for (const verification of [VERIFICATIONS_COMMUNES, scene.verifier].filter(Boolean)) trouves.push(...await evaluer(cdp, verification));
             break;

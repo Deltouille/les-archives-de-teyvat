@@ -1,0 +1,18 @@
+---
+import Site from '../layouts/Site.astro';
+import EnTetePage from '../components/EnTetePage.astro';
+---
+<Site titre="Confidentialité" description="Ni compte, ni publicité, ni mesure d’audience : ce que le site garde, et où.">
+  <EnTetePage surTitre="Votre tranquillité">Une lecture <em>sans suivi publicitaire.</em></EnTetePage>
+  <article class="prose max-w-3xl rounded-carte bg-surface p-6 sm:p-10">
+    <p>Ce site de lecture ne comporte ni compte utilisateur, ni publicité, ni outil de mesure d’audience.</p>
+    <h2>Préférence de thème</h2>
+    <p>Le choix du thème clair ou sombre est mémorisé dans le stockage local de votre navigateur, sous la clé <code>genshin-theme</code>. Cette préférence reste sur votre appareil. Vous pouvez l’effacer dans les paramètres de votre navigateur.</p>
+    <h2>Recherche</h2>
+    <p>La recherche télécharge un index statique depuis le site et traite votre requête dans votre navigateur. Aucun service de recherche tiers n’est utilisé.</p>
+    <h2>Images, icônes et polices</h2>
+    <p>Les illustrations et les icônes sont servies par le site lui-même. Les polices sont celles de votre appareil, sans chargement auprès d’un fournisseur externe.</p>
+    <h2>Liens externes</h2>
+    <p>Les liens vers d’autres sites vous conduisent vers des services qui appliquent leurs propres règles de confidentialité.</p>
+  </article>
+</Site>

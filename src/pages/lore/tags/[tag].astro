@@ -1,0 +1,33 @@
+---
+import Site from '../../../layouts/Site.astro';
+import Icon from '../../../components/Icon.astro';
+import EnTetePage from '../../../components/EnTetePage.astro';
+import FilAriane from '../../../components/FilAriane.astro';
+import Puces from '../../../components/Puces.astro';
+import GrilleArticles from '../../../components/GrilleArticles.astro';
+import { bibliotheque, cheminTag, type Tag } from '../../../lib/contenu';
+
+export async function getStaticPaths() {
+  const { tags } = await bibliotheque();
+  return tags.map(tag => ({ params: { tag: tag.id }, props: { tag } }));
+}
+
+const { tag } = Astro.props as { tag: Tag };
+const { themes, avecTag } = await bibliotheque();
+const { data } = tag;
+const lectures = avecTag(tag.id);
+const nombre = `${lectures.length} lecture${lectures.length > 1 ? 's' : ''}`;
+---
+<Site titre={data.libelle} description={data.description}>
+  <FilAriane etapes={[{ libelle: 'Accueil', href: '/' }, data.theme ? { libelle: 'Explorer', href: '/lore' } : { libelle: 'Tags', href: '/lore/tags' }, { libelle: data.libelle }]} class="mb-6" />
+  {/* Un thème garde son emblème et les filtres de thème ; un tag simple s'affiche « #Libellé ». */}
+  <EnTetePage surTitre={data.theme ? `Explorer le lore · ${nombre}` : `Tag · ${nombre}`}>
+    {data.theme && data.icone && <span slot="embleme" class="mb-6 grid size-16 place-items-center rounded-tres-grand bg-tonal text-sur-tonal"><Icon nom={data.icone} taille={32} /></span>}
+    {data.theme ? data.libelle : <><span class="text-primaire opacity-70">#</span>{data.libelle}</>}
+    <Fragment slot="chapeau">{data.description}</Fragment>
+  </EnTetePage>
+  {data.theme && <Puces puces={[{ href: '/lore', libelle: 'Tout explorer' }, ...themes.map(t => ({ href: cheminTag(t.id), libelle: t.data.libelle, icone: t.data.icone, actif: t.id === tag.id }))]} libelle="Changer de thème" />}
+  {lectures.length > 0
+    ? <GrilleArticles articles={lectures} niveau="h2" />
+    : <p class="text-discret">Aucune lecture pour l’instant. <a class="lien-texte" href="/lore/tags">Voir tous les tags <Icon nom="fleche" taille={18} /></a></p>}
+</Site>

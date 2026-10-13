@@ -1,0 +1,22 @@
+---
+// Sommaire de l'article : les titres de niveau 2, plus les sources si elles existent.
+// Deux formes : repliable en tête d'article (mobile), liste collante dans la colonne latérale (sm et plus).
+interface Props { titres: { slug: string; text: string }[]; avecSources: boolean; forme: 'repliable' | 'laterale'; }
+const { titres, avecSources, forme } = Astro.props;
+const entrees = [...titres.map(t => ({ href: `#${t.slug}`, libelle: t.text })), ...(avecSources ? [{ href: '#sources-titre', libelle: 'Sources dans le jeu' }] : [])];
+---
+{forme === 'repliable' ? (
+  <details class="mb-6 rounded-grand border border-ligne bg-surface px-4 py-3 sm:hidden" data-pagefind-ignore>
+    <summary class="text-titre-p cursor-pointer">Dans cet article</summary>
+    <nav class="pt-2" aria-label="Sommaire">
+      {entrees.map(e => <a class="text-corps-m block py-2 text-primaire" href={e.href}>{e.libelle}</a>)}
+    </nav>
+  </details>
+) : (
+  <>
+    <p class="sur-titre">Dans cet article</p>
+    <nav class="mt-4 mb-8 border-l border-ligne" aria-label="Sommaire">
+      {entrees.map(e => <a class="text-corps-m block py-2 pl-4 text-discret transition-colors hover:bg-texte/8 hover:text-primaire" href={e.href}>{e.libelle}</a>)}
+    </nav>
+  </>
+)}

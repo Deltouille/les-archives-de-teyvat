@@ -1,0 +1,10 @@
+---
+import Icon from './Icon.astro';
+interface Props { points: string[]; }
+---
+<aside class="mb-8 rounded-carte bg-tonal p-6 text-sur-tonal" aria-labelledby="resume-titre" data-encadre="resume">
+  <h2 id="resume-titre" class="sur-titre flex items-center gap-2 font-sans text-sur-tonal"><Icon nom="etincelle" taille={18} /> L’essentiel en quelques mots</h2>
+  <ul class="mt-4 flex flex-col gap-3">
+    {Astro.props.points.map(point => <li class="text-corps-m flex items-start gap-3"><Icon nom="coche" taille={20} class="shrink-0" /><span>{point}</span></li>)}
+  </ul>
+</aside>

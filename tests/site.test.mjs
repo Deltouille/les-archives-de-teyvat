@@ -72,16 +72,10 @@ test('les icônes sont des tracés SVG insérés dans le HTML (aucune webfont)',
   assert.doesNotMatch(html, /fonts\.(googleapis|gstatic)\.com/);
 });
 
-test('le contenu publié : tous les articles sauf les brouillons', async () => {
-  const { readdir } = await import('node:fs/promises');
-  const dossier = path.resolve('src/content/articles');
-  const fichiers = (await readdir(dossier)).filter(f => f.endsWith('.md'));
-  const publies = [];
-  for (const fichier of fichiers) {
-    const texte = await readFile(path.join(dossier, fichier), 'utf8');
-    if (!/^brouillon:\s*true\s*$/m.test(texte.split(/^---$/m)[1])) publies.push(texte.match(/^titre:\s*"?(.+?)"?\s*$/m)[1]);
-  }
+test('l’accueil provisoire liste tous les articles publiés', async () => {
+  const { lireArticlesPublies } = await import('./sources.mjs');
+  const publies = await lireArticlesPublies();
   const liste = (await lire('index.html')).split('data-articles')[1].split('</ul>')[0];
   assert.equal((liste.match(/<li\b/g) ?? []).length, publies.length);
-  for (const titre of publies) assert.ok(liste.includes(titre), titre);
+  for (const { titre } of publies) assert.ok(liste.includes(titre), titre);
 });

@@ -16,8 +16,10 @@ import soleil from '@material-symbols/svg-400/rounded/light_mode.svg?raw';
 import fermer from '@material-symbols/svg-400/rounded/close.svg?raw';
 import tag from '@material-symbols/svg-400/rounded/sell.svg?raw';
 import menu from '@material-symbols/svg-400/rounded/menu.svg?raw';
+import coche from '@material-symbols/svg-400/rounded/check.svg?raw';
+import oeil from '@material-symbols/svg-400/rounded/visibility.svg?raw';
 
-const sources = { maison, livre, boussole, personne, strates, horloge, etincelle, recherche, fleche, chevron, lune, soleil, fermer, tag, menu };
+const sources = { maison, livre, boussole, personne, strates, horloge, etincelle, recherche, fleche, chevron, lune, soleil, fermer, tag, menu, coche, oeil };
 
 export type NomIcone = keyof typeof sources;
 export const NOMS_ICONES = Object.keys(sources) as [NomIcone, ...NomIcone[]];

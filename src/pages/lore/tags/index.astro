@@ -1,0 +1,46 @@
+---
+import Site from '../../../layouts/Site.astro';
+import Icon from '../../../components/Icon.astro';
+import EnTetePage from '../../../components/EnTetePage.astro';
+import EnTeteSection from '../../../components/EnTeteSection.astro';
+import { bibliotheque, cheminTag } from '../../../lib/contenu';
+
+const { tags, themes, avecTag } = await bibliotheque();
+const autres = tags.filter(t => !t.data.theme);
+const compte = (id: string) => { const n = avecTag(id).length; return `${n} lecture${n > 1 ? 's' : ''}`; };
+---
+<Site titre="Tous les tags" description="Les thèmes et les tags du lore de Teyvat, avec leur description.">
+  <EnTetePage surTitre="L’index de Teyvat">
+    Tirez un <em>fil.</em>
+    <Fragment slot="chapeau">Chaque lecture porte des tags : un thème, une nation, un personnage, une idée. Suivez-en un pour relier les histoires entre elles.</Fragment>
+  </EnTetePage>
+
+  <EnTeteSection surTitre="Les grands thèmes" titre="Par où entrer" />
+  <ul class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3" data-themes>
+    {themes.map(t => (
+      <li class="group relative flex items-start gap-4 rounded-carte bg-surface p-5 transition-shadow hover:shadow-niveau-2 has-[a:focus-visible]:outline-3 has-[a:focus-visible]:outline-offset-2 has-[a:focus-visible]:outline-primaire">
+        {t.data.icone && <span class="grid size-12 shrink-0 place-items-center rounded-grand bg-tonal text-sur-tonal"><Icon nom={t.data.icone} /></span>}
+        <span class="min-w-0">
+          <a href={cheminTag(t.id)} class="text-titre-m block after:absolute after:inset-0 after:content-[''] focus-visible:outline-none group-hover:text-primaire">{t.data.libelle}</a>
+          <span class="text-corps-m mt-1 block text-discret">{t.data.description}</span>
+          <span class="text-etiquette-m mt-2 block text-primaire">{compte(t.id)}</span>
+        </span>
+      </li>
+    ))}
+  </ul>
+
+  <EnTeteSection surTitre="Au fil des histoires" titre="Tous les tags" />
+  <ul class="grid gap-x-8 sm:grid-cols-2 lg:grid-cols-3" data-tags>
+    {autres.map(t => (
+      <li class="border-b border-ligne">
+        <a href={cheminTag(t.id)} class="group block py-4">
+          <span class="flex items-baseline justify-between gap-3">
+            <strong class="text-titre-p group-hover:text-primaire"><span class="text-primaire opacity-70">#</span>{t.data.libelle}</strong>
+            <span class="text-etiquette-m shrink-0 text-discret">{compte(t.id)}</span>
+          </span>
+          <span class="text-corps-m mt-1 block text-discret">{t.data.description}</span>
+        </a>
+      </li>
+    ))}
+  </ul>
+</Site>

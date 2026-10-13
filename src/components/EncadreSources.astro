@@ -1,0 +1,11 @@
+---
+// Où retrouver l'histoire dans le jeu. id="sources-titre" : cible du sommaire.
+interface Props { sources: { titre: string; detail: string }[]; }
+---
+<section class="mt-10 rounded-carte bg-doux p-6" aria-labelledby="sources-titre" data-encadre="sources">
+  <h2 id="sources-titre" class="text-grand-titre-p">Pour retrouver l’histoire dans le jeu</h2>
+  <p class="text-corps-m mt-2 text-discret">Repères de lecture dans Genshin Impact.</p>
+  <ol class="mt-2 list-decimal pl-5">
+    {Astro.props.sources.map(({ titre, detail }) => <li class="text-corps-m mt-4 pl-1"><strong class="font-semibold">{titre}</strong><p class="mt-1 text-discret">{detail}</p></li>)}
+  </ol>
+</section>

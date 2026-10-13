@@ -119,3 +119,12 @@
   .prose blockquote { @apply my-6 rounded-r-grand border-l-4 border-primaire bg-doux px-6 py-4 italic; }
   .prose code { @apply rounded-tres-petit bg-tonal px-1.5 py-0.5 text-corps-m text-sur-tonal; }
 }
+
+/* Voile des bannières : assombrit la gauche et le bas, là où se pose le texte, sans éteindre le centre de l'image
+   (les personnages de l'image d'accueil). Teinte « nuit » de la palette, valable dans les deux thèmes. */
+@utility voile-banniere {
+  background:
+    linear-gradient(90deg, color-mix(in srgb, var(--color-nuit) 85%, transparent) 0%, color-mix(in srgb, var(--color-nuit) 50%, transparent) 35%, transparent 65%),
+    linear-gradient(0deg, color-mix(in srgb, var(--color-nuit) 90%, transparent) 0%, color-mix(in srgb, var(--color-nuit) 50%, transparent) 38%, color-mix(in srgb, var(--color-nuit) 12%, transparent) 70%, color-mix(in srgb, var(--color-nuit) 40%, transparent) 100%),
+    radial-gradient(ellipse at 30% 60%, transparent 40%, color-mix(in srgb, black 60%, transparent) 100%);
+}

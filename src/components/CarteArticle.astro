@@ -1,0 +1,31 @@
+---
+import { Image } from 'astro:assets';
+import Icon from './Icon.astro';
+import { cheminArticle, imageDe, type Article, type Tag } from '../lib/contenu';
+import { minutesDeLecture } from '../lib/bibliotheque.mjs';
+
+interface Props {
+  article: Article;
+  theme: Tag;
+  /** Repère affiché en sur-titre : le premier tag qui n'est pas un thème (souvent la nation). */
+  repere: string;
+  /** Niveau du titre, selon la page : h2 dans une liste, h3 sous un titre de section. */
+  niveau?: 'h2' | 'h3';
+}
+const { article, theme, repere, niveau: Titre = 'h3' } = Astro.props;
+const { data } = article;
+---
+{/* Un seul lien, sur le titre, étendu à toute la carte par son ::after : un lecteur d'écran n'entend qu'une fois
+     chaque article, et toute la carte reste cliquable. Le contour de focus est porté par la carte entière. */}
+<article class="group relative flex flex-col overflow-hidden rounded-carte bg-surface transition-shadow duration-200 ease-standard hover:shadow-niveau-2 has-[a:focus-visible]:outline-3 has-[a:focus-visible]:outline-offset-2 has-[a:focus-visible]:outline-primaire">
+  <div class="relative aspect-video overflow-hidden">
+    <Image class="size-full object-cover transition-transform duration-500 ease-standard group-hover:scale-105" src={imageDe(data.image)} alt="" widths={[400, 700]} sizes="(min-width: 1200px) 33vw, (min-width: 600px) 50vw, 100vw" loading="lazy" />
+    <span class="text-etiquette-m absolute bottom-3 left-3 rounded-full bg-surface/90 px-3 py-1 text-texte backdrop-blur">{theme.data.singulier}</span>
+  </div>
+  <div class="flex flex-1 flex-col gap-2 p-5">
+    <p class="text-etiquette-m flex justify-between gap-2"><span class="sur-titre">{repere}</span><span class="text-discret">{minutesDeLecture(article.body ?? '')} min de lecture</span></p>
+    <Titre class="text-titre-g font-semibold"><a href={cheminArticle(article)} class="after:absolute after:inset-0 after:content-[''] focus-visible:outline-none group-hover:text-primaire">{data.titre}</a></Titre>
+    <p class="text-corps-m line-clamp-3 text-discret">{data.description}</p>
+    <span class="text-etiquette-g mt-auto flex items-center justify-between border-t border-ligne pt-3 text-primaire" aria-hidden="true">Découvrir <Icon nom="fleche" taille={20} /></span>
+  </div>
+</article>

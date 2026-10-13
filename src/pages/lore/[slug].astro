@@ -1,0 +1,85 @@
+---
+import { render } from 'astro:content';
+import Site from '../../layouts/Site.astro';
+import Icon from '../../components/Icon.astro';
+import Marque from '../../components/Marque.astro';
+import Banniere from '../../components/Banniere.astro';
+import FilAriane from '../../components/FilAriane.astro';
+import EncadreSpoilers from '../../components/EncadreSpoilers.astro';
+import EncadreResume from '../../components/EncadreResume.astro';
+import EncadreSources from '../../components/EncadreSources.astro';
+import Sommaire from '../../components/Sommaire.astro';
+import TagsArticle from '../../components/TagsArticle.astro';
+import EnTeteSection from '../../components/EnTeteSection.astro';
+import GrilleArticles from '../../components/GrilleArticles.astro';
+import { bibliotheque, cheminTag, imageDe, type Article } from '../../lib/contenu';
+import { articlesLies, minutesDeLecture, dateFr } from '../../lib/bibliotheque.mjs';
+
+export async function getStaticPaths() {
+  const { articles } = await bibliotheque();
+  return articles.map(article => ({ params: { slug: article.id }, props: { article } }));
+}
+
+const { article } = Astro.props as { article: Article };
+const { articles, tag, themeDe } = await bibliotheque();
+const { Content, headings } = await render(article);
+const { data } = article;
+const theme = themeDe(article);
+const lies = articlesLies(article, articles);
+const image = imageDe(data.image);
+const titres = headings.filter(h => h.depth === 2);
+const avecSommaire = titres.length > 0;
+const jour = (d: Date) => d.toISOString().slice(0, 10);
+---
+<Site titre={data.titre} description={data.description} image={image.src} article>
+  <Banniere slot="hero" image={image} alt={data.imageAlt} titre="article-titre" class="min-h-[35rem] md:h-[clamp(32rem,78svh,48rem)]">
+    {/* Même gouttière que le <main> : le titre commence au même bord que la colonne de lecture.
+         pt-28 : la barre de navigation fixe (64 px) recouvre le haut de la bannière. */}
+    <header class="mx-auto mt-auto w-full max-w-site px-4 pt-28 pb-24 sm:px-6 md:pb-36 lg:px-10">
+      <h1 id="article-titre" class="max-w-[18ch] text-shadow-lg" data-pagefind-meta="title">{data.titre}</h1>
+      <p class="mt-4 max-w-2xl text-white/85" data-pagefind-meta="description">{data.description}</p>
+      <p class="text-corps-m mt-6 flex flex-wrap items-center gap-2 text-white/75">
+        <span class="grid size-8 place-items-center rounded-full border border-white/20 bg-white/10 text-ciel backdrop-blur-md"><Marque taille={16} /></span>
+        <span>Les chroniques de Teyvat</span><span aria-hidden="true">·</span><time datetime={jour(data.publieLe)}>{dateFr(data.publieLe)}</time>
+        {data.modifieLe && <><span aria-hidden="true">·</span><span>mis à jour le <time datetime={jour(data.modifieLe)}>{dateFr(data.modifieLe)}</time></span></>}
+      </p>
+    </header>
+  </Banniere>
+
+  <article data-pagefind-body>
+    <div class="mb-8 flex max-w-5xl flex-wrap items-center justify-between gap-x-6 gap-y-3" data-pagefind-ignore>
+      <FilAriane etapes={[{ libelle: 'Accueil', href: '/' }, { libelle: 'Explorer', href: '/lore' }, { libelle: theme.data.libelle, href: cheminTag(theme.id) }, { libelle: data.titre }]} class="[&_li:last-child]:hidden sm:[&_li:last-child]:flex" />
+      <p class="text-corps-m flex items-center gap-3 text-discret"><span class="pastille" data-pagefind-filter="theme">{theme.data.singulier}</span>{minutesDeLecture(article.body ?? '')} min de lecture</p>
+    </div>
+    <div class:list={['max-w-5xl', avecSommaire && 'sm:grid sm:grid-cols-[minmax(0,1fr)_11rem] sm:gap-8 lg:grid-cols-[minmax(0,1fr)_13rem] lg:gap-12']}>
+      <div class="min-w-0">
+        {data.spoilers && <EncadreSpoilers perimetre={data.spoilers} />}
+        {data.resume.length > 0 && <EncadreResume points={data.resume} />}
+        {avecSommaire && <Sommaire titres={titres} avecSources={data.sources.length > 0} forme="repliable" />}
+        <div class="prose"><Content /></div>
+        {data.sources.length > 0 && <EncadreSources sources={data.sources} />}
+        <TagsArticle tags={data.tags.map(tag)} />
+      </div>
+      {avecSommaire && (
+        <aside class="hidden sm:block" data-pagefind-ignore>
+          <div class="sticky top-24">
+            <Sommaire titres={titres} avecSources={data.sources.length > 0} forme="laterale" />
+            <a href={cheminTag('premiers-pas')} class="flex flex-col items-start gap-2 rounded-carte bg-conteneur-primaire p-5 text-sur-conteneur-primaire transition-shadow hover:shadow-niveau-1">
+              <Icon nom="boussole" />
+              <strong class="text-titre-p">Chaque histoire se relie.</strong>
+              <span class="text-corps-p">Commencez par nos premières lectures.</span>
+              <Icon nom="fleche" taille={20} />
+            </a>
+          </div>
+        </aside>
+      )}
+    </div>
+  </article>
+
+  {lies.length > 0 && (
+    <section data-pagefind-ignore aria-labelledby="lies-titre">
+      <EnTeteSection surTitre="Le voyage continue" titre="Pour aller plus loin" id="lies-titre" />
+      <GrilleArticles articles={lies} />
+    </section>
+  )}
+</Site>

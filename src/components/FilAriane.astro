@@ -1,0 +1,16 @@
+---
+import Icon from './Icon.astro';
+// Le dernier élément est la page courante : sans lien, signalé par aria-current.
+interface Props { etapes: { libelle: string; href?: string }[]; class?: string; }
+const { etapes, class: classe } = Astro.props;
+---
+<nav class:list={['text-corps-m text-discret', classe]} aria-label="Fil d’Ariane">
+  <ol class="flex flex-wrap items-center gap-1">
+    {etapes.map(({ libelle, href }, i) => (
+      <li class="flex items-center gap-1">
+        {i > 0 && <Icon nom="chevron" taille={16} class="opacity-70" />}
+        {href && i < etapes.length - 1 ? <a href={href} class="underline-offset-4 hover:text-primaire hover:underline">{libelle}</a> : <span aria-current="page">{libelle}</span>}
+      </li>
+    ))}
+  </ol>
+</nav>

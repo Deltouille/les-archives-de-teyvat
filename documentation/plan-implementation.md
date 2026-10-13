@@ -69,13 +69,14 @@ Chaque étape se termine seulement quand :
 - **Tests** : unitaires (validation, articles liés, tri, temps de lecture) ; build en échec quand on mal orthographie un tag (vérifié à la main, consigné) ; un brouillon n'apparaît pas dans `dist/`.
 - **Décision** : D10.
 
-## Étape 4 — Pages de lecture
+## Étape 4 — Pages de lecture ✅
 
-- [ ] `Banniere.astro` commune (image fixe, voile à trois dégradés, vague `fill-fond`), rendue hors du `<main>`.
-- [ ] Composants extraits : `ArticleCard`, `GrilleArticles`, en-têtes, encadrés `Resume` / `Spoilers` / `Sources`, `Sommaire` (seulement s'il y a des `##`), fil d'Ariane.
-- [ ] Pages `/lore`, `/lore/[slug]`, `/lore/tags`, `/lore/tags/[tag]`.
-- [ ] Pages éditoriales `/a-propos` (texte corrigé : retirer « Shirone »), `/confidentialite`, `/404`.
+- [x] `Banniere.astro` commune (image fixe, voile à trois dégradés, vague `fill-fond`), rendue hors du `<main>`.
+- [x] Composants extraits : `ArticleCard`, `GrilleArticles`, en-têtes, encadrés `Resume` / `Spoilers` / `Sources`, `Sommaire` (seulement s'il y a des `##`), fil d'Ariane.
+- [x] Pages `/lore`, `/lore/[slug]`, `/lore/tags`, `/lore/tags/[tag]`.
+- [x] Pages éditoriales `/a-propos` (texte corrigé : retirer « Shirone »), `/confidentialite`, `/404`.
 - **Tests** : build — chaque lien et chaque ancre a une cible ; chaque article affiche ses tags et chaque tag a sa page ; encadrés absents quand vides ; captures.
+- **Décision** : D11.
 
 ## Étape 5 — Page d'accueil
 
@@ -108,7 +109,7 @@ Chaque étape se termine seulement quand :
 
 À trancher quand l'étape concernée arrive ; la réponse va dans `decisions.md`.
 
-- Parallaxe au défilement sur les bannières ? (étape 4)
+- ~~Parallaxe au défilement sur les bannières ?~~ Non par défaut, bannière fixe (D11).
 - Curseur clignotant et flèche flottante de l'accueil : garder ? (étape 5)
-- Ligne « fil d'Ariane / type » de l'article : pleine largeur ? (étape 4)
+- ~~Ligne « fil d'Ariane / type » de l'article : pleine largeur ?~~ Alignée sur la colonne de lecture (D11).
 - Reprendre du site Nuxt : infobox des régions/personnages, listes curatées, mise en avant, page théories ? (après l'étape 8)
