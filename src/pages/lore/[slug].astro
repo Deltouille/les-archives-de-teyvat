@@ -1,5 +1,6 @@
 ---
 import { render } from 'astro:content';
+import { getImage } from 'astro:assets';
 import Site from '../../layouts/Site.astro';
 import Icon from '../../components/Icon.astro';
 import Marque from '../../components/Marque.astro';
@@ -27,11 +28,13 @@ const { data } = article;
 const theme = themeDe(article);
 const lies = articlesLies(article, articles);
 const image = imageDe(data.image);
+// Image de partage au format attendu par les réseaux (1200 × 630), au lieu de l'original de plus d'un mégaoctet.
+const partage = await getImage({ src: image, width: 1200, height: 630, fit: 'cover', format: 'jpg', quality: 80 });
 const titres = headings.filter(h => h.depth === 2);
 const avecSommaire = titres.length > 0;
 const jour = (d: Date) => d.toISOString().slice(0, 10);
 ---
-<Site titre={data.titre} description={data.description} image={image.src} article>
+<Site titre={data.titre} description={data.description} image={partage.src} article>
   <Banniere slot="hero" image={image} alt={data.imageAlt} titre="article-titre" class="min-h-[35rem] md:h-[clamp(32rem,78svh,48rem)]">
     {/* Même gouttière que le <main> : le titre commence au même bord que la colonne de lecture.
          pt-28 : la barre de navigation fixe (64 px) recouvre le haut de la bannière. */}

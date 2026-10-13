@@ -96,7 +96,7 @@ test('les pages éditoriales existent ; la 404 n’est pas indexée ni dans le s
   assert.match(await lire('404.html'), /name="robots" content="noindex"/);
   const sitemap = await lire('sitemap-0.xml');
   assert.doesNotMatch(sitemap, /404/);
-  for (const a of articles) assert.match(sitemap, new RegExp(`/lore/${a.id}/</loc>`), a.id);
+  for (const a of articles) assert.match(sitemap, new RegExp(`/lore/${a.id}</loc>`), a.id);
   assert.doesNotMatch(await lire('a-propos/index.html'), /Shirone/);
 });
 
@@ -187,4 +187,12 @@ test('robots.txt autorise l’exploration et donne le sitemap', async () => {
 test('les anciennes URL redirigées n’entrent pas dans le sitemap', async () => {
   const sitemap = await lire('sitemap-0.xml');
   for (const ancienne of ['/lore/regions/mondstadt/', '/tags/anemo/', '/dossiers/commencer/']) assert.doesNotMatch(sitemap, new RegExp(`<loc>https?://[^/<]+${ancienne}</loc>`), ancienne);
+});
+
+test('une seule forme d’URL, sans barre finale : canoniques et sitemap comme les liens internes', async () => {
+  for (const page of ['lore/index.html', 'lore/venti/index.html', 'lore/tags/regions/index.html', 'a-propos/index.html']) {
+    assert.match(await lire(page), /<link rel="canonical" href="https:\/\/[^"]+[^/]"/, page);
+  }
+  const avecBarre = [...(await lire('sitemap-0.xml')).matchAll(/<loc>(https?:\/\/[^/]+\/[^<]*\/)<\/loc>/g)].map(m => m[1]);
+  assert.deepEqual(avecBarre, []);
 });

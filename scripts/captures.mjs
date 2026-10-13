@@ -6,12 +6,16 @@
 //   npm run captures -- --filtre menu      seulement les scènes dont le nom contient « menu »
 //   npm run captures -- --reference        enregistre aussi les captures comme référence (captures/reference/)
 //
+// Chaque page est aussi auditée par axe-core (WCAG 2.2 A et AA, plus les bonnes pratiques) : toute violation fait
+// échouer le script. `audit: false` sur une scène pour l'en dispenser.
+//
 // Sans --reference, chaque capture est comparée à sa référence si elle existe (octets identiques, ou écart de
 // hauteur). Le script échoue si une vérification échoue. NAVIGATEUR=chromium pour changer de navigateur.
 import { spawn } from 'node:child_process';
 import { mkdir, mkdtemp, readFile, rm, writeFile, copyFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
+import { createRequire } from 'node:module';
 
 const args = process.argv.slice(2);
 const option = nom => { const i = args.indexOf(`--${nom}`); return i === -1 ? undefined : (args[i + 1] ?? true); };
@@ -296,6 +300,14 @@ async function evaluer(cdp, expression) {
 
 const hauteurPng = octets => octets.readUInt32BE(20);
 
+// Audit d'accessibilité : axe-core injecté dans la page, règles WCAG 2.2 A/AA et bonnes pratiques.
+const SOURCE_AXE = await readFile(createRequire(import.meta.url).resolve('axe-core/axe.min.js'), 'utf8');
+async function auditer(cdp) {
+  await evaluer(cdp, `if (!window.axe) { ${SOURCE_AXE} }`);
+  return evaluer(cdp, `axe.run(document, { runOnly: ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa', 'best-practice'] })
+    .then(r => r.violations.map(v => 'axe ' + v.id + ' (' + v.impact + ') : ' + v.help + ' → ' + v.nodes.slice(0, 3).map(n => n.target.join(' ')).join(' | ')))`);
+}
+
 const CODES = { Tab: ['Tab', 9], Escape: ['Escape', 27], Enter: ['Enter', 13], k: ['KeyK', 75] };
 async function clavier(cdp, etape) {
   if (etape.attendre) return evaluer(cdp, `new Promise(r => setTimeout(r, ${etape.attendre}))`);
@@ -340,6 +352,7 @@ try {
             if (scene.clavier) await evaluer(cdp, `new Promise(r => setTimeout(r, 200))`);
             trouves = [];
             for (const verification of [VERIFICATIONS_COMMUNES, scene.verifier].filter(Boolean)) trouves.push(...await evaluer(cdp, verification));
+            if (scene.audit !== false) trouves.push(...await auditer(cdp));
             break;
           } catch (erreur) {
             if (essai === 3 || !/navigated|closed|context/i.test(erreur.message)) throw erreur;

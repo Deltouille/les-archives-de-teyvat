@@ -22,7 +22,8 @@ const niveaux = ['shadow-niveau-1', 'shadow-niveau-2', 'shadow-niveau-3'];
       if (voulu) document.documentElement.dataset.theme = voulu;
     </script>
   </head>
-  <body class="mx-auto max-w-6xl px-4 py-10 sm:px-6 lg:px-8">
+  <body>
+    <main class="mx-auto max-w-6xl px-4 py-10 sm:px-6 lg:px-8">
     <header class="mb-10 flex flex-wrap items-center justify-between gap-4">
       <div>
         <p class="sur-titre">Outillage · dev uniquement</p>
@@ -103,6 +104,7 @@ const niveaux = ['shadow-niveau-1', 'shadow-niveau-2', 'shadow-niveau-3'];
       </article>
     </section>
 
+    </main>
     <script>
       document.getElementById('bascule')?.addEventListener('click', () => {
         const racine = document.documentElement;

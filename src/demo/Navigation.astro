@@ -4,10 +4,10 @@
 import Site from '../layouts/Site.astro';
 ---
 <Site titre="Banc d’essai de la navigation" noindex>
-  <section slot="hero" class="flex h-[80svh] items-end bg-linear-160 from-nuit to-primaire px-4 pb-16 text-white sm:px-6 lg:px-10" data-hero>
+  <section slot="hero" aria-labelledby="banc-titre" class="flex h-[80svh] items-end bg-linear-160 from-nuit to-primaire px-4 pb-16 text-white sm:px-6 lg:px-10" data-hero>
     <div>
       <p class="sur-titre text-ambre">Banc d’essai</p>
-      <h1 class="mt-2">La barre survole la bannière</h1>
+      <h1 id="banc-titre" class="mt-2">La barre survole la bannière</h1>
     </div>
   </section>
   {Array.from({ length: 12 }, (_, i) => <p class="mb-6 max-w-prose">Paragraphe {i + 1}. La barre doit devenir opaque, avec un flou, dès que la bannière a fini de passer dessous.</p>)}

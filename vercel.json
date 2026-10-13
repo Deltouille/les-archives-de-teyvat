@@ -1,0 +1,205 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "buildCommand": "npm run build",
+  "outputDirectory": "dist",
+  "trailingSlash": false,
+  "redirects": [
+    {
+      "source": "/lore/regions/mondstadt",
+      "destination": "/lore/mondstadt",
+      "statusCode": 301
+    },
+    {
+      "source": "/lore/quetes/prologue-mondstadt",
+      "destination": "/lore/prologue-mondstadt",
+      "statusCode": 301
+    },
+    {
+      "source": "/lore/personnages/venti",
+      "destination": "/lore/venti",
+      "statusCode": 301
+    },
+    {
+      "source": "/lore/factions/archons",
+      "destination": "/lore/archons",
+      "statusCode": 301
+    },
+    {
+      "source": "/lore/factions/ordre-abysse",
+      "destination": "/lore/ordre-abysse",
+      "statusCode": 301
+    },
+    {
+      "source": "/lore/evenements/cataclysme",
+      "destination": "/lore/cataclysme",
+      "statusCode": 301
+    },
+    {
+      "source": "/lore/quetes",
+      "destination": "/lore/tags/quetes",
+      "statusCode": 301
+    },
+    {
+      "source": "/lore/concepts",
+      "destination": "/lore/tags/concepts",
+      "statusCode": 301
+    },
+    {
+      "source": "/lore/personnages",
+      "destination": "/lore/tags/personnages",
+      "statusCode": 301
+    },
+    {
+      "source": "/lore/regions",
+      "destination": "/lore/tags/regions",
+      "statusCode": 301
+    },
+    {
+      "source": "/lore/factions",
+      "destination": "/lore/tags/factions",
+      "statusCode": 301
+    },
+    {
+      "source": "/lore/evenements",
+      "destination": "/lore/tags/evenements",
+      "statusCode": 301
+    },
+    {
+      "source": "/tags/abysse",
+      "destination": "/lore/tags/abysse",
+      "statusCode": 301
+    },
+    {
+      "source": "/tags/anemo",
+      "destination": "/lore/tags/anemo",
+      "statusCode": 301
+    },
+    {
+      "source": "/tags/archontes",
+      "destination": "/lore/tags/archontes",
+      "statusCode": 301
+    },
+    {
+      "source": "/tags/barbatos",
+      "destination": "/lore/tags/barbatos",
+      "statusCode": 301
+    },
+    {
+      "source": "/tags/dvalin",
+      "destination": "/lore/tags/dvalin",
+      "statusCode": 301
+    },
+    {
+      "source": "/tags/elements",
+      "destination": "/lore/tags/elements",
+      "statusCode": 301
+    },
+    {
+      "source": "/tags/histoire",
+      "destination": "/lore/tags/histoire",
+      "statusCode": 301
+    },
+    {
+      "source": "/tags/khaenri-ah",
+      "destination": "/lore/tags/khaenri-ah",
+      "statusCode": 301
+    },
+    {
+      "source": "/tags/liberte",
+      "destination": "/lore/tags/liberte",
+      "statusCode": 301
+    },
+    {
+      "source": "/tags/mondstadt",
+      "destination": "/lore/tags/mondstadt",
+      "statusCode": 301
+    },
+    {
+      "source": "/tags/quete-d-archons",
+      "destination": "/lore/tags/quete-d-archons",
+      "statusCode": 301
+    },
+    {
+      "source": "/tags/teyvat",
+      "destination": "/lore/tags/teyvat",
+      "statusCode": 301
+    },
+    {
+      "source": "/tags/voyageur",
+      "destination": "/lore/tags/voyageur",
+      "statusCode": 301
+    },
+    {
+      "source": "/dossiers/commencer",
+      "destination": "/lore/tags/premiers-pas",
+      "statusCode": 301
+    },
+    {
+      "source": "/lore/chronologie",
+      "destination": "/lore",
+      "statusCode": 301
+    },
+    {
+      "source": "/lore/teyvat/mondstadt",
+      "destination": "/lore/mondstadt",
+      "statusCode": 301
+    },
+    {
+      "source": "/lore/teyvat",
+      "destination": "/lore/tags/regions",
+      "statusCode": 301
+    },
+    {
+      "source": "/categories/regions",
+      "destination": "/lore/tags/regions",
+      "statusCode": 301
+    },
+    {
+      "source": "/categories/personnages",
+      "destination": "/lore/tags/personnages",
+      "statusCode": 301
+    },
+    {
+      "source": "/categories/factions",
+      "destination": "/lore/tags/factions",
+      "statusCode": 301
+    },
+    {
+      "source": "/categories/evenements",
+      "destination": "/lore/tags/evenements",
+      "statusCode": 301
+    }
+  ],
+  "headers": [
+    {
+      "source": "/_astro/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
+        }
+      ]
+    },
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        },
+        {
+          "key": "Referrer-Policy",
+          "value": "strict-origin-when-cross-origin"
+        },
+        {
+          "key": "Permissions-Policy",
+          "value": "camera=(), microphone=(), geolocation=()"
+        },
+        {
+          "key": "X-Frame-Options",
+          "value": "DENY"
+        }
+      ]
+    }
+  ]
+}

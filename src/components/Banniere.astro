@@ -16,7 +16,8 @@ const { image, alt = '', titre, class: classe } = Astro.props;
      Fond « nuit » le temps que l'image arrive, pour que le texte blanc reste lisible. */}
 <section class:list={['relative isolate flex flex-col overflow-hidden bg-nuit text-white', classe]} aria-labelledby={titre} data-hero>
   {/* Image volontairement fixe : un zoom lent en continu (essayé dans le prototype) faisait trembler la bannière. */}
-  <Image class="absolute inset-0 -z-20 size-full object-cover" src={image} alt={alt} widths={[960, 1600, 2400]} sizes="100vw" loading="eager" fetchpriority="high" />
+  {/* width = la plus grande variante : sinon le src de repli est l'original ré-encodé (3840 px, ~600 Ko). */}
+  <Image class="absolute inset-0 -z-20 size-full object-cover" src={image} alt={alt} width={2400} widths={[960, 1600, 2400]} sizes="100vw" loading="eager" fetchpriority="high" />
   <div class="voile-banniere absolute inset-0 -z-10" aria-hidden="true"></div>
   <slot />
   {/* La vague prend la couleur du fond de page : elle suit le thème sans règle dédiée. */}

@@ -157,3 +157,27 @@
 - **Forme des redirections** : pages statiques générées par Astro (`meta refresh`, `noindex`, canonique vers la nouvelle adresse). Suffisant pour les visiteurs et les moteurs ; de vraies **301** côté Vercel seraient meilleures — reporté au déploiement (étape 8).
 - **`robots.txt`** généré (`src/pages/robots.txt.ts`) pour que l'adresse du sitemap suive `SITE_URL`. Sitemap déjà en place (étape 0), sans la 404 ni les redirections.
 - **Tests** : unitaires (pas de redirection vers une redirection, toutes vers `/lore…`, noms réservés) ; sur `dist/` : chaque URL publiée répond, chaque page de redirection mène directement à une vraie page, `robots.txt`, anciennes URL absentes du sitemap. **Vu en échec** en retirant la redirection `/lore/chronologie`.
+
+## D15 — Finitions avant la mise en ligne (13 oct. 2026)
+
+Le déploiement lui-même est fait par Deltouille ; tout le reste de l'étape 8 est en place.
+
+- **Une seule forme d'URL, sans barre finale** (`trailingSlash: 'never'`). Avant, la canonique et le sitemap déclaraient `/lore/venti/` alors que tous les liens et redirections menaient à `/lore/venti` : deux adresses pour une page. Test ajouté (canoniques et sitemap sans barre finale).
+- **`vercel.json` généré** par `scripts/vercel.mjs` (`npm run vercel`) depuis `src/lib/redirections.mjs`, test de synchronisation comme pour la palette :
+  - les 33 anciennes URL en **vraies redirections 301** (les pages `meta refresh` d'Astro restent dans `dist/` pour tout autre hébergeur) ;
+  - `buildCommand: npm run build` (un simple `astro build` oublierait l'index de recherche), `trailingSlash: false` ;
+  - cache d'un an, `immutable`, sur `/_astro/*` (noms de fichiers à empreinte) ;
+  - en-têtes `X-Content-Type-Options`, `Referrer-Policy`, `Permissions-Policy`, `X-Frame-Options`. **Pas de CSP** pour l'instant : les scripts sont mis en ligne par Astro, il faudrait leurs empreintes (hash) ; à faire si besoin, avec un test.
+- **Audit d'accessibilité automatisé** : axe-core injecté par `npm run captures` dans chaque scène (pages, menus et recherche ouverts, mobile, deux thèmes), règles WCAG 2.2 A/AA + bonnes pratiques ; toute violation fait échouer le script. Les vraies pages passaient d'emblée ; seules les pages d'outillage `/demo*` avaient des repères manquants, corrigés. Vu en échec : bouton de recherche mobile sans nom → `button-name (critical)` (et seulement en 390 px : axe ignore, à juste titre, un bouton masqué).
+- **Poids** (`tests/poids.test.mjs`, budgets écrits dans le test) : HTML < 25 Ko compressés par page (mesuré 11 à 15), aucun fichier JS externe et < 12 Ko de scripts en ligne, une seule feuille CSS < 20 Ko compressés (9), chaque image affichée < 400 Ko, image de partage JPEG 1200 × 630 < 300 Ko.
+  - Le test a trouvé deux vrais défauts : l'**image de partage** était l'original (1,3 à 1,6 Mo) → générée en 1200 × 630 par `getImage` (≈ 110 Ko) ; le **`src` de repli** des `<Image>` était l'original ré-encodé en 3840 px (≈ 600 Ko, inutile mais généré, et chargé par un navigateur sans `srcset`) → `width` = la plus grande variante. `dist/_astro` : 11 → 6,4 Mo.
+  - **Limite connue** : les images non utilisées de `src/assets/images` (régions sans article) sont copiées dans `dist/` (≈ 6 Mo), parce que `import.meta.glob` les importe toutes. Essayé : l'import paresseux ne change rien (Vite émet quand même chaque module). Sans effet sur le poids des pages ; seulement sur la taille du déploiement.
+- **Lighthouse 12** (mobile, bridage par défaut, Brave, `astro preview`) :
+
+  | Page | Performance | Accessibilité | Bonnes pratiques | SEO | LCP | CLS | TBT |
+  |---|---|---|---|---|---|---|---|
+  | `/` | 100 | 100 | 100 | 100 | 1,8 s | 0,013 | 0 ms |
+  | `/lore/venti` | 100 | 100 | 100 | 100 | 1,7 s | 0 | 0 ms |
+  | `/lore` | 100 | 100 | 100 | 100 | 1,0 s | 0 | 0 ms |
+
+  Lancé à la main (`CHROME_PATH=$(which brave) npx lighthouse@12 <url>`), pas dans les tests : les scores varient d'une machine à l'autre ; les budgets de `poids.test.mjs` et l'audit axe sont les garde-fous permanents.

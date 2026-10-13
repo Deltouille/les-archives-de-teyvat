@@ -2,7 +2,7 @@
 
 > Réécriture propre du prototype `old/`, d'après son cahier des charges
 > `old/documentation/refonte-astro.md` (cité « CDC §n » ci-dessous).
-> Commencé le 13 octobre 2026. Les décisions prises en route vont dans
+> Commencé le 13 octobre 2026. **État : étapes 0 à 8 réalisées ; reste le déploiement (Deltouille).** Les décisions prises en route vont dans
 > [`decisions.md`](decisions.md) ; ce fichier dit **quoi faire et dans quel ordre**.
 
 ## Règles du jeu
@@ -100,12 +100,15 @@ Chaque étape se termine seulement quand :
 - **Tests** : chaque redirection pointe vers une page existante ; **surface d'URL identique à `old/dist/`** (écarts justifiés dans `decisions.md`).
 - **Décision** : D14.
 
-## Étape 8 — Finitions et mise en ligne
+## Étape 8 — Finitions et mise en ligne ✅ (sauf le déploiement, fait par Deltouille)
 
-- [ ] Audit accessibilité (clavier, contrastes, `alt`) et poids des pages (images `astro:assets`, JS minimal).
-- [ ] Déploiement, `SITE_URL` de production.
-- [ ] Vraies redirections 301 côté Vercel pour les anciennes URL (aujourd'hui des pages `meta refresh`, D14).
-- **Tests** : `npm run verify` + captures complètes de toutes les pages ; Lighthouse sur 3 pages types, scores consignés.
+- [x] Audit accessibilité automatisé (axe-core dans les captures) et budgets de poids (`tests/poids.test.mjs`).
+- [ ] Déploiement, `SITE_URL` de production — **par Deltouille** (cf. README, « Mise en ligne »).
+- [x] Vraies redirections 301 côté Vercel : `vercel.json` généré depuis `src/lib/redirections.mjs` (D15).
+- [x] Une seule forme d'URL, sans barre finale (D15).
+- **Tests** : `npm run verify` + captures complètes de toutes les pages ; Lighthouse sur 3 pages types, scores consignés (100 partout, D15).
+- **Décision** : D15.
+
 
 ---
 

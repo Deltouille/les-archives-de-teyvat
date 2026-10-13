@@ -46,6 +46,8 @@ const outillageDeDev = () => ({
 export default defineConfig({
   site: process.env.SITE_URL || 'https://l-histoire-de-genshin-expliquee.vercel.app',
   output: 'static',
+  // Une seule forme d'URL, sans barre finale, comme tous les liens internes : canonique et sitemap comprises (D15).
+  trailingSlash: 'never',
   integrations: [sitemap({ filter: page => !page.endsWith('/404/') }), outillageDeDev()],
   vite: { plugins: [tailwindcss()] },
   devToolbar: { enabled: false },
