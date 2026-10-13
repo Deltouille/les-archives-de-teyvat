@@ -151,3 +151,40 @@ test('recherche : fenêtre accessible et boutons d’ouverture sur chaque page',
     assert.match(html, /<kbd[^>]*data-raccourci>Ctrl K<\/kbd>/, page);
   }
 });
+
+test('aucune URL publiée par le prototype ne disparaît (page ou redirection)', async () => {
+  const urls = (await readFile(path.resolve('tests/donnees/urls-publiees.txt'), 'utf8')).split('\n').filter(l => l && !l.startsWith('#'));
+  const absentes = [];
+  for (const url of urls) {
+    const fichier = url.endsWith('/') ? path.join(racine, url, 'index.html') : path.join(racine, url);
+    if (!(await existe(fichier))) absentes.push(url);
+  }
+  assert.deepEqual(absentes, []);
+});
+
+test('chaque page de redirection mène directement à une vraie page', async () => {
+  const erreurs = [];
+  let nombre = 0;
+  for (const fichier of pages) {
+    const cible = (await readFile(fichier, 'utf8')).match(/http-equiv="refresh" content="0;url=([^"]+)"/)?.[1];
+    if (!cible) continue;
+    nombre++;
+    const html = await readFile(path.join(racine, cible, 'index.html'), 'utf8').catch(() => null);
+    if (!html) erreurs.push(`${path.relative(racine, fichier)} → ${cible} : introuvable`);
+    else if (html.includes('http-equiv="refresh"')) erreurs.push(`${path.relative(racine, fichier)} → ${cible} : encore une redirection`);
+  }
+  assert.ok(nombre >= 33, `${nombre} pages de redirection`);
+  assert.deepEqual(erreurs, []);
+});
+
+test('robots.txt autorise l’exploration et donne le sitemap', async () => {
+  const robots = await lire('robots.txt');
+  assert.match(robots, /^User-agent: \*$/m);
+  assert.match(robots, /^Sitemap: https:\/\/[^\s]+\/sitemap-index\.xml$/m);
+  assert.ok(await existe(path.join(racine, 'sitemap-index.xml')));
+});
+
+test('les anciennes URL redirigées n’entrent pas dans le sitemap', async () => {
+  const sitemap = await lire('sitemap-0.xml');
+  for (const ancienne of ['/lore/regions/mondstadt/', '/tags/anemo/', '/dossiers/commencer/']) assert.doesNotMatch(sitemap, new RegExp(`<loc>https?://[^/<]+${ancienne}</loc>`), ancienne);
+});

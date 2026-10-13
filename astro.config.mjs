@@ -4,6 +4,7 @@ import { readFile } from 'node:fs/promises';
 import path from 'node:path';
 import sitemap from '@astrojs/sitemap';
 import tailwindcss from '@tailwindcss/vite';
+import { REDIRECTIONS } from './src/lib/redirections.mjs';
 
 const TYPES = { '.js': 'text/javascript', '.json': 'application/json', '.css': 'text/css' };
 
@@ -48,4 +49,6 @@ export default defineConfig({
   integrations: [sitemap({ filter: page => !page.endsWith('/404/') }), outillageDeDev()],
   vite: { plugins: [tailwindcss()] },
   devToolbar: { enabled: false },
+  // Anciennes URL, listes figées : aucune adresse publiée ne disparaît.
+  redirects: REDIRECTIONS,
 });

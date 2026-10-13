@@ -93,16 +93,18 @@ Chaque étape se termine seulement quand :
 - **Tests** : build (index Pagefind généré, filtre présent) ; interaction dans Brave headless : ouverture au clavier, une requête « Venti » renvoie l'article.
 - **Décision** : D13 (interface maison sur l'API Pagefind, index servi en dev).
 
-## Étape 7 — Référencement et redirections
+## Étape 7 — Référencement et redirections ✅
 
-- [ ] Redirections **figées** reprises de `old/astro.config.mjs`.
-- [ ] Sitemap sans la 404, image sociale, `robots`.
+- [x] Redirections **figées** reprises de `old/astro.config.mjs`, dans `src/lib/redirections.mjs` (source unique, aussi lue par la validation).
+- [x] Sitemap sans la 404, image sociale, `robots.txt` généré.
 - **Tests** : chaque redirection pointe vers une page existante ; **surface d'URL identique à `old/dist/`** (écarts justifiés dans `decisions.md`).
+- **Décision** : D14.
 
 ## Étape 8 — Finitions et mise en ligne
 
 - [ ] Audit accessibilité (clavier, contrastes, `alt`) et poids des pages (images `astro:assets`, JS minimal).
 - [ ] Déploiement, `SITE_URL` de production.
+- [ ] Vraies redirections 301 côté Vercel pour les anciennes URL (aujourd'hui des pages `meta refresh`, D14).
 - **Tests** : `npm run verify` + captures complètes de toutes les pages ; Lighthouse sur 3 pages types, scores consignés.
 
 ---

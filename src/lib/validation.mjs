@@ -2,9 +2,9 @@
 // tests/validation.test.mjs. Chaque erreur nomme le fichier à corriger.
 // Ils portent sur tous les articles, brouillons compris : un brouillon mal tagué doit échouer dès le dev.
 
-// /lore/tags est l'index des tags, et /lore/<ancienne catégorie> redirige vers son thème (astro.config.mjs) :
-// aucun article ne peut prendre ces noms.
-const RESERVES = new Set(['tags', 'teyvat', 'chronologie', 'quetes', 'concepts', 'personnages', 'regions', 'factions', 'evenements']);
+// /lore/tags est l'index des tags, et plusieurs /lore/<nom> sont des redirections figées : aucun article ne peut
+// prendre ces noms (src/lib/redirections.mjs).
+import { NOMS_RESERVES as RESERVES } from './redirections.mjs';
 
 /**
  * @param {{ id: string, data: { tags: string[], image: string, publieLe: Date, modifieLe?: Date } }[]} articles
