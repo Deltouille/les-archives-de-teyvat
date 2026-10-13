@@ -1,43 +1,24 @@
-# Astro Starter Kit: Minimal
+# L'Histoire de Genshin
 
-```sh
-npm create astro@latest -- --template minimal
-```
+Blog statique qui raconte le lore de Genshin Impact, en français. Projet de fans indépendant, non affilié à HoYoverse.
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+Astro (sortie statique), Tailwind CSS v4, Pagefind pour la recherche. Aucune webfont, aucun service tiers.
 
-## 🚀 Project Structure
+## Commandes
 
-Inside of your Astro project, you'll see the following folders and files:
+| Commande | Action |
+| :-- | :-- |
+| `npm install` | Installe les dépendances (Node ≥ 22.12) |
+| `npm run dev` | Serveur de dev sur `localhost:4321` |
+| `npm run build` | Build dans `dist/`, puis index de recherche Pagefind |
+| `npm run check` | Vérification des types (`astro check`) |
+| `npm test` | Tests (`node --test`) ; ceux de `tests/site.test.mjs` exigent un build |
+| `npm run verify` | `check` + `build` + `test` : à faire passer avant chaque commit |
+| `npm run preview` | Sert le build localement |
 
-```text
-/
-├── public/
-├── src/
-│   └── pages/
-│       └── index.astro
-└── package.json
-```
+`SITE_URL` remplace l'URL de production (`https://l-histoire-de-genshin-expliquee.vercel.app`) pour les URL canoniques et le sitemap.
 
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
+## Documentation
 
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
-
-Any static assets, like images, can be placed in the `public/` directory.
-
-## 🧞 Commands
-
-All commands are run from the root of the project, from a terminal:
-
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
-
-## 👀 Want to learn more?
-
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+- [`documentation/plan-implementation.md`](documentation/plan-implementation.md) : le plan, étape par étape.
+- [`documentation/decisions.md`](documentation/decisions.md) : le journal des décisions.

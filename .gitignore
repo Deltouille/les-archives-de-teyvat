@@ -22,3 +22,6 @@ pnpm-debug.log*
 
 # jetbrains setting folder
 .idea/
+
+# prototype de référence, local uniquement (cf. documentation/decisions.md, D1)
+old/
