@@ -24,6 +24,7 @@ npm run build      # astro build && pagefind --site dist
 npm run check      # astro check
 npm test           # node --test tests/*.test.mjs ; un seul fichier : node --test tests/site.test.mjs
 npm run verify     # check + build + test : doit passer avant de clore une étape
+npm run palette    # régénère src/styles/palette.css depuis scripts/palette.mjs
 ```
 
 Pas de linter. `tests/site.test.mjs` lit `dist/` (build requis). Les fonctions pures de `src/lib/` (validation du contenu, etc.) ont leurs tests unitaires, qui ne demandent pas de build.
@@ -35,13 +36,15 @@ Pas de linter. `tests/site.test.mjs` lit `dist/` (build requis). Les fonctions p
 - **Pagefind** pour la recherche (index statique au build), **`@astrojs/sitemap`**.
 - **Aucune webfont** : piles système uniquement (engagement écrit dans la page Confidentialité).
 - Thème sombre porté par `data-theme` sur `<html>` (pas la media query), mémorisé dans `localStorage` (`genshin-theme`), appliqué par un script inline dans `<head>` (anti-flash). Variante : `@custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *))`.
-- Jetons de couleur en français (`fond`, `surface`, `tonal`, `doux`, `ligne`, `texte`, `discret`, `primaire`, `or`…, valeurs dans refonte-astro.md §3) : ils basculent seuls avec le thème, `dark:` ne sert qu'aux couleurs fixes.
+- Composants plus petits que dans le prototype : extraire carte « À la une », tuile de thème, encadrés (spoilers, résumé, sources), sommaire.
 
-### À faire mieux que le prototype
+### Système de design (decisions.md D6, D7 ; planche visible sur `/demo` en dev)
 
-- **Mobile d'abord**, points de rupture Tailwind par défaut (le prototype utilisait des `max-*` hérités).
-- Échelle typographique et d'espacement dans `@theme` plutôt que des tailles arbitraires (`text-[11px]`…).
-- Composants plus petits : extraire carte « À la une », tuile de thème, encadrés (spoilers, résumé, sources), sommaire.
+- **Couleurs** : `src/styles/palette.css` est **généré** par `scripts/palette.mjs` (Material Color Utilities, Tonal Spot, source `#355f98`) — ne jamais l'éditer à la main : modifier le script puis `npm run palette`. Jetons français rattachés à des rôles M3 (`fond`, `surface`, `doux`, `tonal`/`sur-tonal`, `ligne`, `contour`, `texte`, `discret`, `primaire`/`sur-primaire`, `conteneur-primaire`, `or`…) ; ils basculent seuls avec le thème, `dark:` ne sert qu'aux couleurs fixes (`ciel`, `ciel-clair`, `nuit`, `ambre`). Survol : `primaire-survol`, `tonal-survol` (couche d'état M3). `ligne` est décoratif ; une bordure de contrôle interactif utilise `contour`.
+- **Tailles de texte, rayons, ombres** : seules les échelles M3 existent (`text-corps-m`, `text-titre-g`, `rounded-carte`, `rounded-moyen`, `shadow-niveau-2`…) ; celles de Tailwind (`text-sm`, `rounded-lg`, `shadow-md`) sont supprimées. Pas de taille arbitraire `text-[…]`.
+- **Points de rupture** : classes de fenêtre M3, mobile d'abord — `sm` 600, `md` 840, `lg` 1200, `xl` 1600 (pas de `2xl`).
+- Écrire les classes Tailwind en entier : `` `text-${taille}` `` n'est pas détecté.
+- La machine de dev n'a aucune police serif : les titres y apparaissent sans empattement sur les captures, c'est attendu.
 
 ## Modèle de contenu : tout en tags
 

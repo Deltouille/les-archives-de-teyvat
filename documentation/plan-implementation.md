@@ -38,16 +38,16 @@ Chaque étape se termine seulement quand :
 - **Tests** : premier `tests/site.test.mjs` minimal (la page d'accueil est générée, `lang="fr"`) ; `npm run verify` vert.
 - **Décidé** : Vercel, `l-histoire-de-genshin-expliquee.vercel.app` (D3). Outillage : D5.
 
-## Étape 1 — Système de design
+## Étape 1 — Système de design ✅
 
-- [ ] `src/styles/global.css` : jetons de couleur en français, clair et sombre (CDC §3), exposés via `@theme inline`.
-- [ ] Variante `dark` sur `data-theme` (`@custom-variant`).
-- [ ] **Échelle typographique et d'espacement** dans `@theme` (fini les `text-[11px]`), rayons M3 (`rounded-carte`…), piles système `font-sans` / `font-serif`.
-- [ ] Points de rupture **Tailwind par défaut, mobile d'abord**.
-- [ ] Styles de base (titres, focus visible, sélection, `kbd`), utilitaires maison en `@utility` (`sur-titre`, `pastille`, `lien-texte`, `fleche-ronde`), `.prose` pour le Markdown.
-- [ ] Page de démonstration des jetons et composants, servie **en dev uniquement** (sert aux captures visuelles).
+- [x] `src/styles/global.css` : jetons de couleur en français, clair et sombre (CDC §3), exposés via `@theme inline`.
+- [x] Variante `dark` sur `data-theme` (`@custom-variant`).
+- [x] **Échelle typographique et d'espacement** dans `@theme` (fini les `text-[11px]`), rayons M3 (`rounded-carte`…), piles système `font-sans` / `font-serif`.
+- [x] Points de rupture mobile d'abord : classes de fenêtre M3 plutôt que Tailwind par défaut (D7).
+- [x] Styles de base (titres, focus visible, sélection, `kbd`), utilitaires maison en `@utility` (`sur-titre`, `pastille`, `lien-texte`, `fleche-ronde`), `.prose` pour le Markdown.
+- [x] Page de démonstration des jetons et composants, servie **en dev uniquement** (sert aux captures visuelles).
 - **Tests** : build vert ; contraste des paires de couleurs texte/fond vérifié par un test unitaire (seuil WCAG AA) ; captures clair/sombre de la page de démo.
-- **Décidé** : palette tonale M3 **générée** à partir d’une couleur source (D4), réversible si le rendu déçoit.
+- **Décidé** : palette tonale M3 **générée** à partir d’une couleur source (D4), mise en œuvre en D6 ; système de design : D7.
 
 ## Étape 2 — Mise en page et navigation
 

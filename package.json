@@ -12,7 +12,8 @@
     "test": "node --test tests/*.test.mjs",
     "verify": "npm run check && npm run build && npm test",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "palette": "node scripts/palette.mjs"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.7.4",
@@ -22,6 +23,7 @@
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.10",
+    "@material/material-color-utilities": "^0.3.0",
     "pagefind": "^1.5.2",
     "typescript": "^6.0.3"
   }

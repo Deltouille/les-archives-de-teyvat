@@ -1,1 +1,116 @@
 @import "tailwindcss";
+/* Couleurs : générées depuis une couleur source (scripts/palette.mjs). Elles basculent seules avec le thème :
+   inutile d'écrire dark: pour elles. */
+@import "./palette.css";
+
+/* Le thème est porté par data-theme sur <html> (script anti-flash du layout), pas par la media query :
+   le choix manuel du visiteur doit l'emporter sur la préférence système. dark: ne sert qu'aux couleurs fixes. */
+@custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));
+
+@theme inline {
+  /* Couche d'état M3 au survol : 8 % de la couleur « sur » mélangée au conteneur. */
+  --color-primaire-survol: color-mix(in srgb, var(--primaire), var(--sur-primaire) 8%);
+  --color-tonal-survol: color-mix(in srgb, var(--tonal), var(--sur-tonal) 8%);
+}
+
+@theme {
+  /* Aucune webfont : piles système uniquement (engagement de la page Confidentialité). */
+  --font-sans: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  /* Georgia (Windows, macOS), puis les serifs courantes de Linux et Android avant le générique. */
+  --font-serif: Georgia, Cambria, "Times New Roman", "Noto Serif", "DejaVu Serif", "Liberation Serif", serif;
+
+  /* Échelle typographique M3 (affichage, grand titre, titre, corps, étiquette ; g/m/p = grand/moyen/petit).
+     Seules ces tailles existent : pas de text-[11px]. */
+  --text-*: initial;
+  --text-affichage-g: 3.5625rem; --text-affichage-g--line-height: 4rem; --text-affichage-g--letter-spacing: -0.016rem;
+  --text-affichage-m: 2.8125rem; --text-affichage-m--line-height: 3.25rem;
+  --text-affichage-p: 2.25rem; --text-affichage-p--line-height: 2.75rem;
+  --text-grand-titre-g: 2rem; --text-grand-titre-g--line-height: 2.5rem;
+  --text-grand-titre-m: 1.75rem; --text-grand-titre-m--line-height: 2.25rem;
+  --text-grand-titre-p: 1.5rem; --text-grand-titre-p--line-height: 2rem;
+  --text-titre-g: 1.375rem; --text-titre-g--line-height: 1.75rem;
+  --text-titre-m: 1rem; --text-titre-m--line-height: 1.5rem; --text-titre-m--letter-spacing: 0.009rem; --text-titre-m--font-weight: 500;
+  --text-titre-p: 0.875rem; --text-titre-p--line-height: 1.25rem; --text-titre-p--letter-spacing: 0.006rem; --text-titre-p--font-weight: 500;
+  --text-corps-g: 1rem; --text-corps-g--line-height: 1.5rem; --text-corps-g--letter-spacing: 0.031rem;
+  --text-corps-m: 0.875rem; --text-corps-m--line-height: 1.25rem; --text-corps-m--letter-spacing: 0.016rem;
+  --text-corps-p: 0.75rem; --text-corps-p--line-height: 1rem; --text-corps-p--letter-spacing: 0.025rem;
+  --text-etiquette-g: 0.875rem; --text-etiquette-g--line-height: 1.25rem; --text-etiquette-g--letter-spacing: 0.006rem; --text-etiquette-g--font-weight: 500;
+  --text-etiquette-m: 0.75rem; --text-etiquette-m--line-height: 1rem; --text-etiquette-m--letter-spacing: 0.031rem; --text-etiquette-m--font-weight: 500;
+  --text-etiquette-p: 0.6875rem; --text-etiquette-p--line-height: 1rem; --text-etiquette-p--letter-spacing: 0.031rem; --text-etiquette-p--font-weight: 500;
+
+  /* Échelle de formes M3. Seules ces valeurs existent (plus rounded-full et rounded-none). */
+  --radius-*: initial;
+  --radius-tres-petit: 0.25rem;
+  --radius-petit: 0.5rem;
+  --radius-moyen: 0.75rem;
+  --radius-grand: 1rem;
+  --radius-tres-grand: 1.75rem;
+  --radius-carte: 1.75rem;
+
+  /* Élévation M3, niveaux 1 à 3. */
+  --shadow-*: initial;
+  --shadow-niveau-1: 0 1px 2px 0 rgb(0 0 0 / 0.3), 0 1px 3px 1px rgb(0 0 0 / 0.15);
+  --shadow-niveau-2: 0 1px 2px 0 rgb(0 0 0 / 0.3), 0 2px 6px 2px rgb(0 0 0 / 0.15);
+  --shadow-niveau-3: 0 1px 3px 0 rgb(0 0 0 / 0.3), 0 4px 8px 3px rgb(0 0 0 / 0.15);
+
+  /* Courbes de mouvement M3. */
+  --ease-standard: cubic-bezier(0.2, 0, 0, 1);
+  --ease-emphase-entree: cubic-bezier(0.05, 0.7, 0.1, 1);
+  --ease-emphase-sortie: cubic-bezier(0.3, 0, 0.8, 0.15);
+
+  /* Classes de fenêtre M3, en mobile d'abord : compacte < 600, moyenne (sm), étendue (md), grande (lg), très grande (xl). */
+  --breakpoint-*: initial;
+  --breakpoint-sm: 600px;
+  --breakpoint-md: 840px;
+  --breakpoint-lg: 1200px;
+  --breakpoint-xl: 1600px;
+
+  /* L'espacement reste celui de Tailwind (multiples de 4 px) : c'est déjà la grille de 4 dp de M3. */
+}
+
+@layer base {
+  html { scroll-behavior: smooth; font-synthesis: none; -webkit-text-size-adjust: 100%; }
+  body { background: var(--fond); color: var(--texte); font-family: var(--font-sans); @apply text-corps-g; }
+  button, a { -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
+  button { cursor: pointer; }
+  svg { flex-shrink: 0; }
+  /* Titres éditoriaux en serif, comme le prototype ; tailles prises dans l'échelle M3. */
+  h1, h2 { font-family: var(--font-serif); font-weight: 500; letter-spacing: -0.02em; text-wrap: balance; }
+  h1 { @apply text-affichage-p sm:text-affichage-m lg:text-affichage-g; }
+  h2 { @apply text-grand-titre-m sm:text-grand-titre-g; }
+  h3 { @apply text-titre-g; font-weight: 600; }
+  :focus-visible { outline: 3px solid var(--primaire); outline-offset: 2px; }
+  ::selection { background: var(--tonal); color: var(--sur-tonal); }
+  kbd { @apply text-etiquette-p rounded-tres-petit border border-contour bg-surface px-1.5 py-0.5 font-sans; }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
+  }
+}
+
+/* Petits motifs répétés sur tout le site. En @utility, ils acceptent les variantes (md:, hover:…). */
+@utility sur-titre { @apply text-etiquette-m font-bold tracking-[0.16em] text-primaire uppercase; }
+@utility pastille { @apply text-etiquette-g inline-flex items-center gap-2 rounded-full bg-tonal px-3 py-1.5 text-sur-tonal; }
+@utility fleche-ronde { @apply grid size-10 shrink-0 place-items-center rounded-full bg-tonal text-sur-tonal; }
+@utility lien-texte {
+  @apply text-etiquette-g inline-flex items-center gap-2 text-primaire underline-offset-4;
+  &:hover { text-decoration: underline; }
+}
+
+/* Le Markdown rendu ne peut pas recevoir d'utilitaires : sa typographie est décrite ici une fois pour toutes.
+   Interlignage plus généreux que le corps M3 (1,8 contre 1,5) : ce sont de longues lectures. */
+@layer components {
+  .prose { @apply text-corps-g; line-height: 1.8; overflow-wrap: break-word; }
+  .prose > :first-child { margin-top: 0; }
+  .prose h2 { @apply mt-10 mb-4; }
+  .prose h3 { @apply mt-8 mb-3; }
+  .prose p, .prose ul, .prose ol { @apply mb-5; }
+  .prose a { @apply text-primaire underline underline-offset-4; }
+  .prose strong { font-weight: 650; }
+  .prose em { color: var(--primaire); }
+  .prose ul { @apply list-disc pl-6; }
+  .prose ol { @apply list-decimal pl-6; }
+  .prose li { @apply mb-2; }
+  .prose blockquote { @apply my-6 rounded-r-grand border-l-4 border-primaire bg-doux px-6 py-4 italic; }
+  .prose code { @apply rounded-tres-petit bg-tonal px-1.5 py-0.5 text-corps-m text-sur-tonal; }
+}

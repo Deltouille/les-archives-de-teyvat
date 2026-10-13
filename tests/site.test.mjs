@@ -19,3 +19,16 @@ test('les pages sont en français', async () => {
 test('le sitemap et l’index de recherche sont générés', async () => {
   for (const fichier of ['sitemap-index.xml', 'pagefind/pagefind.js']) assert.ok(await existe(path.join(racine, fichier)), fichier);
 });
+
+test('le CSS publié porte les jetons M3 des deux thèmes', async () => {
+  const { readdir } = await import('node:fs/promises');
+  const feuilles = (await readdir(path.join(racine, '_astro'))).filter(f => f.endsWith('.css'));
+  const css = (await Promise.all(feuilles.map(f => lire(path.join('_astro', f))))).join('');
+  assert.match(css, /--primaire:\s*#/);
+  assert.match(css, /\[data-theme=["']?dark["']?\]/);
+  assert.match(css, /prefers-color-scheme:\s*dark/);
+});
+
+test('la planche du système de design reste hors du site publié', async () => {
+  assert.ok(!(await existe(path.join(racine, 'demo/index.html'))));
+});

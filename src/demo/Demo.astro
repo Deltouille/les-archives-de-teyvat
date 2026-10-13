@@ -1,0 +1,114 @@
+---
+// Planche du système de design (/demo, en dev uniquement) : sert à juger la palette et aux captures visuelles.
+import '../styles/global.css';
+import { genererPalette } from '../../scripts/palette.mjs';
+
+const { clair } = genererPalette();
+const jetons = Object.keys(clair);
+const fixes = ['ciel', 'ciel-clair', 'nuit', 'ambre'];
+// Noms de classes complets : Tailwind ne détecte pas les classes construites dynamiquement.
+const echelle = ['text-affichage-g', 'text-affichage-m', 'text-affichage-p', 'text-grand-titre-g', 'text-grand-titre-m', 'text-grand-titre-p', 'text-titre-g', 'text-titre-m', 'text-titre-p', 'text-corps-g', 'text-corps-m', 'text-corps-p', 'text-etiquette-g', 'text-etiquette-m', 'text-etiquette-p'];
+const formes = ['rounded-tres-petit', 'rounded-petit', 'rounded-moyen', 'rounded-grand', 'rounded-tres-grand'];
+const niveaux = ['shadow-niveau-1', 'shadow-niveau-2', 'shadow-niveau-3'];
+---
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex" />
+    <title>Système de design · L’Histoire de Genshin</title>
+    <script is:inline>
+      const voulu = new URLSearchParams(location.search).get('theme');
+      if (voulu) document.documentElement.dataset.theme = voulu;
+    </script>
+  </head>
+  <body class="mx-auto max-w-6xl px-4 py-10 sm:px-6 lg:px-8">
+    <header class="mb-10 flex flex-wrap items-center justify-between gap-4">
+      <div>
+        <p class="sur-titre">Outillage · dev uniquement</p>
+        <h1>Système de design</h1>
+      </div>
+      <button id="bascule" class="pastille hover:bg-tonal-survol">Basculer le thème</button>
+    </header>
+
+    <section class="mb-12">
+      <h2 class="mb-4">Couleurs</h2>
+      <div class="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
+        {jetons.map(nom => (
+          <div class="overflow-hidden rounded-moyen border border-ligne bg-surface">
+            <div class="h-14" style={`background: var(--${nom})`}></div>
+            <p class="text-etiquette-m px-3 py-2">{nom}</p>
+          </div>
+        ))}
+        {fixes.map(nom => (
+          <div class="overflow-hidden rounded-moyen border border-ligne bg-surface">
+            <div class="h-14" style={`background: var(--color-${nom})`}></div>
+            <p class="text-etiquette-m px-3 py-2">{nom} <span class="text-discret">(fixe)</span></p>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <section class="mb-12">
+      <h2 class="mb-4">Paires de lecture</h2>
+      <div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+        <div class="rounded-carte bg-surface p-5"><p class="text-titre-m">Texte sur surface</p><p class="text-corps-m text-discret">Texte discret sur surface</p></div>
+        <div class="rounded-carte bg-primaire p-5 text-sur-primaire"><p class="text-titre-m">Sur primaire</p><p class="text-corps-m">Bouton plein, bannière</p></div>
+        <div class="rounded-carte bg-tonal p-5 text-sur-tonal"><p class="text-titre-m">Sur tonal</p><p class="text-corps-m">Puces actives, emblèmes</p></div>
+        <div class="rounded-carte bg-conteneur-or p-5 text-sur-conteneur-or"><p class="text-titre-m">Encadré spoilers</p><p class="text-corps-m">Conteneur or</p></div>
+        <div class="rounded-carte bg-nuit p-5"><p class="text-titre-m text-ciel-clair">Sur image sombre</p><p class="text-corps-m text-ciel">Ciel, et <span class="text-ambre">ambre</span></p></div>
+      </div>
+    </section>
+
+    <section class="mb-12">
+      <h2 class="mb-4">Typographie</h2>
+      <div class="space-y-3 rounded-carte bg-surface p-6">
+        {echelle.map(taille => (
+          <p class={`${taille} flex flex-wrap items-baseline gap-x-4`}><span class="text-etiquette-p w-28 shrink-0 text-discret">{taille.replace('text-', '')}</span> Teyvat, terre des sept</p>
+        ))}
+      </div>
+    </section>
+
+    <section class="mb-12">
+      <h2 class="mb-4">Formes et élévation</h2>
+      <div class="flex flex-wrap gap-4">
+        {formes.map(forme => <div class={`${forme} grid size-24 place-items-center bg-conteneur-primaire text-etiquette-m text-sur-conteneur-primaire`}>{forme.replace('rounded-', '')}</div>)}
+        {niveaux.map(niveau => <div class={`${niveau} grid size-24 place-items-center rounded-grand bg-surface text-etiquette-m`}>{niveau.replace('shadow-', '')}</div>)}
+      </div>
+    </section>
+
+    <section class="mb-12">
+      <h2 class="mb-4">Motifs</h2>
+      <div class="flex flex-wrap items-center gap-4 rounded-carte bg-surface p-6">
+        <span class="sur-titre">Sur-titre</span>
+        <span class="pastille">Pastille</span>
+        <span class="fleche-ronde" aria-hidden="true">→</span>
+        <a class="lien-texte" href="#">Lien texte →</a>
+        <button class="text-etiquette-g rounded-full bg-primaire px-6 py-2.5 text-sur-primaire hover:bg-primaire-survol">Bouton plein</button>
+        <button class="text-etiquette-g rounded-full border border-contour px-6 py-2.5 text-primaire hover:bg-doux">Bouton contour</button>
+        <kbd>Ctrl K</kbd>
+      </div>
+    </section>
+
+    <section>
+      <h2 class="mb-4">Prose (Markdown rendu)</h2>
+      <article class="prose max-w-[68ch] rounded-carte bg-surface p-6 sm:p-10">
+        <h2>La chute de Khaenri’ah</h2>
+        <p>Il y a cinq cents ans, une nation sans dieu s’est dressée contre <em>les Cieux</em>. Ce que l’on sait de sa chute tient en quelques <a href="#">témoignages</a>, souvent <strong>contradictoires</strong>.</p>
+        <h3>Ce que l’on sait</h3>
+        <ul><li>Une nation souterraine, sans Archon.</li><li>Une catastrophe qui a touché tout Teyvat.</li></ul>
+        <ol><li>Premier témoignage.</li><li>Second témoignage.</li></ol>
+        <blockquote>« Le ciel est faux. »</blockquote>
+        <p>Une ligne de <code>code</code> au passage.</p>
+      </article>
+    </section>
+
+    <script>
+      document.getElementById('bascule')?.addEventListener('click', () => {
+        const racine = document.documentElement;
+        const sombre = racine.dataset.theme ? racine.dataset.theme === 'dark' : matchMedia('(prefers-color-scheme: dark)').matches;
+        racine.dataset.theme = sombre ? 'light' : 'dark';
+      });
+    </script>
+  </body>
+</html>
