@@ -67,6 +67,11 @@ const boutonIcone = 'grid size-10 place-items-center rounded-full text-discret t
     </nav>
 
     <div class="ml-auto flex items-center gap-2 md:ml-0">
+      {/* Recherche : pastille avec raccourci en largeur étendue, bouton icône en dessous (cf. Recherche.astro). */}
+      <button type="button" class="text-etiquette-g hidden h-10 items-center gap-2 rounded-full border border-contour pr-2 pl-3 text-discret transition-colors duration-200 ease-standard hover:bg-texte/8 md:flex sur-image:border-white/20 sur-image:bg-white/8 sur-image:text-white sur-image:backdrop-blur-md sur-image:hover:bg-white/16" data-recherche>
+        <Icon nom="recherche" taille={20} />Rechercher<kbd class="ml-1 hidden lg:inline sur-image:border-white/25 sur-image:bg-white/10 sur-image:text-white" data-raccourci>Ctrl K</kbd>
+      </button>
+      <button type="button" class:list={[boutonIcone, 'md:hidden']} aria-label="Rechercher" data-recherche><Icon nom="recherche" /></button>
       <BoutonTheme class={boutonIcone} />
       <button type="button" class:list={[boutonIcone, 'group/burger md:hidden']} aria-label="Menu" aria-expanded="false" aria-controls="menu-mobile">
         <Icon nom="menu" class="group-aria-expanded/burger:hidden" />

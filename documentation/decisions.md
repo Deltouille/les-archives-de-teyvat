@@ -137,3 +137,15 @@
 - **Captures** : option `mouvement: true` (pas d'émulation du mouvement réduit). Scène animée : le texte change, la pause le fige, `aria-pressed` suit, le curseur s'arrête ; scène en mouvement réduit : texte fixe, pas de bouton, pas de clignotement.
   - Leçon : la première version de la vérification de pause **passait même sabotée**, parce qu'elle cliquait pendant l'attente de 2,6 s entre deux sujets, où le texte est immobile de toute façon. Elle attend maintenant que le texte soit en train de s'écrire ; vue en échec en neutralisant la pause.
   - Les captures pleine page attendent les images `loading="lazy"` (elles manquaient en bas de l'accueil).
+
+## D13 — Recherche (13 oct. 2026)
+
+- **Interface maison sur l'API JavaScript de Pagefind** (`search`, `debouncedSearch`), au lieu du Pagefind UI du prototype : celui-ci injecte son propre balisage et son CSS, qu'on ne peut habiller que par des variables ; ici, la fenêtre est en composants M3 comme le reste. Pagefind reste chargé à la première ouverture seulement.
+  - `<dialog>` modal (`m-auto`, piège du preflight), `form role="search"`, champ étiqueté, nombre de résultats annoncé (`role="status"`), résultats en simple liste de liens (Tab pour les parcourir, Entrée dans le champ amène au premier) ; Échap, bouton ou clic sur le voile ferment ; le focus revient à l'élément qui a ouvert ; la page derrière est bloquée.
+  - 8 résultats au plus, avec titre, badge du thème (filtre `theme`) et extrait (les `<mark>` de Pagefind en `conteneur-or`). L'extrait est inséré en HTML : Pagefind le produit depuis notre propre contenu, texte échappé.
+  - Index limité aux articles (`data-pagefind-body` n'existe que sur eux), en français (`lang="fr"`).
+- **Boutons** : pastille « Rechercher » + raccourci en largeur étendue, bouton icône en dessous. Raccourci `Ctrl K` dans le HTML, remplacé par `⌘ K` sur Mac et iOS.
+- **Recherche en dev** : l'intégration d'outillage (renommée `outillageDeDev`, ex-`pagesDeDev`) sert `dist/pagefind` sous `/pagefind` pendant `astro dev`. L'index est donc celui du **dernier build** (`npm run build` avant les captures) ; absent, la recherche affiche qu'elle est indisponible. *Écart au prototype*, qui remplaçait la recherche par un filtre local en dev : on testait alors autre chose que ce qui part en production.
+- **Tests** : l'index couvre exactement les articles publiés, en français ; chaque article porte titre et filtre de thème ; fenêtre, formulaire, étiquette, zone d'état et deux boutons présents sur toutes les pages.
+- **Captures** : les scènes peuvent envoyer de vraies frappes (`clavier` : touches avec Ctrl, texte, attentes), en remplacement de `tabulations`. Vérifié : `Ctrl K` ouvre, le focus est dans le champ, « Venti » trouve l'article, le nombre est annoncé, la page est bloquée ; sur mobile, le bouton icône ouvre, une recherche vaine est annoncée, la fenêtre tient dans l'écran ; Échap ferme, rend le focus au bouton et débloque la page. Vu en échec avec un raccourci cassé et avec des résultats jamais affichés.
+- À savoir : la racinisation française de Pagefind rapproche « Venti » de « vent » (Mondstadt sort aussi) ; Venti reste premier.

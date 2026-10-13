@@ -24,8 +24,8 @@ const LARGEURS = [1440, 1024, 390];
 const THEMES = ['clair', 'sombre'];
 
 // Une scène : une page, des actions éventuelles, puis une capture (pleine page ou fenêtre) et des vérifications.
-// `tabulations` : nombre de vraies frappes de Tab envoyées après les actions (un .focus() par script ne déclenche pas
-// :focus-visible). `mouvement: true` : pas d'émulation du mouvement réduit (pour tester une animation). `verifier` est du JavaScript évalué dans la page, qui renvoie la liste des problèmes (vide si tout va bien).
+// `clavier` : vraies frappes envoyées après les actions, par le protocole DevTools — { touche, ctrl? }, { texte } ou
+// { attendre: ms }. Un .focus() par script ne déclenche pas :focus-visible, une vraie touche Tab si. `mouvement: true` : pas d'émulation du mouvement réduit (pour tester une animation). `verifier` est du JavaScript évalué dans la page, qui renvoie la liste des problèmes (vide si tout va bien).
 const SCENES = [
   { nom: 'accueil', url: '/' },
   { nom: 'demo', url: '/demo', largeurs: [1440, 390] },
@@ -80,6 +80,59 @@ const SCENES = [
       return p;
     })()`,
   },
+  {
+    nom: 'recherche-au-clavier',
+    url: '/lore',
+    largeurs: [1440, 1024],
+    fenetre: true,
+    clavier: [{ touche: 'k', ctrl: true }, { texte: 'Venti' }, { attendre: 1200 }],
+    verifier: `(() => {
+      const p = [];
+      const dialogue = document.getElementById('recherche');
+      if (!dialogue.open) return ['Ctrl K devrait ouvrir la recherche'];
+      if (document.activeElement?.id !== 'recherche-champ') p.push('le focus devrait être dans le champ');
+      if (!dialogue.querySelector('[data-resultats] a[href^="/lore/venti"]')) p.push('« Venti » devrait trouver l’article Venti (état : ' + dialogue.querySelector('[data-etat]').textContent + ')');
+      if (!/résultat/.test(dialogue.querySelector('[data-etat]').textContent)) p.push('le nombre de résultats devrait être annoncé');
+      if (getComputedStyle(document.body).overflow !== 'hidden') p.push('la page derrière devrait être bloquée');
+      return p;
+    })()`,
+  },
+  {
+    nom: 'recherche-mobile',
+    url: '/lore',
+    largeurs: [390],
+    fenetre: true,
+    actions: `
+      window.__bouton = [...document.querySelectorAll('[data-recherche]')].find(b => b.offsetParent);
+      window.__bouton.focus(); window.__bouton.click(); await attendre(200);`,
+    clavier: [{ texte: 'zzqxw' }, { attendre: 1200 }],
+    verifier: `(() => {
+      const p = [];
+      const dialogue = document.getElementById('recherche');
+      if (!dialogue.open) return ['le bouton icône devrait ouvrir la recherche'];
+      if (!/Aucun résultat/.test(dialogue.querySelector('[data-etat]').textContent)) p.push('une recherche vaine devrait être annoncée');
+      const r = dialogue.getBoundingClientRect();
+      if (r.left < 0 || r.right > innerWidth) p.push('la fenêtre devrait tenir dans l’écran');
+      return p;
+    })()`,
+  },
+  {
+    nom: 'recherche-fermeture',
+    url: '/lore',
+    largeurs: [390],
+    fenetre: true,
+    actions: `
+      window.__bouton = [...document.querySelectorAll('[data-recherche]')].find(b => b.offsetParent);
+      window.__bouton.focus(); window.__bouton.click(); await attendre(200);`,
+    clavier: [{ touche: 'Escape' }],
+    verifier: `(() => {
+      const p = [];
+      if (document.getElementById('recherche').open) p.push('Échap devrait fermer la recherche');
+      if (document.activeElement !== window.__bouton) p.push('le focus devrait revenir au bouton de recherche');
+      if (getComputedStyle(document.body).overflow === 'hidden') p.push('la page devrait se débloquer');
+      return p;
+    })()`,
+  },
   { nom: 'bibliotheque', url: '/lore' },
   { nom: 'article', url: '/lore/venti' },
   {
@@ -100,7 +153,7 @@ const SCENES = [
     fenetre: true,
     // On part de la dernière puce de filtre : une tabulation mène au lien de la première carte.
     actions: `document.querySelector('nav[aria-label="Filtrer par thème"] a:last-child').focus();`,
-    tabulations: 1,
+    clavier: [{ touche: 'Tab' }],
     verifier: `(() => {
       const carte = document.querySelector('[data-grille-articles] article');
       const style = getComputedStyle(carte);
@@ -243,6 +296,16 @@ async function evaluer(cdp, expression) {
 
 const hauteurPng = octets => octets.readUInt32BE(20);
 
+const CODES = { Tab: ['Tab', 9], Escape: ['Escape', 27], Enter: ['Enter', 13], k: ['KeyK', 75] };
+async function clavier(cdp, etape) {
+  if (etape.attendre) return evaluer(cdp, `new Promise(r => setTimeout(r, ${etape.attendre}))`);
+  if (etape.texte) return cdp.envoyer('Input.insertText', { text: etape.texte });
+  const [code, windowsVirtualKeyCode] = CODES[etape.touche];
+  for (const type of ['keyDown', 'keyUp']) {
+    await cdp.envoyer('Input.dispatchKeyEvent', { type, key: etape.touche, code, windowsVirtualKeyCode, modifiers: etape.ctrl ? 2 : 0 });
+  }
+}
+
 // --- Déroulé ---
 
 await mkdir(SORTIE, { recursive: true });
@@ -273,10 +336,8 @@ try {
             await charge;
             await evaluer(cdp, `document.fonts.ready.then(() => new Promise(r => setTimeout(r, 150)))`);
             if (scene.actions) await evaluer(cdp, `(async () => { const attendre = ms => new Promise(r => setTimeout(r, ms)); ${scene.actions} })()`);
-            for (let n = 0; n < (scene.tabulations ?? 0); n++) {
-              for (const type of ['keyDown', 'keyUp']) await cdp.envoyer('Input.dispatchKeyEvent', { type, key: 'Tab', code: 'Tab', windowsVirtualKeyCode: 9 });
-            }
-            if (scene.tabulations) await evaluer(cdp, `new Promise(r => setTimeout(r, 200))`);
+            for (const etape of scene.clavier ?? []) await clavier(cdp, etape);
+            if (scene.clavier) await evaluer(cdp, `new Promise(r => setTimeout(r, 200))`);
             trouves = [];
             for (const verification of [VERIFICATIONS_COMMUNES, scene.verifier].filter(Boolean)) trouves.push(...await evaluer(cdp, verification));
             break;

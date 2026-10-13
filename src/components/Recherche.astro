@@ -1,0 +1,138 @@
+---
+import Icon from './Icon.astro';
+// Fenêtre de recherche : interface maison sur l'API JavaScript de Pagefind (index statique généré au build,
+// recherche dans le navigateur, aucun service tiers). Ouverte par les boutons [data-recherche] et Ctrl K / ⌘ K.
+---
+{/* m-auto : le preflight de Tailwind remet à zéro la marge automatique qui centre un <dialog> modal. */}
+<dialog
+  id="recherche"
+  class="m-auto max-h-[85dvh] w-[min(42rem,calc(100%-2rem))] overflow-y-auto overscroll-contain rounded-tres-grand bg-surface p-6 text-texte shadow-niveau-3 backdrop:bg-nuit/50 backdrop:backdrop-blur-sm sm:p-8"
+  aria-labelledby="recherche-titre"
+  data-pagefind-ignore
+>
+  <div class="mb-6 flex items-start justify-between gap-4">
+    <div>
+      <p class="sur-titre">Les archives de Teyvat</p>
+      <h2 id="recherche-titre" class="mt-2">Que cherchez-vous ?</h2>
+    </div>
+    <button type="button" class="grid size-10 shrink-0 place-items-center rounded-full text-discret transition-colors hover:bg-texte/8" aria-label="Fermer la recherche" data-fermer>
+      <Icon nom="fermer" />
+    </button>
+  </div>
+
+  <form role="search" class="relative" data-formulaire>
+    <label for="recherche-champ" class="sr-only">Rechercher dans les articles</label>
+    <Icon nom="recherche" class="pointer-events-none absolute top-1/2 left-4 -translate-y-1/2 text-discret" />
+    <input
+      id="recherche-champ"
+      type="search"
+      class="text-corps-g h-14 w-full rounded-full border border-contour bg-fond pr-4 pl-12 text-texte placeholder:text-discret focus-visible:border-primaire focus-visible:outline-2 focus-visible:outline-offset-0"
+      placeholder="Un personnage, une quête, un mystère…"
+      autocomplete="off"
+      spellcheck="false"
+    />
+  </form>
+
+  {/* Annonce du nombre de résultats (ou de l'erreur) aux lecteurs d'écran. */}
+  <p class="text-corps-m mt-4 min-h-5 text-discret" role="status" data-etat></p>
+  <ul class="mt-2 flex flex-col gap-1" data-resultats></ul>
+
+  <p class="text-corps-p mt-6 border-t border-ligne pt-4 text-discret">Explorez les quêtes, les personnages et les mystères de Teyvat.</p>
+</dialog>
+
+<template id="recherche-modele">
+  <li>
+    <a class="block rounded-grand p-3 transition-colors hover:bg-texte/8 focus-visible:bg-texte/8">
+      <span class="flex items-center justify-between gap-3">
+        <strong class="text-titre-m" data-titre></strong>
+        <span class="pastille shrink-0" data-theme hidden></span>
+      </span>
+      <span class="text-corps-m mt-1 block text-discret [&_mark]:rounded-tres-petit [&_mark]:bg-conteneur-or [&_mark]:px-0.5 [&_mark]:text-sur-conteneur-or" data-extrait></span>
+    </a>
+  </li>
+</template>
+
+<script>
+  type Resultat = { url: string; meta: { title?: string }; filters: Record<string, string[]>; excerpt: string };
+  type Pagefind = {
+    options: (o: Record<string, unknown>) => Promise<void>;
+    debouncedSearch: (q: string, o?: object, ms?: number) => Promise<{ results: { data: () => Promise<Resultat> }[] } | null>;
+  };
+
+  const MAXIMUM = 8;
+  const dialogue = document.querySelector<HTMLDialogElement>('#recherche')!;
+  const champ = dialogue.querySelector<HTMLInputElement>('#recherche-champ')!;
+  const etat = dialogue.querySelector<HTMLElement>('[data-etat]')!;
+  const liste = dialogue.querySelector<HTMLUListElement>('[data-resultats]')!;
+  const modele = document.querySelector<HTMLTemplateElement>('#recherche-modele')!;
+  let pagefind: Promise<Pagefind> | undefined;
+  let ouvreur: HTMLElement | null = null;
+
+  // Chargé à la première ouverture seulement. L'URL est construite à l'exécution : Vite ne doit pas tenter
+  // d'empaqueter un fichier qui n'existe qu'après le build.
+  function chargerPagefind() {
+    pagefind ??= import(/* @vite-ignore */ new URL('/pagefind/pagefind.js', location.origin).href).then(async (module: Pagefind) => {
+      await module.options({ excerptLength: 24 });
+      return module;
+    });
+    return pagefind;
+  }
+
+  function afficher(resultats: Resultat[], total: number, requete: string) {
+    liste.replaceChildren(...resultats.map(r => {
+      const element = modele.content.firstElementChild!.cloneNode(true) as HTMLLIElement;
+      element.querySelector('a')!.href = r.url;
+      element.querySelector('[data-titre]')!.textContent = r.meta.title ?? r.url;
+      const theme = r.filters.theme?.[0];
+      if (theme) Object.assign(element.querySelector<HTMLElement>('[data-theme]')!, { textContent: theme, hidden: false });
+      // Extrait produit par Pagefind à partir de notre propre contenu : texte échappé, seuls les <mark> sont du HTML.
+      element.querySelector('[data-extrait]')!.innerHTML = r.excerpt;
+      return element;
+    }));
+    etat.textContent = total === 0
+      ? `Aucun résultat pour « ${requete} ».`
+      : `${total} résultat${total > 1 ? 's' : ''} pour « ${requete} »${total > MAXIMUM ? ` (les ${MAXIMUM} premiers)` : ''}.`;
+  }
+
+  champ.addEventListener('input', async () => {
+    const requete = champ.value.trim();
+    if (!requete) { liste.replaceChildren(); etat.textContent = ''; return; }
+    try {
+      const recherche = await (await chargerPagefind()).debouncedSearch(requete, {}, 150);
+      if (!recherche) return; // une frappe plus récente a remplacé celle-ci
+      afficher(await Promise.all(recherche.results.slice(0, MAXIMUM).map(r => r.data())), recherche.results.length, requete);
+    } catch {
+      etat.textContent = 'La recherche est indisponible. Vous pouvez parcourir tous les articles depuis la bibliothèque.';
+    }
+  });
+  dialogue.querySelector('[data-formulaire]')!.addEventListener('submit', e => {
+    e.preventDefault();
+    liste.querySelector('a')?.focus();
+  });
+
+  function ouvrir() {
+    if (dialogue.open) return;
+    ouvreur = document.activeElement as HTMLElement | null;
+    dialogue.showModal();
+    champ.focus();
+    chargerPagefind().catch(() => { etat.textContent = 'La recherche est indisponible. Vous pouvez parcourir tous les articles depuis la bibliothèque.'; });
+  }
+  document.querySelectorAll('[data-recherche]').forEach(b => b.addEventListener('click', ouvrir));
+  dialogue.querySelector('[data-fermer]')!.addEventListener('click', () => dialogue.close());
+  // Clic sur le voile (hors de la boîte) : fermeture.
+  dialogue.addEventListener('click', e => {
+    const r = dialogue.getBoundingClientRect();
+    if (e.target === dialogue && (e.clientX < r.left || e.clientX > r.right || e.clientY < r.top || e.clientY > r.bottom)) dialogue.close();
+  });
+  dialogue.addEventListener('close', () => ouvreur?.focus());
+  document.addEventListener('keydown', e => {
+    if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {
+      e.preventDefault();
+      if (dialogue.open) dialogue.close(); else ouvrir();
+    }
+  });
+
+  // Raccourci affiché selon la plateforme : ⌘ K sur Mac et iOS, Ctrl K ailleurs (valeur du HTML statique).
+  const surMac = /Mac|iPhone|iPad/.test((navigator as Navigator & { userAgentData?: { platform: string } }).userAgentData?.platform ?? navigator.platform);
+  if (surMac) document.querySelectorAll('[data-raccourci]').forEach(k => { k.textContent = '⌘ K'; });
+</script>

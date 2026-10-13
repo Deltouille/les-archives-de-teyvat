@@ -128,3 +128,26 @@ test('accueil : à la une, entrées par thème, lectures récentes', async () =>
   assert.equal(cartes(recents), Math.min(6, articles.length));
   assert.match(html, /href="\/lore\/tags"[^>]*>[\s\S]*Tirez un fil, suivez une histoire/);
 });
+
+test('recherche : l’index Pagefind couvre exactement les articles publiés, en français', async () => {
+  const entree = JSON.parse(await lire('pagefind/pagefind-entry.json'));
+  assert.deepEqual(Object.keys(entree.languages), ['fr']);
+  assert.equal(entree.languages.fr.page_count, articles.length);
+  for (const a of articles) {
+    const html = await lire(`lore/${a.id}/index.html`);
+    assert.match(html, /data-pagefind-filter="theme"/, `${a.id} : filtre de thème`);
+    assert.match(html, /data-pagefind-meta="title"/, `${a.id} : titre`);
+  }
+});
+
+test('recherche : fenêtre accessible et boutons d’ouverture sur chaque page', async () => {
+  for (const page of ['index.html', 'lore/index.html', 'lore/venti/index.html', '404.html']) {
+    const html = await lire(page);
+    assert.match(html, /<dialog[^>]*id="recherche"[^>]*aria-labelledby="recherche-titre"/, page);
+    assert.match(html, /<form role="search"/, page);
+    assert.match(html, /<label for="recherche-champ"/, page);
+    assert.match(html, /role="status"[^>]*data-etat/, page);
+    assert.equal((html.match(/\sdata-recherche[\s>]/g) ?? []).length, 2, `${page} : bouton large et bouton icône`);
+    assert.match(html, /<kbd[^>]*data-raccourci>Ctrl K<\/kbd>/, page);
+  }
+});

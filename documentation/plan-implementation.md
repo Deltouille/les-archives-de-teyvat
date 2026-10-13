@@ -85,12 +85,13 @@ Chaque étape se termine seulement quand :
 - **Tests** : build (le premier sujet est dans le HTML, les boutons pointent vers des pages existantes, chiffres cohérents avec le contenu) ; captures, y compris en mouvement réduit.
 - **Décision** : D12.
 
-## Étape 6 — Recherche
+## Étape 6 — Recherche ✅
 
-- [ ] Pagefind : `data-pagefind-body` sur les articles, métadonnées et filtre « thème », brouillons et pied de page exclus.
-- [ ] `Search.astro` : `<dialog>` (`m-auto`), `Ctrl K` / `⌘ K` selon la plateforme, thème Pagefind via ses variables CSS.
-- [ ] Bouton de recherche dans la barre de navigation (desktop et mobile), absent tant que la recherche n’existait pas (D8).
+- [x] Pagefind : `data-pagefind-body` sur les articles, métadonnées et filtre « thème », brouillons et pied de page exclus.
+- [x] `Search.astro` : `<dialog>` (`m-auto`), `Ctrl K` / `⌘ K` selon la plateforme, thème Pagefind via ses variables CSS.
+- [x] Bouton de recherche dans la barre de navigation (desktop et mobile), absent tant que la recherche n’existait pas (D8).
 - **Tests** : build (index Pagefind généré, filtre présent) ; interaction dans Brave headless : ouverture au clavier, une requête « Venti » renvoie l'article.
+- **Décision** : D13 (interface maison sur l'API Pagefind, index servi en dev).
 
 ## Étape 7 — Référencement et redirections
 

@@ -2,6 +2,7 @@
 import '../styles/global.css';
 import Navbar from '../components/Navbar.astro';
 import PiedDePage from '../components/PiedDePage.astro';
+import Recherche from '../components/Recherche.astro';
 import { genererPalette } from '../../scripts/palette.mjs';
 
 interface Props {
@@ -62,7 +63,7 @@ const avecHero = hero.trim() !== '';
       }
     </script>
   </head>
-  <body class="has-[[data-menu-ouvert]]:overflow-hidden">
+  <body class="has-[[data-menu-ouvert]]:overflow-hidden has-[dialog[open]]:overflow-hidden">
     <a href="#contenu" class="text-etiquette-g fixed -top-20 left-4 z-50 rounded-full bg-primaire px-5 py-3 text-sur-primaire focus:top-4">Aller au contenu</a>
     <Navbar surHero={avecHero} />
     {/* Bannière rendue hors du <main>, directement en pleine largeur : pas de 100vw (qui inclut la barre de défilement). */}
@@ -71,5 +72,6 @@ const avecHero = hero.trim() !== '';
       <slot />
     </main>
     <PiedDePage />
+    <Recherche />
   </body>
 </html>
