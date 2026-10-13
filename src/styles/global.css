@@ -132,3 +132,20 @@
     linear-gradient(0deg, color-mix(in srgb, var(--color-nuit) 90%, transparent) 0%, color-mix(in srgb, var(--color-nuit) 50%, transparent) 38%, color-mix(in srgb, var(--color-nuit) 12%, transparent) 70%, color-mix(in srgb, var(--color-nuit) 40%, transparent) 100%),
     radial-gradient(ellipse at 30% 60%, transparent 40%, color-mix(in srgb, black 60%, transparent) 100%);
 }
+
+/* Transitions entre pages : View Transitions natives entre documents, sans JavaScript (cf. decisions.md, D16).
+   Navigateur qui ne les connaît pas : navigation ordinaire. Mouvement réduit : aucune transition. */
+@view-transition { navigation: auto; }
+@media (prefers-reduced-motion: reduce) {
+  @view-transition { navigation: none; }
+}
+/* Page entière : « fondu enchaîné » M3 (l'ancienne page s'efface vite, la nouvelle apparaît ensuite). */
+::view-transition-old(root) { animation: 90ms var(--ease-emphase-sortie) both transition-sortie; }
+::view-transition-new(root) { animation: 210ms var(--ease-emphase-entree) 90ms both transition-entree; }
+@keyframes transition-sortie { to { opacity: 0; } }
+@keyframes transition-entree { from { opacity: 0; transform: scale(0.98); } }
+/* Éléments partagés (image carte ↔ bannière, barre de navigation) : déplacement en courbe standard. */
+::view-transition-group(*) { animation-duration: 350ms; animation-timing-function: var(--ease-standard); }
+/* L'image change de proportions (16/9 dans la carte, plein cadre dans la bannière) : recadrer plutôt que déformer. */
+::view-transition-old(*.image-article),
+::view-transition-new(*.image-article) { height: 100%; object-fit: cover; overflow: clip; }

@@ -29,7 +29,9 @@ const THEMES = ['clair', 'sombre'];
 
 // Une scène : une page, des actions éventuelles, puis une capture (pleine page ou fenêtre) et des vérifications.
 // `clavier` : vraies frappes envoyées après les actions, par le protocole DevTools — { touche, ctrl? }, { texte } ou
-// { attendre: ms }. Un .focus() par script ne déclenche pas :focus-visible, une vraie touche Tab si. `mouvement: true` : pas d'émulation du mouvement réduit (pour tester une animation). `verifier` est du JavaScript évalué dans la page, qui renvoie la liste des problèmes (vide si tout va bien).
+// { attendre: ms }. Un .focus() par script ne déclenche pas :focus-visible, une vraie touche Tab si.
+// `navigation` : sélecteur d'un lien cliqué ensuite ; la scène continue sur la nouvelle page, où window.__transition
+// dit si le navigateur l'a révélée par une View Transition (événement pagereveal). `mouvement: true` : pas d'émulation du mouvement réduit (pour tester une animation). `verifier` est du JavaScript évalué dans la page, qui renvoie la liste des problèmes (vide si tout va bien).
 const SCENES = [
   { nom: 'accueil', url: '/' },
   { nom: 'demo', url: '/demo', largeurs: [1440, 390] },
@@ -136,6 +138,28 @@ const SCENES = [
       if (getComputedStyle(document.body).overflow === 'hidden') p.push('la page devrait se débloquer');
       return p;
     })()`,
+  },
+  {
+    nom: 'transition-vers-article',
+    url: '/lore',
+    largeurs: [1440, 390],
+    fenetre: true,
+    mouvement: true,
+    navigation: '[data-grille-articles] a[href="/lore/venti"]',
+    verifier: `(() => {
+      const p = [];
+      if (location.pathname !== '/lore/venti') p.push('le clic sur la carte devrait mener à l’article (' + location.pathname + ')');
+      if (window.__transition !== true) p.push('l’article devrait être révélé par une View Transition (' + window.__transition + ')');
+      return p;
+    })()`,
+  },
+  {
+    nom: 'transition-mouvement-reduit',
+    url: '/lore',
+    largeurs: [1440],
+    fenetre: true,
+    navigation: '[data-grille-articles] a[href="/lore/venti"]',
+    verifier: `(() => window.__transition === false ? [] : ['en mouvement réduit, pas de View Transition (' + window.__transition + ')'])()`,
   },
   { nom: 'bibliotheque', url: '/lore' },
   { nom: 'article', url: '/lore/venti' },
@@ -326,6 +350,8 @@ const navigateur = await lancerNavigateur();
 const cdp = await connecter(navigateur.url);
 await cdp.envoyer('Page.enable');
 await cdp.envoyer('Runtime.enable');
+// Sur chaque nouveau document : la page a-t-elle été révélée par une View Transition ?
+await cdp.envoyer('Page.addScriptToEvaluateOnNewDocument', { source: "addEventListener('pagereveal', e => { window.__transition = Boolean(e.viewTransition); })" });
 
 const problemes = [];
 const ecarts = [];
@@ -350,6 +376,12 @@ try {
             if (scene.actions) await evaluer(cdp, `(async () => { const attendre = ms => new Promise(r => setTimeout(r, ms)); ${scene.actions} })()`);
             for (const etape of scene.clavier ?? []) await clavier(cdp, etape);
             if (scene.clavier) await evaluer(cdp, `new Promise(r => setTimeout(r, 200))`);
+            if (scene.navigation) {
+              const arrivee = cdp.evenement('Page.loadEventFired');
+              await evaluer(cdp, `document.querySelector(${JSON.stringify(scene.navigation)}).click()`);
+              await arrivee;
+              await evaluer(cdp, `new Promise(r => setTimeout(r, 700))`);
+            }
             trouves = [];
             for (const verification of [VERIFICATIONS_COMMUNES, scene.verifier].filter(Boolean)) trouves.push(...await evaluer(cdp, verification));
             if (scene.audit !== false) trouves.push(...await auditer(cdp));

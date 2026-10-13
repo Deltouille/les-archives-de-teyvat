@@ -8,13 +8,16 @@ interface Props {
   alt?: string;
   /** id du titre de la bannière, pour aria-labelledby. */
   titre: string;
+  /** Nom de View Transition de la bannière entière (image, voile, titre) : la carte de l'article s'y transforme,
+   *  et le titre apparaît en fondu pendant le mouvement (cf. transitionImage dans contenu.ts). */
+  transition?: string;
   class?: string;
 }
-const { image, alt = '', titre, class: classe } = Astro.props;
+const { image, alt = '', titre, transition, class: classe } = Astro.props;
 ---
 {/* data-hero : repère lu par la barre de navigation pour savoir quand quitter son état transparent.
      Fond « nuit » le temps que l'image arrive, pour que le texte blanc reste lisible. */}
-<section class:list={['relative isolate flex flex-col overflow-hidden bg-nuit text-white', classe]} aria-labelledby={titre} data-hero>
+<section class:list={['relative isolate flex flex-col overflow-hidden bg-nuit text-white', transition && '[view-transition-class:image-article]', classe]} style={transition && `view-transition-name: ${transition}`} aria-labelledby={titre} data-hero>
   {/* Image volontairement fixe : un zoom lent en continu (essayé dans le prototype) faisait trembler la bannière. */}
   {/* width = la plus grande variante : sinon le src de repli est l'original ré-encodé (3840 px, ~600 Ko). */}
   <Image class="absolute inset-0 -z-20 size-full object-cover" src={image} alt={alt} width={2400} widths={[960, 1600, 2400]} sizes="100vw" loading="eager" fetchpriority="high" />

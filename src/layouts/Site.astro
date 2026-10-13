@@ -62,6 +62,25 @@ const avecHero = hero.trim() !== '';
         document.documentElement.dataset.theme = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
       }
     </script>
+    {/* View Transitions entre pages (D16) : seule la carte de l'article qu'on ouvre (pageswap), ou qu'on quitte en
+         revenant en arrière (pagereveal), reçoit le nom de la bannière. Nommer toutes les cartes faisait voler
+         vers leur nouvelle place celles qui existent aussi sur la page d'arrivée. En ligne et dans le <head> :
+         pagereveal survient avant le premier rendu. */}
+    <script is:inline>
+      (() => {
+        const carteDe = url => {
+          const id = url && new URL(url).pathname.replace(/\/$/, '').match(/^\/lore\/([^/]+)$/)?.[1];
+          return id ? document.querySelector(`[data-transition="image-${id}"]`) : null;
+        };
+        const nommer = (carte, transition) => {
+          if (!carte || !transition) return;
+          carte.style.viewTransitionName = carte.dataset.transition;
+          transition.finished.finally(() => { carte.style.viewTransitionName = ''; });
+        };
+        addEventListener('pageswap', e => nommer(carteDe(e.activation?.entry?.url), e.viewTransition));
+        addEventListener('pagereveal', e => nommer(carteDe(window.navigation?.activation?.from?.url), e.viewTransition));
+      })();
+    </script>
   </head>
   <body class="has-[[data-menu-ouvert]]:overflow-hidden has-[dialog[open]]:overflow-hidden">
     <a href="#contenu" class="text-etiquette-g fixed -top-20 left-4 z-50 rounded-full bg-primaire px-5 py-3 text-sur-primaire focus:top-4">Aller au contenu</a>

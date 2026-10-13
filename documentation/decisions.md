@@ -181,3 +181,16 @@ Le déploiement lui-même est fait par Deltouille ; tout le reste de l'étape 8 
   | `/lore` | 100 | 100 | 100 | 100 | 1,0 s | 0 | 0 ms |
 
   Lancé à la main (`CHROME_PATH=$(which brave) npx lighthouse@12 <url>`), pas dans les tests : les scores varient d'une machine à l'autre ; les budgets de `poids.test.mjs` et l'audit axe sont les garde-fous permanents.
+
+## D16 — Transitions entre pages (View Transitions) (13 oct. 2026)
+
+- **View Transitions natives entre documents** (`@view-transition { navigation: auto; }` dans `global.css`), et non le `<ClientRouter />` d'Astro : celui-ci ferait du site une application monopage, imposerait de réécrire tous les scripts (barre, thème, recherche, machine à écrire ne s'exécuteraient qu'au premier chargement) et ajouterait du JavaScript à chaque page. Ici, zéro JavaScript pour la transition de page. Chrome, Edge et Safari 18.2+ animent ; les autres navigateurs naviguent comme avant (amélioration progressive).
+- **Mouvement M3** : « fondu enchaîné » pour la page (sortie 90 ms en courbe d'emphase, entrée 210 ms avec un léger zoom), éléments partagés en 350 ms, courbe standard. **Aucune transition** sous `prefers-reduced-motion`.
+- **Éléments partagés** :
+  - la **barre de navigation** (`barre-navigation`) reste en place ;
+  - la **carte d'un article se transforme en sa bannière** (`image-<id>`, fonction `transitionImage` dans `contenu.ts`), recadrée et non déformée (`view-transition-class: image-article`, `object-fit: cover`).
+- **Deux défauts vus sur des images ralenties** (animations à 10 % par le protocole DevTools, capturées en cours de route) et corrigés :
+  1. avec un nom sur *toutes* les cartes, celles qui existent aussi sur la page d'arrivée (« Pour aller plus loin ») volaient vers leur nouvelle place → les cartes ne portent plus qu'un `data-transition` ; un petit script en ligne dans le `<head>` donne le nom à la **seule carte cliquée** (`pageswap`) ou, au retour en arrière, à la carte de l'article qu'on quitte (`pagereveal`, via `navigation.activation`). Sans ce script (ou sans ces événements), il reste le fondu de page ;
+  2. avec le nom sur l'*image* de la bannière, l'image passait au-dessus du voile et du titre, qui surgissaient à la fin → le nom est porté par **toute la bannière** ; le titre apparaît en fondu pendant le mouvement.
+- **Piège** : deux éléments du même nom sur une page annulent toute la transition. D'où l'accueil, où « À la une » et la grille montrent tous deux Mondstadt : la carte « À la une » n'a pas de nom.
+- **Tests** : aucun nom en double sur aucune page (vu en échec en nommant aussi la carte « À la une ») ; aucune carte nommée d'avance, chaque bannière nommée, `data-transition` correspondant ; script de nommage dans le `<head>` ; règles CSS (actives, coupées en mouvement réduit). **Captures** : option `navigation` (clic sur un lien, la scène continue sur la page d'arrivée) et écoute de `pagereveal` sur chaque document : le clic sur une carte révèle l'article **par une View Transition** dans Brave, et **sans** en mouvement réduit (vu en échec en retirant `@view-transition`). Le retour en arrière n'est pas testé automatiquement (cache de navigation incertain en headless).

@@ -196,3 +196,33 @@ test('une seule forme d’URL, sans barre finale : canoniques et sitemap comme l
   const avecBarre = [...(await lire('sitemap-0.xml')).matchAll(/<loc>(https?:\/\/[^/]+\/[^<]*\/)<\/loc>/g)].map(m => m[1]);
   assert.deepEqual(avecBarre, []);
 });
+
+test('View Transitions : aucun nom en double sur une page (le navigateur abandonnerait toute la transition)', async () => {
+  const erreurs = [];
+  for (const fichier of pages) {
+    const noms = [...(await readFile(fichier, 'utf8')).matchAll(/view-transition-name:\s*([\w-]+)/g)].map(m => m[1]);
+    const doublons = noms.filter((nom, i) => noms.indexOf(nom) !== i);
+    if (doublons.length) erreurs.push(`${path.relative(racine, fichier)} : ${[...new Set(doublons)].join(', ')}`);
+  }
+  assert.deepEqual(erreurs, []);
+});
+
+test('View Transitions : la bannière d’un article porte son nom, la carte le même en data-transition (sans nom statique)', async () => {
+  const bibliotheque = await lire('lore/index.html');
+  assert.doesNotMatch(bibliotheque, /view-transition-name:\s*image-/, 'aucune carte nommée d’avance (sinon toutes s’animeraient)');
+  for (const { id } of articles) {
+    assert.match(bibliotheque, new RegExp(`data-transition="image-${id}"`), `carte ${id}`);
+    const banniere = (await lire(`lore/${id}/index.html`)).match(/<section[^>]*data-hero>/)[0];
+    assert.match(banniere, new RegExp(`view-transition-name: image-${id}\\b`), `bannière ${id}`);
+  }
+  const tete = bibliotheque.split('</head>')[0];
+  assert.match(tete, /addEventListener\('pageswap'/, 'script de nommage dans le <head>');
+  assert.match(tete, /addEventListener\('pagereveal'/);
+});
+
+test('View Transitions : activées entre documents, désactivées en mouvement réduit', async () => {
+  const feuille = (await readdir(path.join(racine, '_astro'))).find(f => f.endsWith('.css'));
+  const css = await readFile(path.join(racine, '_astro', feuille), 'utf8');
+  assert.match(css, /@view-transition\s*\{\s*navigation:\s*auto/);
+  assert.match(css, /prefers-reduced-motion:\s*reduce\)\s*\{\s*@view-transition\s*\{\s*navigation:\s*none/);
+});

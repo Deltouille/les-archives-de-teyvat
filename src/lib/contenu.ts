@@ -9,6 +9,10 @@ export type Tag = CollectionEntry<'tags'>;
 
 export const cheminArticle = (article: Article) => `/lore/${article.id}`;
 export const cheminTag = (id: string) => `/lore/tags/${id}`;
+/** Nom de View Transition d'un article : porté en permanence par la bannière de l'article, et donné à sa carte
+ *  (data-transition) au seul moment où l'on part vers l'article ou en revient (script de Site.astro). Un nom doit
+ *  rester unique sur une page, sinon le navigateur abandonne toute la transition. */
+export const transitionImage = (article: Article) => `image-${article.id}`;
 
 // Toutes les images, par nom : src/assets/images/<nom>.webp. Astro les optimise à l'usage (<Image />).
 const images = Object.fromEntries(

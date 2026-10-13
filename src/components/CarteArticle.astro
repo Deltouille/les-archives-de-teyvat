@@ -1,7 +1,7 @@
 ---
 import { Image } from 'astro:assets';
 import Icon from './Icon.astro';
-import { cheminArticle, imageDe, type Article, type Tag } from '../lib/contenu';
+import { cheminArticle, imageDe, transitionImage, type Article, type Tag } from '../lib/contenu';
 import { minutesDeLecture } from '../lib/bibliotheque.mjs';
 
 interface Props {
@@ -19,7 +19,7 @@ const { data } = article;
      chaque article, et toute la carte reste cliquable. Le contour de focus est porté par la carte entière. */}
 <article class="group relative flex flex-col overflow-hidden rounded-carte bg-surface transition-shadow duration-200 ease-standard hover:shadow-niveau-2 has-[a:focus-visible]:outline-3 has-[a:focus-visible]:outline-offset-2 has-[a:focus-visible]:outline-primaire">
   <div class="relative aspect-video overflow-hidden">
-    <Image class="size-full object-cover transition-transform duration-500 ease-standard group-hover:scale-105" src={imageDe(data.image)} alt="" width={700} widths={[400, 700]} sizes="(min-width: 1200px) 33vw, (min-width: 600px) 50vw, 100vw" loading="lazy" />
+    <Image class="size-full object-cover transition-transform duration-500 ease-standard group-hover:scale-105 [view-transition-class:image-article]" data-transition={transitionImage(article)} src={imageDe(data.image)} alt="" width={700} widths={[400, 700]} sizes="(min-width: 1200px) 33vw, (min-width: 600px) 50vw, 100vw" loading="lazy" />
     <span class="text-etiquette-m absolute bottom-3 left-3 rounded-full bg-surface/90 px-3 py-1 text-texte backdrop-blur">{theme.data.singulier}</span>
   </div>
   <div class="flex flex-1 flex-col gap-2 p-5">

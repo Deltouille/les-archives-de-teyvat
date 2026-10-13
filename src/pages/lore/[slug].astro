@@ -13,7 +13,7 @@ import Sommaire from '../../components/Sommaire.astro';
 import TagsArticle from '../../components/TagsArticle.astro';
 import EnTeteSection from '../../components/EnTeteSection.astro';
 import GrilleArticles from '../../components/GrilleArticles.astro';
-import { bibliotheque, cheminTag, imageDe, type Article } from '../../lib/contenu';
+import { bibliotheque, cheminTag, imageDe, transitionImage, type Article } from '../../lib/contenu';
 import { articlesLies, minutesDeLecture, dateFr } from '../../lib/bibliotheque.mjs';
 
 export async function getStaticPaths() {
@@ -35,7 +35,7 @@ const avecSommaire = titres.length > 0;
 const jour = (d: Date) => d.toISOString().slice(0, 10);
 ---
 <Site titre={data.titre} description={data.description} image={partage.src} article>
-  <Banniere slot="hero" image={image} alt={data.imageAlt} titre="article-titre" class="min-h-[35rem] md:h-[clamp(32rem,78svh,48rem)]">
+  <Banniere slot="hero" image={image} alt={data.imageAlt} titre="article-titre" transition={transitionImage(article)} class="min-h-[35rem] md:h-[clamp(32rem,78svh,48rem)]">
     {/* Même gouttière que le <main> : le titre commence au même bord que la colonne de lecture.
          pt-28 : la barre de navigation fixe (64 px) recouvre le haut de la bannière. */}
     <header class="mx-auto mt-auto w-full max-w-site px-4 pt-28 pb-24 sm:px-6 md:pb-36 lg:px-10">

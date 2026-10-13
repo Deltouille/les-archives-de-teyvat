@@ -25,7 +25,8 @@ const boutonIcone = 'grid size-10 place-items-center rounded-full text-discret t
      et celui-ci ne couvre plus l'écran. */}
 <header
   class:list={[
-    'inset-x-0 top-0 z-40 border-b border-ligne bg-fond/85 text-texte backdrop-blur-lg transition-[background-color,border-color,color] duration-300 ease-standard',
+    // Nom de View Transition : la barre reste en place pendant que la page change (cf. global.css).
+    '[view-transition-name:barre-navigation] inset-x-0 top-0 z-40 border-b border-ligne bg-fond/85 text-texte backdrop-blur-lg transition-[background-color,border-color,color] duration-300 ease-standard',
     'sur-image:border-transparent sur-image:bg-transparent sur-image:text-white sur-image:backdrop-blur-none',
     'data-menu-ouvert:bg-fond data-menu-ouvert:backdrop-blur-none',
     surHero ? 'fixed' : 'sticky',
