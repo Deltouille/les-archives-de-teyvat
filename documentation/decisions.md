@@ -90,3 +90,15 @@
 - **Hors de `npm test`** : il faut un navigateur et un serveur. À lancer avant de clore toute étape qui touche à l'interface.
 - **Garde-fou vérifié** : sans le blocage du défilement sur `<body>`, la scène `menu-mobile-ouvert` échoue.
 - **Écarté** : Playwright ou Puppeteer (centaines de Mo de dépendances pour ce besoin).
+
+## D10 — Modèle de contenu (13 oct. 2026)
+
+- **Repris du prototype** (CDC §6) : un article = un fichier, URL `/lore/<nom-du-fichier>`, catégories devenues des tags `theme: true` du registre `tags.yaml`, thème principal = premier tag-thème, « Pour aller plus loin » = le plus de tags communs, listes du plus récent au plus ancien, brouillons visibles en dev et absents du build.
+- **Logique pure séparée d'Astro** : `src/lib/validation.mjs` (garde-fous) et `src/lib/bibliotheque.mjs` (tri, brouillons, articles liés, thème principal, temps de lecture, dates) se testent avec `node --test`, sans build ; `src/lib/contenu.ts` ne fait que les appliquer aux collections (`bibliotheque()`).
+- **Images à plat** : `src/assets/images/<nom>.webp`, le frontmatter donne `<nom>`. Le prototype rangeait `lore/teyvat/mondstadt/mondstadt.webp` et cherchait par suffixe, ce qui laissait passer deux images de même nom. Noms en kebab-case : `Teyvat_Planet` → `teyvat`, `genshin_wallpaper` → `fond-d-ecran` (seuls changements apportés aux 6 articles).
+  - **Écarté** : le helper `image()` des collections Astro (chemin relatif dans le frontmatter, validé par Astro) : plus lourd à écrire pour l'auteur (`../../assets/images/mondstadt.webp`) pour un gain nul, la validation couvrant déjà le cas.
+- **Garde-fous** (le build échoue en nommant le fichier), sur tous les articles, brouillons compris :
+  - repris : tag non déclaré, article sans thème, nom réservé (`tags` et les anciennes catégories redirigées) ;
+  - **nouveaux** : image absente (le prototype levait une erreur sans nommer l'article), `modifieLe` antérieur à `publieLe`, thème sans `singulier` ou sans `icone` (sinon un badge ou une icône vide) ; icône hors du registre `src/lib/icones.ts` (schéma Zod).
+- **Accueil provisoire** : il liste les articles (thème, titre, date), ce qui fait passer la validation à chaque build en attendant les vraies pages (étape 4).
+- **Vérifié en cassant** sur un vrai build : tag `mondstad` → « Tag inconnu « mondstad » dans src/content/articles/venti.md : déclarez-le dans src/content/tags.yaml » ; image `mondstad` → « Image inconnue « mondstad » dans src/content/articles/venti.md : ajoutez src/assets/images/mondstad.webp » ; `brouillon: true` sur Venti → absent de `dist/`, et le test du contenu publié passe toujours (il lit les brouillons dans les fichiers).

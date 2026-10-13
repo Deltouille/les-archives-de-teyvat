@@ -60,13 +60,14 @@ Chaque étape se termine seulement quand :
 - **Tests** : build (un seul `h1`, canonical, skip link présent) ; captures desktop/mobile × thèmes ; états vérifiés au focus clavier : menu déroulant ouvert, burger ouvert/fermé sans saut de défilement.
 - **Décisions** : D8 (mise en page, navigation), D9 (captures).
 
-## Étape 3 — Modèle de contenu
+## Étape 3 — Modèle de contenu ✅
 
-- [ ] `src/lib/validation.mjs` écrit **tests d'abord** : tag inconnu, article sans thème, nom réservé → erreur nommant le fichier.
-- [ ] `src/content.config.ts` : collections `articles` (glob) et `tags` (`file()` sur `tags.yaml`), schémas du CDC §6.
-- [ ] `src/lib/contenu.ts` : `bibliotheque()`, thème principal, `articlesLies`, chemins, images, temps de lecture, dates en français. Logique pure extraite en `.mjs` pour être testée.
-- [ ] Migration du contenu de `old/` : 6 articles, `tags.yaml`, images (`old/src/assets/images/`).
+- [x] `src/lib/validation.mjs` écrit **tests d'abord** : tag inconnu, article sans thème, nom réservé → erreur nommant le fichier.
+- [x] `src/content.config.ts` : collections `articles` (glob) et `tags` (`file()` sur `tags.yaml`), schémas du CDC §6.
+- [x] `src/lib/contenu.ts` : `bibliotheque()`, thème principal, `articlesLies`, chemins, images, temps de lecture, dates en français. Logique pure extraite en `.mjs` pour être testée.
+- [x] Migration du contenu de `old/` : 6 articles, `tags.yaml`, images mises à plat dans `src/assets/images/` (D10).
 - **Tests** : unitaires (validation, articles liés, tri, temps de lecture) ; build en échec quand on mal orthographie un tag (vérifié à la main, consigné) ; un brouillon n'apparaît pas dans `dist/`.
+- **Décision** : D10.
 
 ## Étape 4 — Pages de lecture
 

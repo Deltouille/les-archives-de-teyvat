@@ -52,9 +52,10 @@ Pas de linter. `tests/site.test.mjs` lit `dist/` (build requis). `npm run captur
 ## Modèle de contenu : tout en tags
 
 - **Un article = un fichier** dans `src/content/articles/` ; URL `/lore/<nom-du-fichier>`, indépendante des tags. Renommer un fichier impose une redirection dans `astro.config.mjs`.
-- Frontmatter : `titre`, `description`, `image` (nom d'un `.webp` de `src/assets/images/`), `publieLe`, `tags`. Facultatifs : `imageAlt`, `modifieLe`, `brouillon`, et les encadrés `resume`, `spoilers`, `sources` (affichés seulement s'ils sont remplis).
+- Frontmatter : `titre`, `description`, `image` (nom, sans extension, d'un fichier **à plat** `src/assets/images/<nom>.webp`), `publieLe`, `tags`. Facultatifs : `imageAlt`, `modifieLe`, `brouillon`, et les encadrés `resume`, `spoilers`, `sources` (affichés seulement s'ils sont remplis).
 - **Registre unique `src/content/tags.yaml`** (loader `file()`) : libellé + description par tag. Les tags `theme: true` remplacent les catégories : ils ont `singulier` et `icone`, alimentent le menu, et le **premier tag-thème** d'un article donne son badge, son fil d'Ariane et le filtre Pagefind.
-- Garde-fous (fonction pure, sur **tous** les articles, brouillons compris) : tag non déclaré, article sans thème, nom de fichier réservé (`tags`, anciennes catégories) → le build échoue en nommant le fichier.
+- Garde-fous (`src/lib/validation.mjs`, fonction pure, sur **tous** les articles, brouillons compris) : tag non déclaré, article sans thème, nom de fichier réservé (`tags`, anciennes catégories), image absente, `modifieLe` < `publieLe`, thème sans `singulier`/`icone` → le build échoue en nommant le fichier. Nouvelle règle de contenu → l'ajouter là, avec son test.
+- Les pages obtiennent le contenu par `bibliotheque()` (`src/lib/contenu.ts`), jamais par `getCollection` directement : c'est ce qui garantit la validation et l'exclusion des brouillons. La logique (tri, articles liés, thème principal, temps de lecture, dates) est dans `src/lib/bibliotheque.mjs`, testée sans build.
 - Brouillons visibles en dev, exclus du build. Listes triées par date décroissante. « Pour aller plus loin » = les 3 articles partageant le plus de tags.
 - `premiers-pas` est un tag ordinaire, cible des boutons « Commencer le voyage ».
 - Pages : `/`, `/lore`, `/lore/<article>`, `/lore/tags`, `/lore/tags/<tag>` (pas `/lore/<tag>` : collision avec les articles), `/a-propos`, `/confidentialite`, `/404`.

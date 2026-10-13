@@ -1,7 +1,29 @@
 import { defineCollection } from 'astro:content';
-import { file } from 'astro/loaders';
+import { file, glob } from 'astro/loaders';
 import { z } from 'astro/zod';
 import { NOMS_ICONES } from './lib/icones';
+
+// Un article = un fichier. Son URL est /lore/<nom-du-fichier> : elle ne dépend pas des tags,
+// donc retaguer un article ne casse jamais un lien. Règles croisées (tags connus, thème, image) : src/lib/validation.mjs.
+const articles = defineCollection({
+  loader: glob({ base: './src/content/articles', pattern: '**/*.md' }),
+  schema: z.object({
+    titre: z.string(),
+    description: z.string(),
+    // Nom d'un .webp de src/assets/images, sans extension.
+    image: z.string(),
+    imageAlt: z.string().default(''),
+    publieLe: z.coerce.date(),
+    modifieLe: z.coerce.date().optional(),
+    brouillon: z.boolean().default(false),
+    // Identifiants déclarés dans tags.yaml ; au moins un doit être un thème.
+    tags: z.array(z.string()).min(1),
+    // Encadrés facultatifs : ils ne s'affichent que s'ils sont remplis.
+    resume: z.array(z.string()).default([]),
+    spoilers: z.string().optional(),
+    sources: z.array(z.object({ titre: z.string(), detail: z.string() })).default([]),
+  }),
+});
 
 // Le registre des tags : libellé et description de chacun, et lesquels sont des thèmes
 // (mis en avant dans le menu, avec une icône). L'ordre du fichier est libre : tout s'affiche par libellé.
@@ -11,10 +33,10 @@ const tags = defineCollection({
     libelle: z.string(),
     description: z.string(),
     theme: z.boolean().default(false),
-    // Thèmes uniquement : nom au singulier (badge des cartes) et icône (cf. src/lib/icones.ts).
+    // Thèmes uniquement (exigés par la validation) : nom au singulier (badge des cartes) et icône (src/lib/icones.ts).
     singulier: z.string().optional(),
     icone: z.enum(NOMS_ICONES).optional(),
   }),
 });
 
-export const collections = { tags };
+export const collections = { articles, tags };
