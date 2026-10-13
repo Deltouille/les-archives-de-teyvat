@@ -1,0 +1,105 @@
+---
+import Icon from './Icon.astro';
+import Marque from './Marque.astro';
+import BoutonTheme from './BoutonTheme.astro';
+import MenuMobile from './MenuMobile.astro';
+import { registreDesTags, cheminTag } from '../lib/contenu';
+import { lienActif, CHEMIN_QUETES } from '../lib/navigation.mjs';
+
+interface Props { surHero?: boolean; }
+const { surHero = false } = Astro.props;
+const chemin = Astro.url.pathname;
+const courant = (href: string) => (lienActif(chemin, href) ? 'page' : undefined);
+
+// Les quêtes ont leur propre entrée dans la barre : le menu déroulant liste les autres thèmes.
+const themes = (await registreDesTags()).themes.filter(t => cheminTag(t.id) !== CHEMIN_QUETES);
+
+// Lien de la barre : indicateur actif M3 (conteneur secondaire), couche d'état de 8 % au survol.
+const lien = 'text-etiquette-g flex h-10 items-center gap-1 rounded-full px-4 transition-colors duration-200 ease-standard hover:bg-texte/8 aria-[current=page]:bg-tonal aria-[current=page]:text-sur-tonal sur-image:hover:bg-white/12 sur-image:aria-[current=page]:bg-white/16 sur-image:aria-[current=page]:text-white';
+// Bouton icône M3 standard ; verre dépoli quand la barre survole la bannière.
+const boutonIcone = 'grid size-10 place-items-center rounded-full text-discret transition-colors duration-200 ease-standard hover:bg-texte/8 sur-image:border sur-image:border-white/20 sur-image:bg-white/8 sur-image:text-white sur-image:backdrop-blur-md sur-image:hover:bg-white/16';
+---
+{/* Sur une page à bannière, la barre sort du flux (fixed) pour que la bannière commence tout en haut.
+     data-sur-image est posé tant qu'elle survole la bannière : c'est lui qui active les variantes sur-image:.
+     Menu mobile ouvert : pas de backdrop-filter, sinon l'en-tête devient le bloc conteneur du panneau « fixed »
+     et celui-ci ne couvre plus l'écran. */}
+<header
+  class:list={[
+    'inset-x-0 top-0 z-40 border-b border-ligne bg-fond/85 text-texte backdrop-blur-lg transition-[background-color,border-color,color] duration-300 ease-standard',
+    'sur-image:border-transparent sur-image:bg-transparent sur-image:text-white sur-image:backdrop-blur-none',
+    'data-menu-ouvert:bg-fond data-menu-ouvert:backdrop-blur-none',
+    surHero ? 'fixed' : 'sticky',
+  ]}
+  data-navbar
+  data-sur-image={surHero ? '' : undefined}
+  data-pagefind-ignore
+>
+  <div class="mx-auto flex h-16 max-w-site items-center gap-4 px-4 sm:px-6 lg:gap-6 lg:px-10">
+    <a href="/" class="text-titre-m flex items-center gap-2 font-normal whitespace-nowrap" aria-label="L’Histoire de Genshin, accueil">
+      <Marque class="rotate-12 text-primaire sur-image:text-ciel" />
+      <span>L’Histoire <strong class="font-bold">de Genshin</strong></span>
+    </a>
+
+    <nav class="mx-auto hidden items-center gap-1 md:flex" aria-label="Navigation principale">
+      <a href="/" class={lien} aria-current={courant('/')}>Accueil</a>
+      <div class="group/lore relative">
+        <a href="/lore" class={lien} aria-current={courant('/lore')} data-lien-lore>
+          Le lore
+          <Icon nom="chevron" taille={18} class="rotate-90 opacity-70 transition-transform duration-200 group-focus-within/lore:-rotate-90 group-hover/lore:-rotate-90" />
+        </a>
+        {/* Déroulant au survol et au focus clavier ; le lien « Le lore » reste cliquable pour qui n'a pas de survol.
+             Le ::before comble l'espace entre le lien et le menu pour que le survol ne se perde pas en chemin. */}
+        <div class="invisible absolute top-full left-1/2 mt-2 w-96 -translate-x-1/2 -translate-y-1 rounded-grand border border-ligne bg-surface p-2 text-texte opacity-0 shadow-niveau-2 transition duration-200 ease-standard before:absolute before:inset-x-0 before:-top-2 before:h-2 group-focus-within/lore:visible group-focus-within/lore:translate-y-0 group-focus-within/lore:opacity-100 group-hover/lore:visible group-hover/lore:translate-y-0 group-hover/lore:opacity-100" data-menu-lore>
+          {themes.map(({ id, data }) => (
+            <a href={cheminTag(id)} class="flex items-start gap-3 rounded-moyen p-3 transition-colors hover:bg-texte/8">
+              {data.icone && <span class="grid size-10 shrink-0 place-items-center rounded-moyen bg-tonal text-sur-tonal"><Icon nom={data.icone} taille={22} /></span>}
+              <span>
+                <strong class="text-titre-p block">{data.libelle}</strong>
+                <span class="text-corps-p mt-0.5 block text-discret">{data.description}</span>
+              </span>
+            </a>
+          ))}
+        </div>
+      </div>
+      <a href={CHEMIN_QUETES} class={lien} aria-current={courant(CHEMIN_QUETES)}>Quêtes</a>
+      <a href="/lore/tags" class={lien} aria-current={courant('/lore/tags')}>Tags</a>
+      <a href="/a-propos" class:list={[lien, 'hidden lg:flex']} aria-current={courant('/a-propos')}>À propos</a>
+    </nav>
+
+    <div class="ml-auto flex items-center gap-2 md:ml-0">
+      <BoutonTheme class={boutonIcone} />
+      <button type="button" class:list={[boutonIcone, 'group/burger md:hidden']} aria-label="Menu" aria-expanded="false" aria-controls="menu-mobile">
+        <Icon nom="menu" class="group-aria-expanded/burger:hidden" />
+        <Icon nom="fermer" class="hidden group-aria-expanded/burger:block" />
+      </button>
+    </div>
+  </div>
+
+  <MenuMobile themes={themes} />
+</header>
+
+<script>
+  const barre = document.querySelector<HTMLElement>('[data-navbar]')!;
+  const burger = barre.querySelector<HTMLButtonElement>('[aria-controls="menu-mobile"]')!;
+  const menu = barre.querySelector<HTMLElement>('#menu-mobile')!;
+  const hero = document.querySelector('[data-hero]');
+  let heroSousLaBarre = !!hero;
+  // hidden vaut aussi « until-found » dans les types du DOM : on ne retient que « fermé ou non ».
+  const ferme = () => menu.hidden !== false;
+  // Transparente seulement tant que la bannière est sous la barre et que le menu mobile est fermé.
+  const actualiserFond = () => barre.toggleAttribute('data-sur-image', !!hero && heroSousLaBarre && ferme());
+  // La marge de -64 px (hauteur de la barre) fait basculer la barre quand la bannière a fini de passer dessous.
+  if (hero) new IntersectionObserver(([e]) => { heroSousLaBarre = e.isIntersecting; actualiserFond(); }, { rootMargin: '-64px 0px 0px 0px' }).observe(hero);
+
+  function basculer(ouvrir: boolean) {
+    menu.hidden = !ouvrir;
+    // Fond opaque, et défilement de la page bloqué (has-[[data-menu-ouvert]] sur <body>).
+    barre.toggleAttribute('data-menu-ouvert', ouvrir);
+    burger.setAttribute('aria-expanded', String(ouvrir));
+    actualiserFond();
+  }
+  burger.addEventListener('click', () => basculer(ferme()));
+  document.addEventListener('keydown', e => { if (e.key === 'Escape' && !ferme()) { basculer(false); burger.focus(); } });
+  // Le menu mobile n'a plus de sens si la fenêtre repasse en largeur étendue (point de rupture md).
+  matchMedia('(min-width: 840px)').addEventListener('change', e => { if (e.matches) basculer(false); });
+</script>

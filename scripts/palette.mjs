@@ -69,10 +69,15 @@ export function cssPalette({ clair, sombre, fixes }) {
 :root[data-theme="dark"] { color-scheme: dark; ${variables(sombre)} }
 
 @theme inline {
+  /* Seules nos couleurs existent : la palette Tailwind (bg-blue-500…) est supprimée. */
+  --color-*: initial;
 ${Object.keys(clair).map(nom => `  --color-${nom}: var(--${nom});`).join('\n')}
 }
 
 @theme {
+  /* Blanc et noir restent disponibles pour le verre et les voiles posés sur une image. */
+  --color-white: #fff;
+  --color-black: #000;
 ${Object.entries(fixes).map(([nom, valeur]) => `  --color-${nom}: ${valeur};`).join('\n')}
 }
 `;

@@ -9,7 +9,9 @@ const pagesDeDev = () => ({
   hooks: {
     /** @param {{ command: string, injectRoute: (route: { pattern: string, entrypoint: string }) => void }} options */
     'astro:config:setup': ({ command, injectRoute }) => {
-      if (command === 'dev') injectRoute({ pattern: '/demo', entrypoint: './src/demo/Demo.astro' });
+      if (command !== 'dev') return;
+      injectRoute({ pattern: '/demo', entrypoint: './src/demo/Demo.astro' });
+      injectRoute({ pattern: '/demo/navigation', entrypoint: './src/demo/Navigation.astro' });
     },
   },
 });

@@ -1,0 +1,83 @@
+# Registre des tags. Pour en ajouter un : une entrée ici, puis l'identifiant dans le frontmatter des articles.
+# Un tag inconnu, ou un article sans thème, fait échouer le build.
+# Les thèmes (theme: true) apparaissent dans le menu. Tout s'affiche par ordre alphabétique : l'ordre de ce fichier est libre.
+
+quetes:
+  libelle: Quêtes
+  singulier: Quête
+  description: Les aventures du Voyageur, racontées et expliquées.
+  theme: true
+  icone: livre
+concepts:
+  libelle: Concepts
+  singulier: Concept
+  description: Des repères pour comprendre les grandes idées de Teyvat.
+  theme: true
+  icone: etincelle
+personnages:
+  libelle: Personnages
+  singulier: Personnage
+  description: Les visages, les choix et les histoires qui façonnent ce monde.
+  theme: true
+  icone: personne
+regions:
+  libelle: Régions
+  singulier: Région
+  description: Chaque nation a son histoire. Prenez le temps de la découvrir.
+  theme: true
+  icone: boussole
+factions:
+  libelle: Factions
+  singulier: Faction
+  description: Les organisations qui influencent le destin de Teyvat.
+  theme: true
+  icone: strates
+evenements:
+  libelle: Événements
+  singulier: Événement
+  description: Les moments décisifs dont les échos résonnent encore.
+  theme: true
+  icone: horloge
+
+premiers-pas:
+  libelle: Premiers pas
+  description: Quelques lectures pour entrer dans l’histoire de Teyvat, en commençant par Mondstadt.
+teyvat:
+  libelle: Teyvat
+  description: Le monde de Genshin Impact et ses sept nations.
+mondstadt:
+  libelle: Mondstadt
+  description: La cité de la liberté, nation de l’Anémo protégée par Barbatos.
+archontes:
+  libelle: Archontes
+  description: Les sept dieux qui gouvernent les nations de Teyvat.
+barbatos:
+  libelle: Barbatos
+  description: L’Archonte Anémo, qui voyage sous les traits du barde Venti.
+anemo:
+  libelle: Anémo
+  description: L’élément du vent, celui de Mondstadt et de son Archonte.
+elements:
+  libelle: Éléments
+  description: Les sept éléments qui structurent Teyvat et ses nations.
+liberte:
+  libelle: Liberté
+  description: L’idéal de Mondstadt, et la question qui traverse toute son histoire.
+dvalin:
+  libelle: Dvalin
+  description: Le dragon du vent, protecteur de Mondstadt tombé sous l’influence de l’Abysse.
+quete-d-archons:
+  libelle: Quête d’Archons
+  description: La quête principale du Voyageur, nation après nation.
+voyageur:
+  libelle: Voyageur
+  description: Le héros de l’aventure, à la recherche de son jumeau disparu.
+abysse:
+  libelle: Abysse
+  description: L’Ordre de l’Abysse et les forces qui menacent Teyvat.
+khaenri-ah:
+  libelle: Khaenri’ah
+  description: La nation sans dieu, engloutie lors du Cataclysme.
+histoire:
+  libelle: Histoire
+  description: Les grands événements du passé de Teyvat.

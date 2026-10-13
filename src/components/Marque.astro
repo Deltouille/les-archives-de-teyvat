@@ -1,0 +1,6 @@
+---
+// Le logo : l'étoile à quatre branches du prototype. Ce n'est pas une icône Material : c'est l'emblème du site.
+interface Props { taille?: number; class?: string; }
+const { taille = 24, class: classe } = Astro.props;
+---
+<svg class={classe} width={taille} height={taille} viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round" aria-hidden="true"><path d="M12 2l2.8 7.2L22 12l-7.2 2.8L12 22l-2.8-7.2L2 12l7.2-2.8L12 2Z" /></svg>

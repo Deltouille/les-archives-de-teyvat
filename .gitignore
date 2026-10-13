@@ -25,3 +25,6 @@ pnpm-debug.log*
 
 # prototype de référence, local uniquement (cf. documentation/decisions.md, D1)
 old/
+
+# captures d’écran (scripts/captures.mjs)
+captures/

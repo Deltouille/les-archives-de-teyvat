@@ -1,18 +1,9 @@
 ---
-// Temporaire : le layout (étape 2) importera la feuille de style.
-import '../styles/global.css';
+// Accueil provisoire : la vraie page d'accueil (bannière, sections) arrive à l'étape 5 du plan.
+import Site from '../layouts/Site.astro';
 ---
-
-<html lang="fr">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+<Site titre="Accueil">
+  <p class="sur-titre">Bienvenue, voyageur</p>
+  <h1 class="mt-2">L’Histoire de Genshin</h1>
+  <p class="mt-4 max-w-prose text-discret">Le lore de Genshin Impact, raconté simplement. Le site est en cours de reconstruction.</p>
+</Site>

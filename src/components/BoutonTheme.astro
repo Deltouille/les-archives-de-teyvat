@@ -1,0 +1,27 @@
+---
+import Icon from './Icon.astro';
+interface Props { class?: string; }
+---
+{/* Bouton bascule : libellé fixe, l'état passe par aria-pressed (mis à jour au chargement, le HTML statique
+     ne connaît pas le thème du visiteur). Changer aussi le libellé ferait annoncer deux états contradictoires. */}
+<button type="button" class={Astro.props.class} data-bouton-theme aria-label="Thème sombre" aria-pressed="false">
+  <Icon nom="lune" taille={22} class="dark:hidden" />
+  <Icon nom="soleil" taille={22} class="hidden dark:block" />
+</button>
+
+<script>
+  // Le thème initial est posé dans le <head> par Site.astro (script anti-flash) ; ici, on ne fait que le basculer.
+  const racine = document.documentElement;
+  const boutons = document.querySelectorAll<HTMLButtonElement>('[data-bouton-theme]');
+  function actualiser() {
+    const sombre = String(racine.dataset.theme === 'dark');
+    for (const bouton of boutons) bouton.setAttribute('aria-pressed', sombre);
+  }
+  for (const bouton of boutons) bouton.addEventListener('click', () => {
+    const theme = racine.dataset.theme === 'dark' ? 'light' : 'dark';
+    racine.dataset.theme = theme;
+    try { localStorage.setItem('genshin-theme', theme); } catch {}
+    actualiser();
+  });
+  actualiser();
+</script>

@@ -6,6 +6,8 @@
 /* Le thème est porté par data-theme sur <html> (script anti-flash du layout), pas par la media query :
    le choix manuel du visiteur doit l'emporter sur la préférence système. dark: ne sert qu'aux couleurs fixes. */
 @custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));
+/* Barre de navigation posée sur une bannière, tant qu'elle est transparente (attribut géré par Navbar.astro). */
+@custom-variant sur-image (&:where([data-sur-image], [data-sur-image] *));
 
 @theme inline {
   /* Couche d'état M3 au survol : 8 % de la couleur « sur » mélangée au conteneur. */
@@ -64,6 +66,9 @@
   --breakpoint-md: 840px;
   --breakpoint-lg: 1200px;
   --breakpoint-xl: 1600px;
+
+  /* Largeur maximale du contenu (en-tête, <main>, pied de page). */
+  --container-site: 92.5rem;
 
   /* L'espacement reste celui de Tailwind (multiples de 4 px) : c'est déjà la grille de 4 dp de M3. */
 }

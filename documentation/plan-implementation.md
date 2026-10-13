@@ -49,15 +49,16 @@ Chaque étape se termine seulement quand :
 - **Tests** : build vert ; contraste des paires de couleurs texte/fond vérifié par un test unitaire (seuil WCAG AA) ; captures clair/sombre de la page de démo.
 - **Décidé** : palette tonale M3 **générée** à partir d’une couleur source (D4), mise en œuvre en D6 ; système de design : D7.
 
-## Étape 2 — Mise en page et navigation
+## Étape 2 — Mise en page et navigation ✅
 
-- [ ] `layouts/Site.astro` : `<head>` (titre, description, canonical, OG, Twitter), script anti-flash du thème (`localStorage` `genshin-theme`), lien d'évitement, `<main>`, pied de page (mention fan non affilié).
-- [ ] Slot `hero` détecté **au rendu** (piège `Astro.slots.has`).
-- [ ] `Navbar` : liens, menu déroulant « Le lore » (survol **et** focus clavier), bouton thème, raccourci recherche ; transparente sur hero puis opaque (`IntersectionObserver`).
-- [ ] Menu mobile plein écran : seul le panneau est `fixed`, défilement bloqué, Échap ferme.
-- [ ] `Icon.astro`.
-- [ ] `scripts/captures.mjs` mis en place **ici** (la navigation est la partie la plus fragile visuellement).
+- [x] `layouts/Site.astro` : `<head>` (titre, description, canonical, OG, Twitter), script anti-flash du thème (`localStorage` `genshin-theme`), lien d'évitement, `<main>`, pied de page (mention fan non affilié).
+- [x] Slot `hero` détecté **au rendu** (piège `Astro.slots.has`).
+- [x] `Navbar` : liens, menu déroulant « Le lore » (survol **et** focus clavier), bouton thème (bouton de recherche reporté à l'étape 6) ; transparente sur hero puis opaque (`IntersectionObserver`).
+- [x] Menu mobile plein écran : seul le panneau est `fixed`, défilement bloqué, Échap ferme.
+- [x] `Icon.astro` (Material Symbols), registre des tags avancé ici pour le menu (D8).
+- [x] `scripts/captures.mjs` mis en place **ici** (la navigation est la partie la plus fragile visuellement).
 - **Tests** : build (un seul `h1`, canonical, skip link présent) ; captures desktop/mobile × thèmes ; états vérifiés au focus clavier : menu déroulant ouvert, burger ouvert/fermé sans saut de défilement.
+- **Décisions** : D8 (mise en page, navigation), D9 (captures).
 
 ## Étape 3 — Modèle de contenu
 
@@ -85,6 +86,7 @@ Chaque étape se termine seulement quand :
 
 - [ ] Pagefind : `data-pagefind-body` sur les articles, métadonnées et filtre « thème », brouillons et pied de page exclus.
 - [ ] `Search.astro` : `<dialog>` (`m-auto`), `Ctrl K` / `⌘ K` selon la plateforme, thème Pagefind via ses variables CSS.
+- [ ] Bouton de recherche dans la barre de navigation (desktop et mobile), absent tant que la recherche n’existait pas (D8).
 - **Tests** : build (index Pagefind généré, filtre présent) ; interaction dans Brave headless : ouverture au clavier, une requête « Venti » renvoie l'article.
 
 ## Étape 7 — Référencement et redirections

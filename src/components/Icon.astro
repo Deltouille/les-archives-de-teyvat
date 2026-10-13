@@ -1,0 +1,6 @@
+---
+import { traceIcone, type NomIcone } from '../lib/icones';
+interface Props { nom: NomIcone; taille?: number; class?: string; }
+const { nom, taille = 24, class: classe } = Astro.props;
+---
+<svg class={classe} width={taille} height={taille} viewBox="0 -960 960 960" fill="currentColor" aria-hidden="true"><path d={traceIcone(nom)} /></svg>

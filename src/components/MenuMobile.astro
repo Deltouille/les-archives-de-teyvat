@@ -1,0 +1,41 @@
+---
+import Icon from './Icon.astro';
+import { cheminTag, type Tag } from '../lib/contenu';
+import { lienActif, CHEMIN_QUETES } from '../lib/navigation.mjs';
+
+interface Props { themes: Tag[]; }
+const { themes } = Astro.props;
+const chemin = Astro.url.pathname;
+const courant = (href: string) => (lienActif(chemin, href) ? 'page' : undefined);
+
+// Élément de tiroir de navigation M3 : 56 px de haut, indicateur actif en conteneur secondaire.
+const lien = 'text-etiquette-g flex h-14 items-center gap-3 rounded-full px-4 transition-colors hover:bg-texte/8 aria-[current=page]:bg-tonal aria-[current=page]:text-sur-tonal';
+const principaux = [
+  { href: '/', libelle: 'Accueil', icone: 'maison' },
+  { href: '/lore', libelle: 'Explorer le lore', icone: 'boussole' },
+  { href: CHEMIN_QUETES, libelle: 'Résumés de quêtes', icone: 'livre' },
+  { href: '/lore/tags', libelle: 'Tous les tags', icone: 'tag' },
+] as const;
+---
+{/* Seul ce panneau est « fixed » : l'en-tête garde sa place, sinon le navigateur recale le défilement
+     (scroll anchoring) et la page saute à la fermeture du menu. */}
+<div id="menu-mobile" class="fixed inset-x-0 top-16 bottom-0 overflow-y-auto overscroll-contain border-t border-ligne bg-fond px-4 pt-2 pb-6 text-texte md:hidden" hidden>
+  <nav aria-label="Navigation mobile">
+    {principaux.map(({ href, libelle, icone }) => <a href={href} class={lien} aria-current={courant(href)}><Icon nom={icone} />{libelle}</a>)}
+  </nav>
+  <p class="sur-titre px-4 pt-6 pb-2 text-discret">Au fil des histoires</p>
+  <nav class="grid grid-cols-2" aria-label="Thèmes du lore">
+    {themes.map(({ id, data }) => (
+      <a href={cheminTag(id)} class:list={[lien, 'text-discret']} aria-current={courant(cheminTag(id))}>
+        {data.icone && <Icon nom={data.icone} taille={20} />}{data.libelle}
+      </a>
+    ))}
+  </nav>
+  <a href={cheminTag('premiers-pas')} class="mt-4 flex items-center justify-between gap-4 rounded-carte bg-conteneur-primaire px-5 py-4 text-sur-conteneur-primaire">
+    <span class="flex flex-col gap-1">
+      <strong class="text-titre-m">Un nouveau voyage ?</strong>
+      <span class="text-corps-m">Quelques repères pour bien commencer.</span>
+    </span>
+    <Icon nom="fleche" />
+  </a>
+</div>

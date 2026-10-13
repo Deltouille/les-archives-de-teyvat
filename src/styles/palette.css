@@ -8,6 +8,8 @@
 :root[data-theme="dark"] { color-scheme: dark; --fond: #111318; --surface: #191c20; --doux: #282a2f; --tonal: #3d4758; --sur-tonal: #d9e3f8; --ligne: #43474e; --contour: #8e9199; --texte: #e1e2e9; --discret: #c4c6cf; --primaire: #a7c8ff; --sur-primaire: #03305f; --conteneur-primaire: #244777; --sur-conteneur-primaire: #d5e3ff; --or: #f0be7a; --sur-or: #452b00; --conteneur-or: #624005; --sur-conteneur-or: #ffddb3; }
 
 @theme inline {
+  /* Seules nos couleurs existent : la palette Tailwind (bg-blue-500…) est supprimée. */
+  --color-*: initial;
   --color-fond: var(--fond);
   --color-surface: var(--surface);
   --color-doux: var(--doux);
@@ -28,6 +30,9 @@
 }
 
 @theme {
+  /* Blanc et noir restent disponibles pour le verre et les voiles posés sur une image. */
+  --color-white: #fff;
+  --color-black: #000;
   --color-ciel: #a7c8ff;
   --color-ciel-clair: #d5e3ff;
   --color-nuit: #001c3b;
