@@ -2,7 +2,7 @@
 
 > Réécriture propre du prototype `old/`, d'après son cahier des charges
 > `old/documentation/refonte-astro.md` (cité « CDC §n » ci-dessous).
-> Commencé le 13 octobre 2026. **État : étapes 0 à 9 réalisées ; reste le déploiement (Deltouille).** Les décisions prises en route vont dans
+> Commencé le 13 octobre 2026. **État : étapes 0 à 10 réalisées ; reste le déploiement (Deltouille).** Les décisions prises en route vont dans
 > [`decisions.md`](decisions.md) ; ce fichier dit **quoi faire et dans quel ordre**.
 
 ## Règles du jeu
@@ -116,6 +116,14 @@ Chaque étape se termine seulement quand :
 - [x] Barre de navigation fixe pendant la transition ; carte d'article → bannière (seule la carte cliquée).
 - **Tests** : noms uniques par page, correspondance carte ↔ bannière ; captures : transition réelle dans Brave, absente en mouvement réduit.
 - **Décision** : D16.
+
+## Étape 10 — Crédits et licences ✅ (ajoutée à la demande)
+
+- [x] Champ `credits` (adaptations du wiki, théories de la communauté), vérifié au build ; encadré « Crédits » en fin d'article.
+- [x] Page `/credits` (texte de Deltouille + listes générées), liens en pied de page et dans « À propos ».
+- [x] Tous les textes du site sous CC BY-SA 3.0, licence déclarée sur chaque page.
+- [ ] Licence du code (fichier `LICENSE`) : à choisir par Deltouille.
+- **Décisions** : D17, D18.
 
 ---
 

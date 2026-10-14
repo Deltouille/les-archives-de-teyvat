@@ -21,7 +21,9 @@ Astro (sortie statique), Tailwind CSS v4 avec un système de design Material 3 g
 
 ## Écrire un article
 
-Un fichier Markdown dans `src/content/articles/` ; son nom donne l'URL (`/lore/<nom>`). Les tags sont déclarés dans `src/content/tags.yaml`, les images sont des `.webp` dans `src/assets/images/`. Le build échoue, en nommant le fichier, si un tag est inconnu, si aucun tag n'est un thème ou si l'image manque. Détails : `CLAUDE.md`, section « Modèle de contenu ».
+Un fichier Markdown dans `src/content/articles/` ; son nom donne l'URL (`/lore/<nom>`). Les tags sont déclarés dans `src/content/tags.yaml`, les images sont des `.webp` dans `src/assets/images/`. Un article repris d'une page du Genshin Impact Wiki ou d'une théorie publiée ailleurs déclare sa source dans `credits` (lien, auteur, modifications) : elle est créditée en fin d'article et sur `/credits`. Le build échoue, en nommant le fichier, si un tag est inconnu, si aucun tag n'est un thème, si l'image manque ou si un crédit est incomplet.
+
+Les textes du site sont sous licence [CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0/deed.fr) ; les éléments de Genshin Impact appartiennent à HoYoverse. Détails : `CLAUDE.md`, section « Modèle de contenu ».
 
 ## Mise en ligne (Vercel)
 

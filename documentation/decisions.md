@@ -194,3 +194,24 @@ Le déploiement lui-même est fait par Deltouille ; tout le reste de l'étape 8 
   2. avec le nom sur l'*image* de la bannière, l'image passait au-dessus du voile et du titre, qui surgissaient à la fin → le nom est porté par **toute la bannière** ; le titre apparaît en fondu pendant le mouvement.
 - **Piège** : deux éléments du même nom sur une page annulent toute la transition. D'où l'accueil, où « À la une » et la grille montrent tous deux Mondstadt : la carte « À la une » n'a pas de nom.
 - **Tests** : aucun nom en double sur aucune page (vu en échec en nommant aussi la carte « À la une ») ; aucune carte nommée d'avance, chaque bannière nommée, `data-transition` correspondant ; script de nommage dans le `<head>` ; règles CSS (actives, coupées en mouvement réduit). **Captures** : option `navigation` (clic sur un lien, la scène continue sur la page d'arrivée) et écoute de `pagereveal` sur chaque document : le clic sur une carte révèle l'article **par une View Transition** dans Brave, et **sans** en mouvement réduit (vu en échec en retirant `@view-transition`). Le retour en arrière n'est pas testé automatiquement (cache de navigation incertain en headless).
+
+## D17 — Crédits des contenus repris (14 oct. 2026)
+
+- **Contexte** : une partie du contenu sera une reprise ou une traduction de pages du Genshin Impact Wiki (Fandom, CC BY-SA 3.0), et parfois de théories publiées sur Reddit ou X. Il faut créditer pages et auteurs, et tenir la promesse de la page Crédits (« un lien vers l'article original et une mention des modifications effectuées »).
+- **Choix** : les crédits sont une **donnée de l'article**, vérifiée au build, plutôt qu'un texte libre :
+  - champ `credits` du frontmatter, distinct de `sources` (repères dans le jeu) ; deux types : `wiki` (`titre`, `url`, `modifications`) et `communaute` (`auteur`, `plateforme` : reddit | x | youtube | autre, `url`, `titre` facultatif) ;
+  - garde-fous (`src/lib/credits.mjs`, appelé par `validation.mjs`) : adaptation du wiki **sans `modifications`** (CC BY-SA impose d'indiquer les changements), URL `wiki` hors de `genshin-impact.fandom.com`, URL ne correspondant pas à la plateforme déclarée (domaine exact ou sous-domaine : `reddit.com.exemple.org` est refusé), adresse non HTTPS → le build échoue en nommant le fichier ;
+  - encadré **« Crédits »** en fin d'article (`EncadreCredits`) : lien vers la page d'origine, lien vers l'**historique de ses contributeurs** (l'attribution d'une page de wiki), licence, modifications ; pour la communauté, auteur et plateforme ;
+  - page **`/credits`** : le texte de Deltouille, puis deux listes générées depuis les articles (adaptations du wiki, théories créditées), affichées seulement si elles ne sont pas vides. Liens depuis le pied de page et « À propos ».
+- **Tests** : unitaires (`tests/credits.test.mjs` : domaines, HTTPS, modifications obligatoires, présentation, lien d'historique) et validation ; sur `dist/` : page Crédits, lien en pied de page, encadré et listes présents exactement quand le frontmatter déclare des crédits.
+- **Vérifié avec des crédits temporaires sur Venti** (retirés ensuite : aucune vraie source n'a été inventée) : rendu de l'encadré et des listes, audit axe ; build en échec sans `modifications`. Défaut corrigé : espace manquante avant « (contributeurs) ».
+- **À savoir** : une publication Reddit ou X n'est pas sous licence libre ; la traduire en entier demande l'accord de son auteur. Le site crédite, mais ne peut pas vérifier cet accord.
+- **Outillage** : `npm run captures -- --base <url>` contre `astro preview` saute désormais les scènes `/demo` (dev seulement) en le signalant. Utile quand un `npm run dev` lancé par Deltouille occupe déjà le projet : Astro 7 refuse un second serveur de dev pour le même projet.
+
+## D18 — Textes originaux sous CC BY-SA 3.0 (14 oct. 2026)
+
+- **Contexte** : la première version de la page Crédits réservait les droits des textes originaux. Deltouille : les mettre « aussi sous CC BY-SA comme le wiki. Le site est open source de toutes façons ».
+- **Choix** : **tous les textes du site**, originaux comme adaptations, sont sous **CC BY-SA 3.0**, la même version que le wiki (une seule licence pour tout le site, et compatible avec les adaptations). La section « Contenus originaux » de `/credits` le dit, avec les conditions de réutilisation ; `<link rel="license">` est déclaré sur **chaque page** ; le pied de page le rappelle. Les éléments appartenant à HoYoverse (illustrations, noms, personnages) restent **hors** licence, comme le dit la section dédiée.
+- **Écarté** : CC BY-SA 4.0 pour les textes originaux (plus récente) : deux licences à expliquer pour un même site.
+- **Ouvert** : la licence du **code** (le dépôt n'a pas de fichier `LICENSE`) est une décision distincte, à prendre par Deltouille.
+- **Tests** : licence déclarée sur toutes les pages (hors pages de redirection), rappel en pied de page, section « Contenus originaux » sous CC BY-SA.

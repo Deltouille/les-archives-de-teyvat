@@ -23,6 +23,9 @@ export async function lireArticles() {
       spoilers: Boolean(champ('spoilers')),
       resume: blocListe('resume').length > 0,
       sources: blocListe('sources').length > 0,
+      // Crédits : nombre d'entrées de chaque type (champ credits).
+      creditsWiki: (entete.match(/^\s+(?:-\s+)?type:\s*wiki\s*$/gm) ?? []).length,
+      creditsCommunaute: (entete.match(/^\s+(?:-\s+)?type:\s*communaute\s*$/gm) ?? []).length,
       titres: [...texte.split(/^---$/m).slice(2).join('---').matchAll(/^## (.+)$/gm)].map(m => m[1]),
     };
   }));

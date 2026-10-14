@@ -10,7 +10,8 @@
 // échouer le script. `audit: false` sur une scène pour l'en dispenser.
 //
 // Sans --reference, chaque capture est comparée à sa référence si elle existe (octets identiques, ou écart de
-// hauteur). Le script échoue si une vérification échoue. NAVIGATEUR=chromium pour changer de navigateur.
+// hauteur). Le script échoue si une vérification échoue. Contre `astro preview` (--base), les scènes /demo, qui n'existent
+// qu'en dev, sont sautées et signalées. NAVIGATEUR=chromium pour changer de navigateur.
 import { spawn } from 'node:child_process';
 import { mkdir, mkdtemp, readFile, rm, writeFile, copyFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
@@ -173,6 +174,7 @@ const SCENES = [
   { nom: 'tag-theme', url: '/lore/tags/regions', largeurs: [1440, 390] },
   { nom: 'tag-simple', url: '/lore/tags/mondstadt', largeurs: [1440, 390] },
   { nom: 'a-propos', url: '/a-propos', largeurs: [1440, 390] },
+  { nom: 'credits', url: '/credits', largeurs: [1440, 390] },
   { nom: 'page-introuvable', url: '/cette-page-n-existe-pas', largeurs: [1440, 390] },
   {
     nom: 'carte-au-clavier',
@@ -344,6 +346,10 @@ async function clavier(cdp, etape) {
 
 // --- Déroulé ---
 
+// Les pages d'outillage /demo n'existent qu'avec `astro dev`.
+const avecDemo = (await fetch(new URL('/demo', BASE)).catch(() => null))?.ok ?? false;
+const sautees = SCENES.filter(s => (!FILTRE || s.nom.includes(FILTRE)) && !avecDemo && s.url.startsWith('/demo')).map(s => s.nom);
+
 await mkdir(SORTIE, { recursive: true });
 if (REFERENCE) await mkdir(DOSSIER_REFERENCE, { recursive: true });
 const navigateur = await lancerNavigateur();
@@ -357,7 +363,7 @@ const problemes = [];
 const ecarts = [];
 let nombre = 0;
 try {
-  for (const scene of SCENES.filter(s => !FILTRE || s.nom.includes(FILTRE))) {
+  for (const scene of SCENES.filter(s => (!FILTRE || s.nom.includes(FILTRE)) && !sautees.includes(s.nom))) {
     for (const largeur of scene.largeurs ?? LARGEURS) {
       for (const theme of THEMES) {
         const nom = `${scene.nom}-${largeur}-${theme}`;
@@ -421,6 +427,7 @@ try {
 }
 
 console.log(`${nombre} captures dans ${path.relative(process.cwd(), SORTIE)}/${REFERENCE ? ', copiées comme référence' : ''}.`);
+if (sautees.length) console.log(`Scènes sautées (pages /demo absentes, serveur autre que astro dev) : ${sautees.join(', ')}.`);
 if (ecarts.length) console.log(`Différentes de la référence (à regarder) :\n  ${ecarts.join('\n  ')}`);
 if (problemes.length) {
   console.error(`\n${problemes.length} vérification(s) en échec :\n  ${problemes.join('\n  ')}`);

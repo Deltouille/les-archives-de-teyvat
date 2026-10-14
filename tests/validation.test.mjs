@@ -44,3 +44,9 @@ test('un thème doit avoir un singulier et une icône', () => {
 test('les brouillons sont validés comme les autres', () => {
   assert.throws(() => valider([article('venti', { brouillon: true, tags: ['inconnu'] })]), /Tag inconnu « inconnu »/);
 });
+
+test('un crédit invalide fait échouer le build, en nommant le fichier', () => {
+  const credit = { type: 'wiki', titre: 'Venti', url: 'https://genshin-impact.fandom.com/wiki/Venti', modifications: '' };
+  assert.throws(() => valider([article('venti', { credits: [credit] })]), /Crédit invalide dans src\/content\/articles\/venti\.md : .*modifications/);
+  assert.doesNotThrow(() => valider([article('venti', { credits: [{ ...credit, modifications: 'Traduit.' }] })]));
+});

@@ -4,6 +4,7 @@ import Navbar from '../components/Navbar.astro';
 import PiedDePage from '../components/PiedDePage.astro';
 import Recherche from '../components/Recherche.astro';
 import { genererPalette } from '../../scripts/palette.mjs';
+import { LICENCE_WIKI } from '../lib/credits.mjs';
 
 interface Props {
   titre: string;
@@ -43,6 +44,8 @@ const avecHero = hero.trim() !== '';
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="icon" href="/favicon.ico" sizes="32x32" />
     {noindex && <meta name="robots" content="noindex" />}
+    {/* Tous les textes du site sont sous CC BY-SA 3.0 (originaux et adaptations du wiki), cf. /credits. */}
+    <link rel="license" href={LICENCE_WIKI.url} />
     <meta property="og:site_name" content={NOM_DU_SITE} />
     <meta property="og:title" content={titreComplet} />
     <meta property="og:description" content={description} />

@@ -226,3 +226,43 @@ test('View Transitions : activées entre documents, désactivées en mouvement r
   assert.match(css, /@view-transition\s*\{\s*navigation:\s*auto/);
   assert.match(css, /prefers-reduced-motion:\s*reduce\)\s*\{\s*@view-transition\s*\{\s*navigation:\s*none/);
 });
+
+test('page Crédits et licences : texte, licence déclarée, lien dans le pied de page de chaque page', async () => {
+  const html = await lire('credits/index.html');
+  for (const titre of ['Contenus provenant du Genshin Impact Wiki', 'Contenus originaux', 'Propriété intellectuelle de Genshin Impact']) assert.ok(html.includes(titre), titre);
+  assert.match(html, /<a href="https:\/\/creativecommons\.org\/licenses\/by-sa\/3\.0\/deed\.fr" rel="license">/);
+  for (const page of ['index.html', 'lore/venti/index.html', '404.html']) assert.match(await lire(page), /<a href="\/credits"[^>]*>Crédits et licences<\/a>/, page);
+  assert.match(await lire('sitemap-0.xml'), /\/credits<\/loc>/);
+  const originaux = html.split('Contenus originaux</h2>')[1].split('<h2')[0];
+  assert.match(originaux, /CC BY-SA 3\.0/, 'les contenus originaux sont sous CC BY-SA 3.0 (D18)');
+  assert.doesNotMatch(originaux, /restent soumis aux droits/);
+});
+
+test('tous les textes du site sont sous CC BY-SA 3.0 : licence déclarée sur chaque page et rappelée en pied de page', async () => {
+  for (const fichier of pages) {
+    const html = await readFile(fichier, 'utf8');
+    if (html.includes('http-equiv="refresh"')) continue; // pages de redirection
+    assert.match(html, /<link rel="license" href="https:\/\/creativecommons\.org\/licenses\/by-sa\/3\.0\/deed\.fr">/, path.relative(racine, fichier));
+  }
+  assert.match(await lire('index.html'), /Textes sous licence <a href="https:\/\/creativecommons\.org\/licenses\/by-sa\/3\.0\/deed\.fr"[^>]*>CC BY-SA 3\.0<\/a>/);
+});
+
+test('crédits d’un article : encadré seulement quand le frontmatter en déclare', async () => {
+  for (const a of articles) {
+    const html = await lire(`lore/${a.id}/index.html`);
+    assert.equal(html.includes('data-encadre="credits"'), a.creditsWiki + a.creditsCommunaute > 0, `${a.id} : encadré Crédits`);
+    if (a.creditsWiki) {
+      assert.match(html, /\?action=history"/, `${a.id} : lien vers les contributeurs du wiki`);
+      assert.match(html, /Modifications :/, `${a.id} : modifications mentionnées`);
+    }
+  }
+});
+
+test('page Crédits : les listes d’adaptations et de théories suivent les articles', async () => {
+  const html = await lire('credits/index.html');
+  const wiki = articles.filter(a => a.creditsWiki > 0);
+  const communaute = articles.filter(a => a.creditsCommunaute > 0);
+  assert.equal(html.includes('data-liste="adaptations"'), wiki.length > 0);
+  assert.equal(html.includes('data-liste="theories"'), communaute.length > 0);
+  for (const a of [...wiki, ...communaute]) assert.match(html, new RegExp(`href="/lore/${a.id}"`), a.id);
+});

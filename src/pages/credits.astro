@@ -1,0 +1,53 @@
+---
+import Site from '../layouts/Site.astro';
+import EnTetePage from '../components/EnTetePage.astro';
+import { bibliotheque, cheminArticle, type Article } from '../lib/contenu';
+import { presenterCredit, LICENCE_WIKI } from '../lib/credits.mjs';
+
+// Le texte vient de Deltouille (contenus originaux sous CC BY-SA 3.0 : decisions.md, D18) ; les deux listes du bas sont générées depuis le frontmatter des articles (champ credits).
+const { articles } = await bibliotheque();
+const credites = articles.flatMap((article: Article) => article.data.credits.map(c => ({ article, credit: presenterCredit(c) })));
+const adaptations = credites.flatMap(({ article, credit }) => (credit.type === 'wiki' ? [{ article, credit }] : []));
+const theories = credites.flatMap(({ article, credit }) => (credit.type === 'communaute' ? [{ article, credit }] : []));
+---
+<Site titre="Crédits et licences" description="Contenus adaptés du Genshin Impact Wiki, théories créditées, licences et propriété intellectuelle.">
+  <EnTetePage surTitre="Droits et attributions">Crédits et licences</EnTetePage>
+  <article class="prose max-w-3xl rounded-carte bg-surface p-6 sm:p-10">
+    <p>Ce site est un projet indépendant consacré à l’histoire et à l’univers de Genshin Impact. Il n’est ni affilié ni approuvé par HoYoverse ou Fandom.</p>
+
+    <h2>Contenus provenant du Genshin Impact Wiki</h2>
+    <p>Certains articles de ce site sont traduits ou adaptés de contenus publiés sur le Genshin Impact Wiki, hébergé par Fandom.</p>
+    <p>Ces adaptations sont mises à disposition sous licence <a href={LICENCE_WIKI.url} rel="license">Creative Commons Attribution – Partage dans les mêmes conditions 3.0 (CC BY-SA 3.0)</a>.</p>
+    <p>Les pages concernées comportent un lien vers l’article original et une mention des modifications effectuées.</p>
+
+    <h2>Contenus originaux</h2>
+    <p>Sauf mention contraire, les textes originaux rédigés pour ce site sont eux aussi mis à disposition sous licence <a href={LICENCE_WIKI.url} rel="license">Creative Commons Attribution – Partage dans les mêmes conditions 3.0 (CC BY-SA 3.0)</a>, comme les adaptations du wiki.</p>
+    <p>Vous pouvez donc les reprendre et les adapter, à condition de citer L’Histoire de Genshin avec un lien vers la page d’origine, d’indiquer vos modifications et de partager vos versions sous la même licence.</p>
+
+    <h2>Propriété intellectuelle de Genshin Impact</h2>
+    <p>Genshin Impact, ses personnages, ses illustrations, ses noms et les autres éléments associés au jeu appartiennent à HoYoverse et à leurs titulaires de droits respectifs.</p>
+    <p>Les mentions de licences Creative Commons présentes sur ce site ne s’appliquent pas automatiquement aux éléments appartenant à HoYoverse.</p>
+
+    {adaptations.length > 0 && (
+      <section aria-labelledby="adaptations-titre" data-liste="adaptations">
+        <h2 id="adaptations-titre">Articles adaptés du wiki</h2>
+        <ul>
+          {adaptations.map(({ article, credit }) => (
+            <li><a href={cheminArticle(article)}>{article.data.titre}</a> — d’après « <a href={credit.lien}>{credit.titre}</a> » (<a href={credit.historique}>contributeurs</a>), sous licence {credit.licence.nom}.</li>
+          ))}
+        </ul>
+      </section>
+    )}
+
+    {theories.length > 0 && (
+      <section aria-labelledby="theories-titre" data-liste="theories">
+        <h2 id="theories-titre">Théories et analyses de la communauté</h2>
+        <ul>
+          {theories.map(({ article, credit }) => (
+            <li><a href={cheminArticle(article)}>{article.data.titre}</a> — d’après {credit.titre ? <>« <a href={credit.lien}>{credit.titre}</a> », de {credit.auteur}</> : <a href={credit.lien}>{credit.auteur}</a>} sur {credit.source}.</li>
+          ))}
+        </ul>
+      </section>
+    )}
+  </article>
+</Site>

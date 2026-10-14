@@ -1,0 +1,29 @@
+---
+import { presenterCredit, LICENCE_WIKI } from '../lib/credits.mjs';
+// Crédits de l'article : pages du wiki adaptées (lien, contributeurs, licence, modifications) et théories reprises.
+// C'est la mention promise par la page /credits sur chaque page concernée.
+interface Props { credits: Parameters<typeof presenterCredit>[0][]; }
+const { credits } = Astro.props;
+const presentes = credits.map(presenterCredit);
+---
+<section class="mt-10 rounded-carte border border-ligne p-6" aria-labelledby="credits-titre" data-encadre="credits" data-pagefind-ignore>
+  <h2 id="credits-titre" class="text-grand-titre-p">Crédits</h2>
+  <ul class="text-corps-m mt-4 flex flex-col gap-4">
+    {presentes.map(c => c.type === 'wiki' ? (
+      <li>
+        Adapté de « <a class="text-primaire underline underline-offset-4" href={c.lien}>{c.titre}</a> » sur le {c.source}{' '}
+        (<a class="text-primaire underline underline-offset-4" href={c.historique}>contributeurs</a>),
+        sous licence <a class="text-primaire underline underline-offset-4" href={c.licence.url} rel="license">{c.licence.nom}</a>.
+        <span class="mt-1 block text-discret">Modifications : {c.modifications}</span>
+      </li>
+    ) : (
+      <li>
+        {c.titre ? <>D’après « <a class="text-primaire underline underline-offset-4" href={c.lien}>{c.titre}</a> », de {c.auteur} sur {c.source}.</> : <>D’après une publication de <a class="text-primaire underline underline-offset-4" href={c.lien}>{c.auteur}</a> sur {c.source}.</>}
+      </li>
+    ))}
+  </ul>
+  <p class="text-corps-p mt-4 text-discret">
+    Comme tous les textes du site, cet article est diffusé sous licence <a class="underline underline-offset-4 hover:text-primaire" href={LICENCE_WIKI.url}>{LICENCE_WIKI.nom}</a>.
+    Voir <a class="underline underline-offset-4 hover:text-primaire" href="/credits">Crédits et licences</a>.
+  </p>
+</section>

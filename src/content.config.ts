@@ -4,7 +4,7 @@ import { z } from 'astro/zod';
 import { NOMS_ICONES } from './lib/icones';
 
 // Un article = un fichier. Son URL est /lore/<nom-du-fichier> : elle ne dépend pas des tags,
-// donc retaguer un article ne casse jamais un lien. Règles croisées (tags connus, thème, image) : src/lib/validation.mjs.
+// donc retaguer un article ne casse jamais un lien. Règles croisées (tags connus, thème, image, crédits) : src/lib/validation.mjs.
 const articles = defineCollection({
   loader: glob({ base: './src/content/articles', pattern: '**/*.md' }),
   schema: z.object({
@@ -22,6 +22,13 @@ const articles = defineCollection({
     resume: z.array(z.string()).default([]),
     spoilers: z.string().optional(),
     sources: z.array(z.object({ titre: z.string(), detail: z.string() })).default([]),
+    // Contenus repris d'ailleurs, crédités en fin d'article et sur /credits. Règles d'URL et de licence : src/lib/credits.mjs.
+    credits: z.array(z.discriminatedUnion('type', [
+      // Adaptation d'une page du Genshin Impact Wiki (Fandom) : l'article passe sous CC BY-SA 3.0.
+      z.object({ type: z.literal('wiki'), titre: z.string(), url: z.url(), modifications: z.string() }),
+      // Théorie ou analyse d'un membre de la communauté.
+      z.object({ type: z.literal('communaute'), auteur: z.string(), plateforme: z.enum(['reddit', 'x', 'youtube', 'autre']), url: z.url(), titre: z.string().optional() }),
+    ])).default([]),
   }),
 });
 

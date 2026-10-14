@@ -5,6 +5,7 @@
 // /lore/tags est l'index des tags, et plusieurs /lore/<nom> sont des redirections figées : aucun article ne peut
 // prendre ces noms (src/lib/redirections.mjs).
 import { NOMS_RESERVES as RESERVES } from './redirections.mjs';
+import { verifierCredit } from './credits.mjs';
 
 /**
  * @param {{ id: string, data: { tags: string[], image: string, publieLe: Date, modifieLe?: Date } }[]} articles
@@ -30,5 +31,9 @@ export function validerContenus(articles, tags, images) {
     }
     if (!images.has(data.image)) throw new Error(`Image inconnue « ${data.image} » dans ${origine} : ajoutez src/assets/images/${data.image}.webp`);
     if (data.modifieLe && data.modifieLe < data.publieLe) throw new Error(`modifieLe antérieur à publieLe dans ${origine}`);
+    for (const credit of data.credits ?? []) {
+      const refus = verifierCredit(credit);
+      if (refus) throw new Error(`Crédit invalide dans ${origine} : ${refus}`);
+    }
   }
 }
