@@ -30,5 +30,6 @@
     "axe-core": "^4.14.0",
     "pagefind": "^1.5.2",
     "typescript": "^6.0.3"
-  }
+  },
+  "license": "GPL-3.0-or-later"
 }

@@ -215,3 +215,19 @@ Le déploiement lui-même est fait par Deltouille ; tout le reste de l'étape 8 
 - **Écarté** : CC BY-SA 4.0 pour les textes originaux (plus récente) : deux licences à expliquer pour un même site.
 - **Ouvert** : la licence du **code** (le dépôt n'a pas de fichier `LICENSE`) est une décision distincte, à prendre par Deltouille.
 - **Tests** : licence déclarée sur toutes les pages (hors pages de redirection), rappel en pied de page, section « Contenus originaux » sous CC BY-SA.
+
+## D19 — Code sous GNU GPL v3 ou ultérieure (14 oct. 2026)
+
+- **Contexte** : Deltouille veut une licence copyleft « type GPL » pour le code, compatible avec le contenu du site (textes sous CC BY-SA 3.0, éléments appartenant à HoYoverse).
+- **Choix** : **GPL-3.0-or-later** (`LICENSE` : texte officiel téléchargé sur gnu.org ; `package.json` : `"license": "GPL-3.0-or-later"`).
+  - **v3 et non v2** : les tracés d'icônes Material Symbols et Material Color Utilities sont sous Apache-2.0, compatible avec la GPL v3 mais pas avec la v2.
+  - **GPL et non AGPL** : la clause réseau de l'AGPL vise le logiciel exécuté côté serveur ; le site est statique, sans code serveur. Le JavaScript envoyé aux navigateurs est de toute façon « distribué » au sens de la GPL, et le dépôt public en fournit la source.
+  - **« ou ultérieure »** : permet de suivre une future version de la GPL sans avoir à recontacter tous les contributeurs.
+- **Compatibilité avec le contenu** : code, textes et éléments de HoYoverse sont des œuvres **distinctes, simplement réunies** (agrégat, section 5 de la GPL v3) : aucune licence ne s'étend aux autres. Condition : délimiter clairement, ce que fait `LICENCES.md` — code (tout ce qui n'est pas listé ailleurs) sous GPL ; articles, registre des tags et textes éditoriaux écrits dans les pages et composants sous CC BY-SA 3.0 (dans un fichier `.astro`, le balisage relève du code, les phrases pour les lecteurs relèvent des textes) ; images de `src/assets/images/` et `public/social.webp` sans licence libre (HoYoverse).
+- **Dépendances** : inventaire complet de `node_modules` (≈ 290 paquets) : MIT, ISC, Apache-2.0, BSD, 0BSD, BlueOak, CC0, LGPL-3.0-or-later (`sharp-libvips`, outil de build) et MPL-2.0 (`lightningcss`, `axe-core`, outils de build et de test). Toutes compatibles GPL v3. Pour la MPL-2.0, aucun fichier ne porte la mention « Incompatible With Secondary Licenses » (une première recherche l'avait cru, à tort : le texte de la licence lui-même définit cette expression ; on ne cherche donc que dans le code). Ne partent dans le site publié que Pagefind (MIT) et les tracés Material Symbols (Apache-2.0).
+- **Garde-fou** : `tests/licences.test.mjs` vérifie le texte de `LICENSE` (empreinte SHA-256), la déclaration du paquet, le découpage de `LICENCES.md`, et que **toute dépendance installée** reste sous une licence compatible avec la GPL v3 (liste fermée ; une licence inconnue fait échouer le test, à examiner avant de l'ajouter). Vu en échec en retirant MIT de la liste.
+- **Affichage** : section « Code source » sur `/credits`, mention dans le pied de page (« code sous licence GNU GPL v3 »).
+- **Pistes non retenues pour l'instant** :
+  - passer les textes en **CC BY-SA 4.0**, qui est compatible à sens unique avec la GPL v3 (pas la 3.0), et le permet pour les adaptations du wiki (la CC BY-SA 3.0 autorise une version ultérieure pour les adaptations). Utile seulement si texte et code devaient un jour être vraiment mélangés ; l'agrégat suffit aujourd'hui ;
+  - en-têtes SPDX dans chaque fichier source : facultatifs, `LICENCES.md` fait foi.
+- **À compléter par Deltouille** : la ligne de copyright de `LICENCES.md` (« Deltouille et les contributeurs du projet ») et, une fois public, le lien vers le dépôt sur `/credits`.

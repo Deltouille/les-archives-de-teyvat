@@ -23,13 +23,21 @@ Astro (sortie statique), Tailwind CSS v4 avec un système de design Material 3 g
 
 Un fichier Markdown dans `src/content/articles/` ; son nom donne l'URL (`/lore/<nom>`). Les tags sont déclarés dans `src/content/tags.yaml`, les images sont des `.webp` dans `src/assets/images/`. Un article repris d'une page du Genshin Impact Wiki ou d'une théorie publiée ailleurs déclare sa source dans `credits` (lien, auteur, modifications) : elle est créditée en fin d'article et sur `/credits`. Le build échoue, en nommant le fichier, si un tag est inconnu, si aucun tag n'est un thème, si l'image manque ou si un crédit est incomplet.
 
-Les textes du site sont sous licence [CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0/deed.fr) ; les éléments de Genshin Impact appartiennent à HoYoverse. Détails : `CLAUDE.md`, section « Modèle de contenu ».
+ Détails : `CLAUDE.md`, section « Modèle de contenu ».
 
 ## Mise en ligne (Vercel)
 
 1. Importer le dépôt dans Vercel : Astro est détecté, et `vercel.json` impose `npm run build` (qui génère aussi l'index de recherche) et le dossier `dist`.
 2. Domaine autre que `l-histoire-de-genshin-expliquee.vercel.app` : définir la variable d'environnement `SITE_URL` (URL canoniques, Open Graph, sitemap, `robots.txt`).
 3. Après le premier déploiement, vérifier une ancienne adresse (par exemple `/lore/regions/mondstadt`) : elle doit répondre par une redirection 301.
+
+## Licences
+
+- **Code** : [GNU GPL v3 ou ultérieure](LICENSE).
+- **Textes** (articles, textes éditoriaux) : [CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0/deed.fr).
+- **Éléments de Genshin Impact** (images, noms, personnages) : propriété de HoYoverse, sous aucune licence libre.
+
+Le détail, fichier par fichier, est dans [`LICENCES.md`](LICENCES.md).
 
 ## Documentation
 

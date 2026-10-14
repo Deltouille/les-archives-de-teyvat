@@ -122,8 +122,8 @@ Chaque étape se termine seulement quand :
 - [x] Champ `credits` (adaptations du wiki, théories de la communauté), vérifié au build ; encadré « Crédits » en fin d'article.
 - [x] Page `/credits` (texte de Deltouille + listes générées), liens en pied de page et dans « À propos ».
 - [x] Tous les textes du site sous CC BY-SA 3.0, licence déclarée sur chaque page.
-- [ ] Licence du code (fichier `LICENSE`) : à choisir par Deltouille.
-- **Décisions** : D17, D18.
+- [x] Licence du code : GNU GPL v3 ou ultérieure, `LICENCES.md` pour le découpage code / textes / HoYoverse (D19).
+- **Décisions** : D17, D18, D19.
 
 ---
 

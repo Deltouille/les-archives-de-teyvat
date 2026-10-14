@@ -236,6 +236,8 @@ test('page Crédits et licences : texte, licence déclarée, lien dans le pied d
   const originaux = html.split('Contenus originaux</h2>')[1].split('<h2')[0];
   assert.match(originaux, /CC BY-SA 3\.0/, 'les contenus originaux sont sous CC BY-SA 3.0 (D18)');
   assert.doesNotMatch(originaux, /restent soumis aux droits/);
+  const code = html.split('Code source</h2>')[1].split('<h2')[0];
+  assert.match(code, /href="https:\/\/www\.gnu\.org\/licenses\/gpl-3\.0\.fr\.html">GNU GPL version 3 ou ultérieure/, 'code sous GPL (D19)');
 });
 
 test('tous les textes du site sont sous CC BY-SA 3.0 : licence déclarée sur chaque page et rappelée en pied de page', async () => {
@@ -244,7 +246,7 @@ test('tous les textes du site sont sous CC BY-SA 3.0 : licence déclarée sur ch
     if (html.includes('http-equiv="refresh"')) continue; // pages de redirection
     assert.match(html, /<link rel="license" href="https:\/\/creativecommons\.org\/licenses\/by-sa\/3\.0\/deed\.fr">/, path.relative(racine, fichier));
   }
-  assert.match(await lire('index.html'), /Textes sous licence <a href="https:\/\/creativecommons\.org\/licenses\/by-sa\/3\.0\/deed\.fr"[^>]*>CC BY-SA 3\.0<\/a>/);
+  assert.match(await lire('index.html'), /Textes sous licence <a href="https:\/\/creativecommons\.org\/licenses\/by-sa\/3\.0\/deed\.fr"[^>]*>CC BY-SA 3\.0<\/a>, code sous licence <a href="https:\/\/www\.gnu\.org\/licenses\/gpl-3\.0\.fr\.html"[^>]*>GNU GPL v3<\/a>/);
 });
 
 test('crédits d’un article : encadré seulement quand le frontmatter en déclare', async () => {

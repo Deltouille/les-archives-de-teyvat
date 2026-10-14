@@ -4,7 +4,7 @@ import EnTetePage from '../components/EnTetePage.astro';
 import { bibliotheque, cheminArticle, type Article } from '../lib/contenu';
 import { presenterCredit, LICENCE_WIKI } from '../lib/credits.mjs';
 
-// Le texte vient de Deltouille (contenus originaux sous CC BY-SA 3.0 : decisions.md, D18) ; les deux listes du bas sont générées depuis le frontmatter des articles (champ credits).
+// Le texte vient de Deltouille (contenus originaux sous CC BY-SA 3.0 : decisions.md, D18 ; code sous GPL : D19) ; les deux listes du bas sont générées depuis le frontmatter des articles (champ credits).
 const { articles } = await bibliotheque();
 const credites = articles.flatMap((article: Article) => article.data.credits.map(c => ({ article, credit: presenterCredit(c) })));
 const adaptations = credites.flatMap(({ article, credit }) => (credit.type === 'wiki' ? [{ article, credit }] : []));
@@ -23,6 +23,9 @@ const theories = credites.flatMap(({ article, credit }) => (credit.type === 'com
     <h2>Contenus originaux</h2>
     <p>Sauf mention contraire, les textes originaux rédigés pour ce site sont eux aussi mis à disposition sous licence <a href={LICENCE_WIKI.url} rel="license">Creative Commons Attribution – Partage dans les mêmes conditions 3.0 (CC BY-SA 3.0)</a>, comme les adaptations du wiki.</p>
     <p>Vous pouvez donc les reprendre et les adapter, à condition de citer L’Histoire de Genshin avec un lien vers la page d’origine, d’indiquer vos modifications et de partager vos versions sous la même licence.</p>
+
+    <h2>Code source</h2>
+    <p>Le code du site est un logiciel libre, distribué sous licence <a href="https://www.gnu.org/licenses/gpl-3.0.fr.html">GNU GPL version 3 ou ultérieure</a>. Les deux licences sont indépendantes : la GPL couvre le code, la CC BY-SA couvre les textes, et aucune ne couvre les éléments de Genshin Impact.</p>
 
     <h2>Propriété intellectuelle de Genshin Impact</h2>
     <p>Genshin Impact, ses personnages, ses illustrations, ses noms et les autres éléments associés au jeu appartiennent à HoYoverse et à leurs titulaires de droits respectifs.</p>
