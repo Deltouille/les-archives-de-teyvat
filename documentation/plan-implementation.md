@@ -2,7 +2,7 @@
 
 > Réécriture propre du prototype `old/`, d'après son cahier des charges
 > `old/documentation/refonte-astro.md` (cité « CDC §n » ci-dessous).
-> Commencé le 13 octobre 2026. **État : étapes 0 à 11 réalisées ; reste le déploiement (Deltouille).** Les décisions prises en route vont dans
+> Commencé le 13 octobre 2026. **État : étapes 0 à 12 réalisées ; reste le déploiement (Deltouille).** Les décisions prises en route vont dans
 > [`decisions.md`](decisions.md) ; ce fichier dit **quoi faire et dans quel ordre**.
 
 ## Règles du jeu
@@ -131,6 +131,13 @@ Chaque étape se termine seulement quand :
 - [x] Sommaire « Dans cet article » qui surligne la section en cours.
 - [x] Correction : les ancres ne finissent plus sous la barre de navigation fixe.
 - **Décision** : D20.
+
+## Étape 12 — Organisation libre du contenu ✅ (ajoutée à la demande)
+
+- [x] Articles rangés librement en sous-dossiers ; URL = nom du fichier seul.
+- [x] Doublons de noms détectés au build ; messages avec le vrai chemin.
+- [x] Redirection de l'article renommé (`prologue-mondstadt` → `mondstadt-act-i`).
+- **Décision** : D21.
 
 ---
 

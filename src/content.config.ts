@@ -2,11 +2,12 @@ import { defineCollection } from 'astro:content';
 import { file, glob } from 'astro/loaders';
 import { z } from 'astro/zod';
 import { NOMS_ICONES } from './lib/icones';
+import { identifiantDe } from './lib/identifiant.mjs';
 
-// Un article = un fichier. Son URL est /lore/<nom-du-fichier> : elle ne dépend pas des tags,
-// donc retaguer un article ne casse jamais un lien. Règles croisées (tags connus, thème, image, crédits) : src/lib/validation.mjs.
+// Un article = un fichier, rangé où l'on veut sous src/content/articles. Son URL est /lore/<nom-du-fichier> : elle ne
+// dépend ni des dossiers ni des tags, donc déplacer ou retaguer un article ne casse jamais un lien. Règles croisées (tags connus, thème, image, crédits) : src/lib/validation.mjs.
 const articles = defineCollection({
-  loader: glob({ base: './src/content/articles', pattern: '**/*.md' }),
+  loader: glob({ base: './src/content/articles', pattern: '**/*.md', generateId: ({ entry }) => identifiantDe(entry) }),
   schema: z.object({
     titre: z.string(),
     description: z.string(),

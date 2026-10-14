@@ -4,11 +4,16 @@
 // Lu par astro.config.mjs (redirections) et validation.mjs (noms d'articles réservés).
 
 /** Articles du modèle par catégories (/lore/<catégorie>/<article>) → URL à plat. */
-const ANCIENS_ARTICLES = { 'regions/mondstadt': 'mondstadt', 'quetes/prologue-mondstadt': 'prologue-mondstadt', 'personnages/venti': 'venti', 'factions/archons': 'archons', 'factions/ordre-abysse': 'ordre-abysse', 'evenements/cataclysme': 'cataclysme' };
+const ANCIENS_ARTICLES = { 'regions/mondstadt': 'mondstadt', 'quetes/prologue-mondstadt': 'mondstadt-act-i', 'personnages/venti': 'venti', 'factions/archons': 'archons', 'factions/ordre-abysse': 'ordre-abysse', 'evenements/cataclysme': 'cataclysme' };
 /** Anciennes pages de catégorie /lore/<catégorie> → page du thème. */
 export const ANCIENNES_CATEGORIES = ['quetes', 'concepts', 'personnages', 'regions', 'factions', 'evenements'];
 /** Anciennes pages de tag /tags/<tag>. */
 const ANCIENS_TAGS = ['abysse', 'anemo', 'archontes', 'barbatos', 'dvalin', 'elements', 'histoire', 'khaenri-ah', 'liberte', 'mondstadt', 'quete-d-archons', 'teyvat', 'voyageur'];
+/** Articles renommés depuis la réécriture : /lore/<ancien nom> → /lore/<nouveau nom>. */
+const ARTICLES_RENOMMES = {
+  // 14 oct. 2026 : prologue-mondstadt.md → mondstadt/mondstadt-act-I.md (découpage du prologue en actes).
+  'prologue-mondstadt': 'mondstadt-act-i',
+};
 /** Autres adresses, dont celles du tout premier site. */
 const AUTRES = {
   '/dossiers/commencer': '/lore/tags/premiers-pas',
@@ -26,6 +31,7 @@ export const REDIRECTIONS = {
   ...Object.fromEntries(Object.entries(ANCIENS_ARTICLES).map(([avant, apres]) => [`/lore/${avant}`, `/lore/${apres}`])),
   ...Object.fromEntries(ANCIENNES_CATEGORIES.map(c => [`/lore/${c}`, `/lore/tags/${c}`])),
   ...Object.fromEntries(ANCIENS_TAGS.map(t => [`/tags/${t}`, `/lore/tags/${t}`])),
+  ...Object.fromEntries(Object.entries(ARTICLES_RENOMMES).map(([avant, apres]) => [`/lore/${avant}`, `/lore/${apres}`])),
   ...AUTRES,
 };
 

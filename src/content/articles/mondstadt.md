@@ -39,4 +39,4 @@ Le Voyageur rencontre notamment Amber, Kaeya et Lisa. Leurs missions permettent 
 
 La crise de Dvalin met cet idéal à l’épreuve. Pour sauver Mondstadt, faut-il combattre son ancien protecteur ou chercher à comprendre sa souffrance ? Le prologue répond à cette question à travers la rencontre du Voyageur avec Venti.
 
-Pour poursuivre, découvrez [le rôle de Venti](/lore/venti) ou [le résumé du prologue](/lore/prologue-mondstadt).
+Pour poursuivre, découvrez [le rôle de Venti](/lore/venti) ou [le résumé du prologue](/lore/mondstadt-act-i).

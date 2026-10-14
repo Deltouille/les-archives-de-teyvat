@@ -11,7 +11,7 @@
     },
     {
       "source": "/lore/quetes/prologue-mondstadt",
-      "destination": "/lore/prologue-mondstadt",
+      "destination": "/lore/mondstadt-act-i",
       "statusCode": 301
     },
     {
@@ -127,6 +127,11 @@
     {
       "source": "/tags/voyageur",
       "destination": "/lore/tags/voyageur",
+      "statusCode": 301
+    },
+    {
+      "source": "/lore/prologue-mondstadt",
+      "destination": "/lore/mondstadt-act-i",
       "statusCode": 301
     },
     {

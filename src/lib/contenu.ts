@@ -3,6 +3,11 @@ import type { ImageMetadata } from 'astro';
 import { trierParLibelle } from './navigation.mjs';
 import { validerContenus } from './validation.mjs';
 import { articlesPublies, themePrincipal } from './bibliotheque.mjs';
+import { doublonsDIdentifiants } from './identifiant.mjs';
+
+// Chemins de tous les fichiers d'articles, pour repérer deux fichiers de même nom dans deux dossiers : ils voudraient
+// la même URL, et le chargeur de contenu garderait l'un en écrasant l'autre sans erreur.
+const FICHIERS_ARTICLES = Object.keys(import.meta.glob('../content/articles/**/*.md')).map(c => c.replace(/^\.\.\//, 'src/'));
 
 export type Article = CollectionEntry<'articles'>;
 export type Tag = CollectionEntry<'tags'>;
@@ -38,6 +43,8 @@ export async function registreDesTags() {
  */
 export async function bibliotheque() {
   const [tous, { tags, themes }] = await Promise.all([getCollection('articles'), registreDesTags()]);
+  const doublons = doublonsDIdentifiants(FICHIERS_ARTICLES);
+  if (doublons.length) throw new Error(doublons.map(d => `Même URL /lore/${d.identifiant} pour ${d.chemins.join(' et ')} : renommez l'un des fichiers`).join('\n'));
   validerContenus(tous, tags, new Set(Object.keys(images)));
   const articles = articlesPublies(tous, { dev: import.meta.env.DEV });
   const parId = new Map(tags.map(t => [t.id, t]));

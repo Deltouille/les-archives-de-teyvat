@@ -346,7 +346,14 @@ async function lancerNavigateur() {
     try {
       const cibles = await (await fetch(`http://127.0.0.1:${port}/json/list`)).json();
       const page = cibles.find(c => c.type === 'page');
-      if (page) return { url: page.webSocketDebuggerUrl, fermer: async () => { processus.kill(); await rm(profil, { recursive: true, force: true }); } };
+      // Fermeture : attendre la fin réelle du navigateur, qui écrit encore dans son profil juste après le signal ;
+      // sinon la suppression du profil échoue par intermittence (ENOTEMPTY).
+      if (page) return { url: page.webSocketDebuggerUrl, fermer: async () => {
+        const fini = new Promise(r => processus.once('exit', r));
+        processus.kill();
+        await Promise.race([fini, new Promise(r => setTimeout(r, 5000))]);
+        await rm(profil, { recursive: true, force: true, maxRetries: 5, retryDelay: 200 });
+      } };
     } catch {}
     await new Promise(r => setTimeout(r, 200));
   }

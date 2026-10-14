@@ -8,7 +8,7 @@ import { NOMS_RESERVES as RESERVES } from './redirections.mjs';
 import { verifierCredit } from './credits.mjs';
 
 /**
- * @param {{ id: string, data: { tags: string[], image: string, publieLe: Date, modifieLe?: Date } }[]} articles
+ * @param {{ id: string, filePath?: string, data: { tags: string[], image: string, publieLe: Date, modifieLe?: Date, credits?: any[] } }[]} articles
  * @param {{ id: string, data: { theme: boolean, singulier?: string, icone?: string } }[]} tags
  * @param {Set<string>} images noms des .webp de src/assets/images, sans extension
  */
@@ -20,7 +20,8 @@ export function validerContenus(articles, tags, images) {
   }
   const connus = new Map(tags.map(t => [t.id, t]));
   for (const article of articles) {
-    const origine = `src/content/articles/${article.id}.md`;
+    // Chemin réel (les articles peuvent être rangés en sous-dossiers) ; à défaut, chemin à plat.
+    const origine = article.filePath ?? `src/content/articles/${article.id}.md`;
     const { data } = article;
     if (RESERVES.has(article.id)) throw new Error(`Nom d’article réservé « ${article.id} » : renommez ${origine}`);
     for (const tag of data.tags) {
