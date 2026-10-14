@@ -78,7 +78,8 @@
 }
 
 @layer base {
-  html { scroll-behavior: smooth; font-synthesis: none; -webkit-text-size-adjust: 100%; }
+  /* scroll-padding-top : une ancre (sommaire, lien d'évitement) ne doit pas finir sous la barre de navigation fixe. */
+  html { scroll-behavior: smooth; scroll-padding-top: 5rem; font-synthesis: none; -webkit-text-size-adjust: 100%; }
   body { background: var(--fond); color: var(--texte); font-family: var(--font-sans); @apply text-corps-g; }
   button, a { -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
   button { cursor: pointer; }

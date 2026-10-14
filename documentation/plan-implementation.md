@@ -2,7 +2,7 @@
 
 > Réécriture propre du prototype `old/`, d'après son cahier des charges
 > `old/documentation/refonte-astro.md` (cité « CDC §n » ci-dessous).
-> Commencé le 13 octobre 2026. **État : étapes 0 à 10 réalisées ; reste le déploiement (Deltouille).** Les décisions prises en route vont dans
+> Commencé le 13 octobre 2026. **État : étapes 0 à 11 réalisées ; reste le déploiement (Deltouille).** Les décisions prises en route vont dans
 > [`decisions.md`](decisions.md) ; ce fichier dit **quoi faire et dans quel ordre**.
 
 ## Règles du jeu
@@ -124,6 +124,13 @@ Chaque étape se termine seulement quand :
 - [x] Tous les textes du site sous CC BY-SA 3.0, licence déclarée sur chaque page.
 - [x] Licence du code : GNU GPL v3 ou ultérieure, `LICENCES.md` pour le découpage code / textes / HoYoverse (D19).
 - **Décisions** : D17, D18, D19.
+
+## Étape 11 — Confort de lecture ✅ (ajoutée à la demande)
+
+- [x] Barre de progression de lecture de l'article, sous la barre de navigation.
+- [x] Sommaire « Dans cet article » qui surligne la section en cours.
+- [x] Correction : les ancres ne finissent plus sous la barre de navigation fixe.
+- **Décision** : D20.
 
 ---
 

@@ -12,6 +12,7 @@ import EncadreSources from '../../components/EncadreSources.astro';
 import Sommaire from '../../components/Sommaire.astro';
 import TagsArticle from '../../components/TagsArticle.astro';
 import EncadreCredits from '../../components/EncadreCredits.astro';
+import ProgressionLecture from '../../components/ProgressionLecture.astro';
 import EnTeteSection from '../../components/EnTeteSection.astro';
 import GrilleArticles from '../../components/GrilleArticles.astro';
 import { bibliotheque, cheminTag, imageDe, transitionImage, type Article } from '../../lib/contenu';
@@ -50,7 +51,8 @@ const jour = (d: Date) => d.toISOString().slice(0, 10);
     </header>
   </Banniere>
 
-  <article data-pagefind-body>
+  <ProgressionLecture />
+  <article data-pagefind-body data-lecture>
     <div class="mb-8 flex max-w-5xl flex-wrap items-center justify-between gap-x-6 gap-y-3" data-pagefind-ignore>
       <FilAriane etapes={[{ libelle: 'Accueil', href: '/' }, { libelle: 'Explorer', href: '/lore' }, { libelle: theme.data.libelle, href: cheminTag(theme.id) }, { libelle: data.titre }]} class="[&_li:last-child]:hidden sm:[&_li:last-child]:flex" />
       <p class="text-corps-m flex items-center gap-3 text-discret"><span class="pastille" data-pagefind-filter="theme">{theme.data.singulier}</span>{minutesDeLecture(article.body ?? '')} min de lecture</p>

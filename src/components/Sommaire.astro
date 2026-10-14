@@ -1,22 +1,52 @@
 ---
 // Sommaire de l'article : les titres de niveau 2, plus les sources si elles existent.
 // Deux formes : repliable en tête d'article (mobile), liste collante dans la colonne latérale (sm et plus).
+// La section en cours de lecture est signalée par aria-current="true" (script ci-dessous), dans les deux formes.
 interface Props { titres: { slug: string; text: string }[]; avecSources: boolean; forme: 'repliable' | 'laterale'; }
 const { titres, avecSources, forme } = Astro.props;
 const entrees = [...titres.map(t => ({ href: `#${t.slug}`, libelle: t.text })), ...(avecSources ? [{ href: '#sources-titre', libelle: 'Sources dans le jeu' }] : [])];
+// Indicateur de section active : trait primaire à gauche, sans changer la graisse (pas de saut de mise en page).
+const actif = 'border-l-2 border-transparent transition-colors aria-[current=true]:border-primaire aria-[current=true]:text-primaire';
 ---
 {forme === 'repliable' ? (
   <details class="mb-6 rounded-grand border border-ligne bg-surface px-4 py-3 sm:hidden" data-pagefind-ignore>
     <summary class="text-titre-p cursor-pointer">Dans cet article</summary>
-    <nav class="pt-2" aria-label="Sommaire">
-      {entrees.map(e => <a class="text-corps-m block py-2 text-primaire" href={e.href}>{e.libelle}</a>)}
+    <nav class="pt-2" aria-label="Sommaire" data-sommaire>
+      {entrees.map(e => <a class:list={['text-corps-m block py-2 pl-3 text-discret', actif]} href={e.href}>{e.libelle}</a>)}
     </nav>
   </details>
 ) : (
   <>
     <p class="sur-titre">Dans cet article</p>
-    <nav class="mt-4 mb-8 border-l border-ligne" aria-label="Sommaire">
-      {entrees.map(e => <a class="text-corps-m block py-2 pl-4 text-discret transition-colors hover:bg-texte/8 hover:text-primaire" href={e.href}>{e.libelle}</a>)}
+    <nav class="mt-4 mb-8 border-l border-ligne" aria-label="Sommaire" data-sommaire>
+      {entrees.map(e => <a class:list={['text-corps-m -ml-px block py-2 pl-4 text-discret hover:bg-texte/8 hover:text-primaire aria-[current=true]:bg-texte/8', actif]} href={e.href}>{e.libelle}</a>)}
     </nav>
   </>
 )}
+
+<script>
+  // Section en cours : le dernier titre passé sous la ligne de lecture (barre de navigation + un peu d'air).
+  // Tout en bas de la page, la dernière section l'emporte, même courte.
+  const LIGNE = 96;
+  const liens = [...document.querySelectorAll<HTMLAnchorElement>('[data-sommaire] a[href^="#"]')];
+  const cibles = [...new Set(liens.map(a => decodeURIComponent(a.hash.slice(1))))]
+    .map(id => document.getElementById(id))
+    .filter((titre): titre is HTMLElement => titre !== null);
+  if (cibles.length) {
+    let prevu = false;
+    const mettreAJour = () => {
+      prevu = false;
+      const enBas = innerHeight + scrollY >= document.documentElement.scrollHeight - 2;
+      const passes = cibles.filter(t => t.getBoundingClientRect().top <= LIGNE + 1);
+      const courant = enBas ? cibles.at(-1) : passes.at(-1);
+      for (const lien of liens) {
+        if (courant && lien.hash === `#${encodeURIComponent(courant.id)}`) lien.setAttribute('aria-current', 'true');
+        else lien.removeAttribute('aria-current');
+      }
+    };
+    const demander = () => { if (!prevu) { prevu = true; requestAnimationFrame(mettreAJour); } };
+    addEventListener('scroll', demander, { passive: true });
+    addEventListener('resize', demander);
+    mettreAJour();
+  }
+</script>

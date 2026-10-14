@@ -268,3 +268,16 @@ test('page Crédits : les listes d’adaptations et de théories suivent les art
   assert.equal(html.includes('data-liste="theories"'), communaute.length > 0);
   for (const a of [...wiki, ...communaute]) assert.match(html, new RegExp(`href="/lore/${a.id}"`), a.id);
 });
+
+test('lecture : barre de progression décorative et sommaire suivi sur chaque article, ancres hors de la barre fixe', async () => {
+  for (const a of articles) {
+    const html = await lire(`lore/${a.id}/index.html`);
+    assert.match(html, /<div[^>]*aria-hidden="true"[^>]*>\s*<div[^>]*data-progression/, `${a.id} : barre de progression`);
+    assert.match(html, /<article[^>]*data-lecture/, `${a.id} : article mesuré`);
+    if (a.titres.length) assert.equal((html.match(/data-sommaire/g) ?? []).length >= 2, true, `${a.id} : deux sommaires suivis`);
+    assert.doesNotMatch(html, /aria-current="true"/, `${a.id} : aucune section active dans le HTML statique`);
+  }
+  assert.doesNotMatch(await lire('lore/index.html'), /data-progression/, 'pas de barre hors des articles');
+  const feuille = (await readdir(path.join(racine, '_astro'))).find(f => f.endsWith('.css'));
+  assert.match(await readFile(path.join(racine, '_astro', feuille), 'utf8'), /scroll-padding-top:\s*5rem/);
+});

@@ -170,6 +170,63 @@ const SCENES = [
     fenetre: true,
     verifier: `(() => document.querySelector('[data-navbar]').hasAttribute('data-sur-image') ? [] : ['la barre devrait être transparente sur la bannière de l’article'])()`,
   },
+  {
+    nom: 'progression-lecture',
+    url: '/lore/venti',
+    largeurs: [1440, 390],
+    fenetre: true,
+    actions: `
+      const article = document.querySelector('[data-lecture]');
+      // Largeur réellement affichée (et non la valeur d'une propriété CSS, qui peut être annulée par une autre).
+      const echelle = () => Math.round(document.querySelector('[data-progression]').getBoundingClientRect().width / innerWidth * 100) / 100;
+      const debut = article.getBoundingClientRect().top + scrollY - 64;
+      const parcours = article.offsetHeight - innerHeight + 64;
+      window.__mesures = { debut: echelle() };
+      scrollTo(0, debut + parcours + 20); await attendre(150); window.__mesures.fin = echelle();
+      scrollTo(0, document.documentElement.scrollHeight); await attendre(150); window.__mesures.bas = echelle();
+      scrollTo(0, debut + parcours / 2); await attendre(150); window.__mesures.milieu = echelle();`,
+    verifier: `(() => {
+      const { debut, milieu, fin, bas } = window.__mesures;
+      const p = [];
+      if (debut !== 0) p.push('la barre devrait être vide en haut de page (' + debut + ')');
+      if (!(milieu > 0.4 && milieu < 0.6)) p.push('la barre devrait être à moitié au milieu de l’article (' + milieu.toFixed(2) + ')');
+      if (fin !== 1 || bas !== 1) p.push('la barre devrait être pleine à la fin de l’article et au-delà (' + fin + ', ' + bas + ')');
+      return p;
+    })()`,
+  },
+  {
+    nom: 'sommaire-section-active',
+    url: '/lore/venti',
+    largeurs: [1440],
+    fenetre: true,
+    actions: `
+      const titre = document.querySelectorAll('.prose h2[id]')[1];
+      scrollTo(0, titre.getBoundingClientRect().top + scrollY - 90); await attendre(150);
+      window.__attendu = '#' + encodeURIComponent(titre.id);`,
+    verifier: `(() => {
+      const actifs = [...document.querySelectorAll('[data-sommaire] a[aria-current="true"]')].map(a => a.hash);
+      return actifs.length === 2 && actifs.every(h => h === window.__attendu) ? [] : ['le deuxième titre devrait être la section active des deux sommaires (' + actifs.join(', ') + ')'];
+    })()`,
+  },
+  {
+    nom: 'sommaire-clic',
+    url: '/lore/venti',
+    largeurs: [1440, 390],
+    fenetre: true,
+    actions: `
+      const nav = [...document.querySelectorAll('[data-sommaire]')].find(n => n.closest('details') ? getComputedStyle(n.closest('details')).display !== 'none' : n.offsetParent);
+      nav.closest('details')?.setAttribute('open', '');
+      window.__lien = nav.querySelectorAll('a')[2];
+      window.__lien.click(); await attendre(300);`,
+    verifier: `(() => {
+      const p = [];
+      const titre = document.getElementById(decodeURIComponent(window.__lien.hash.slice(1)));
+      const haut = titre.getBoundingClientRect().top;
+      if (haut < 64 || haut > 160) p.push('le titre visé devrait apparaître sous la barre de navigation, pas dessous (haut : ' + Math.round(haut) + ' px)');
+      if (window.__lien.getAttribute('aria-current') !== 'true') p.push('le lien cliqué devrait devenir la section active');
+      return p;
+    })()`,
+  },
   { nom: 'index-des-tags', url: '/lore/tags' },
   { nom: 'tag-theme', url: '/lore/tags/regions', largeurs: [1440, 390] },
   { nom: 'tag-simple', url: '/lore/tags/mondstadt', largeurs: [1440, 390] },

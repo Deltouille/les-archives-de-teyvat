@@ -1,0 +1,31 @@
+---
+// Barre de progression de lecture (indicateur linéaire M3), juste sous la barre de navigation. Elle suit l'article
+// [data-lecture] seulement : vide quand son début passe sous la barre, pleine quand sa fin atteint le bas de l'écran.
+// Décorative : les lecteurs d'écran ont leur propre repère de position.
+---
+<div class="pointer-events-none fixed inset-x-0 top-16 z-30 h-1" aria-hidden="true" data-pagefind-ignore>
+  {/* Propriété CSS scale (et non transform) : c'est celle qu'utilisent les classes scale-* de Tailwind v4 ; mélanger
+       les deux multiplie les échelles. */}
+  <div class="h-full origin-left bg-primaire" style="scale: 0 1" data-progression></div>
+</div>
+
+<script>
+  const barre = document.querySelector<HTMLElement>('[data-progression]');
+  const article = document.querySelector<HTMLElement>('[data-lecture]');
+  // Hauteur de la barre de navigation : le texte commence à être lu quand il passe dessous.
+  const HAUT = 64;
+  if (barre && article) {
+    let prevu = false;
+    const mettreAJour = () => {
+      prevu = false;
+      const { top, bottom } = article.getBoundingClientRect();
+      const parcours = bottom - innerHeight - (top - HAUT);
+      const avancee = parcours <= 0 ? (top <= HAUT ? 1 : 0) : (HAUT - top) / parcours;
+      barre.style.scale = `${Math.min(1, Math.max(0, avancee))} 1`;
+    };
+    const demander = () => { if (!prevu) { prevu = true; requestAnimationFrame(mettreAJour); } };
+    addEventListener('scroll', demander, { passive: true });
+    addEventListener('resize', demander);
+    mettreAJour();
+  }
+</script>
