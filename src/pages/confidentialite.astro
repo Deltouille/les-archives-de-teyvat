@@ -1,7 +1,7 @@
 ---
 import Site from '../layouts/Site.astro';
 import EnTetePage from '../components/EnTetePage.astro';
-import { PLATEFORME, HEBERGEUR, CONTACT_PRIVE } from '../lib/projet.mjs';
+import { NOM, PLATEFORME, TICKETS, HEBERGEUR, CONTACT_PRIVE } from '../lib/projet.mjs';
 // Distinguer ce que le site ne fait pas (publicité, mesure d'audience, cookies) des traitements techniques de
 // l'hébergement, décrits d'après les documents de Vercel pour l'offre utilisée, et ceux de l'éditeur avec leurs bases
 // juridiques (decisions.md, D30, D33 et D34). Ne rien affirmer sur la répartition des rôles qui ne soit établi. À revoir si
@@ -10,36 +10,39 @@ import { PLATEFORME, HEBERGEUR, CONTACT_PRIVE } from '../lib/projet.mjs';
 <Site titre="Confidentialité" description="Ni publicité, ni mesure d’audience, ni cookie ; ce que l’hébergement traite, et pourquoi.">
   <EnTetePage surTitre="Votre tranquillité">Une lecture <em>sans suivi publicitaire.</em></EnTetePage>
   <article class="prose max-w-3xl rounded-carte bg-surface p-6 sm:p-10">
+    <p>Cette page explique quelles données sont utilisées lorsque vous consultez {NOM} ou contactez son éditeur. Pour une demande privée, écrivez à <a href={`mailto:${CONTACT_PRIVE}`}>{CONTACT_PRIVE}</a>. Les informations sur l’éditeur figurent dans les <a href="/mentions-legales">mentions légales</a>.</p>
     <h2>Ce que le site ne fait pas</h2>
-    <p>Ce site de lecture ne comporte ni compte utilisateur, ni publicité, ni outil de mesure d’audience, et ne dépose aucun cookie. Il n’intègre aucun script de suivi ni service tiers : tout ce que charge votre navigateur vient du site lui-même.</p>
+    <p>Ce site de lecture ne comporte ni compte utilisateur, ni publicité, ni outil de mesure d’audience. Le code du site ne dépose aucun cookie et n’intègre aucun script de suivi. Les pages, images et scripts nécessaires à la lecture sont servis depuis le site ; leur hébergement est assuré par Vercel.</p>
 
     <h2>Ce que l’hébergement traite</h2>
     <p>Comme pour tout site web, chaque visite passe par les serveurs de l’hébergeur, {HEBERGEUR.nom}. Vercel collecte alors des données techniques de connexion : votre adresse IP, la localisation approximative qui s’en déduit, des informations sur la configuration de votre appareil et de votre navigateur, et des journaux de requêtes.</p>
     <p><strong>Ce que Vercel déclare.</strong> Selon sa <a href={HEBERGEUR.confidentialite}>politique de confidentialité</a>, Vercel traite certaines de ces données pour son propre compte, comme responsable de traitement : pour sécuriser son service (détection des menaces, de la fraude et des accès non autorisés), pour améliorer ses produits, et pour les données générées par l’utilisation de son service. Pour ces traitements, Vercel indique supprimer ou anonymiser les données lorsqu’il n’en a plus de besoin légitime, sans durée chiffrée.</p>
-    <p><strong>Ce qui n’est pas précisé.</strong> Le contrat de sous-traitance publié par Vercel ne couvre que ses offres Pro et Enterprise. Pour l’offre gratuite utilisée par ce site, la répartition des rôles entre l’éditeur et Vercel pour le simple envoi des pages n’est fixée par aucun contrat, et n’a pas été confirmée par Vercel.</p>
+    <p><strong>Répartition des responsabilités.</strong> Le <a href="https://vercel.com/legal/dpa">contrat de sous-traitance publié par Vercel</a> vise ses offres Pro et Enterprise. Pour l’offre Hobby utilisée par ce site, la répartition des rôles pour l’envoi des pages n’a pas été confirmée par Vercel. Cette limite ne remet pas en cause les engagements de l’éditeur pour les traitements décrits ci-dessous.</p>
     <p><strong>Où.</strong> Vercel est établi aux États-Unis. Il est certifié au cadre de protection des données UE–États-Unis (Data Privacy Framework), que la Commission européenne a reconnu comme assurant un niveau de protection adéquat (décision du 10 juillet 2023), et recourt aussi aux clauses contractuelles types de la Commission.</p>
 
     <h2>Ce que l’éditeur traite</h2>
-    <p><strong>Journaux de requêtes.</strong> L’éditeur peut consulter les journaux de requêtes de son site dans son espace Vercel, uniquement pour diagnostiquer un problème ou un abus. Base juridique : l’intérêt légitime de l’éditeur à faire fonctionner et à sécuriser son site. Ces journaux ne restent consultables que pendant {HEBERGEUR.journaux} ; l’éditeur ne les exporte ni ne les conserve.</p>
+    <p><strong>Journaux de requêtes.</strong> L’éditeur peut consulter les journaux de requêtes de son site dans son espace Vercel, uniquement pour diagnostiquer un problème ou un abus. Base juridique : l’intérêt légitime de l’éditeur à faire fonctionner et à sécuriser son site. Dans l’outil <a href="https://vercel.com/docs/logs/runtime">Runtime Logs</a> de l’offre Hobby, ces journaux ne restent consultables que pendant {HEBERGEUR.journaux} ; l’éditeur ne les exporte ni ne les conserve. Cette fenêtre de consultation ne détermine pas la durée des autres traitements de Vercel.</p>
     <p><strong>Messages envoyés au contact privé.</strong> Ce que vous écrivez à <a href={`mailto:${CONTACT_PRIVE}`}>{CONTACT_PRIVE}</a>, et votre adresse, servent uniquement à traiter votre message :</p>
     <ul>
       <li>pour une question, une remarque ou une demande ordinaire, la base juridique est l’intérêt légitime de l’éditeur à répondre aux messages qu’il reçoit ;</li>
       <li>pour une demande d’exercice de vos droits sur vos données, la base juridique est l’obligation légale de l’éditeur d’y répondre (articles 12 à 22 du RGPD).</li>
     </ul>
     <p>Cette adresse est un alias Proton Pass, qui transfère votre message vers la boîte de l’éditeur, également chez Proton : vos messages sont donc traités par Proton AG, établie en Suisse, pays reconnu par la Commission européenne comme assurant un niveau de protection adéquat. Ils sont supprimés dès que votre demande est traitée.</p>
+    <p>L’envoi d’un message est facultatif. Pour obtenir une réponse, une adresse de retour et les informations utiles à votre demande sont nécessaires. Évitez de transmettre des données sensibles ou une pièce d’identité sans qu’elle vous ait été demandée pour une raison justifiée.</p>
 
     <h2>Vos droits</h2>
     <p>Pour les données que traite l’éditeur (vos messages, et les journaux le temps où il peut les consulter), vous pouvez demander l’accès, la rectification, l’effacement ou la limitation, et vous opposer aux traitements fondés sur son intérêt légitime, en écrivant à <a href={`mailto:${CONTACT_PRIVE}`}>{CONTACT_PRIVE}</a>. L’éditeur ne conservant pas les journaux, il ne peut en fournir que ce qui est encore consultable.</p>
     <p>Pour les traitements que Vercel réalise pour son propre compte, adressez-vous à Vercel (coordonnées dans sa politique de confidentialité). Dans tous les cas, vous pouvez introduire une réclamation auprès de la <a href="https://www.cnil.fr/">CNIL</a>.</p>
+    <p>L’éditeur répond à une demande d’exercice des droits dans un délai d’un mois à compter de sa réception. Si sa complexité ou le nombre de demandes impose une prolongation, il vous en informe dans ce premier mois, avec les raisons du délai supplémentaire, qui ne peut dépasser deux mois. Ces droits s’exercent dans les conditions prévues par le <a href="https://www.cnil.fr/fr/reglement-europeen-protection-donnees/chapitre3">RGPD</a>.</p>
 
     <h2>Préférence de thème</h2>
-    <p>Le choix du thème clair ou sombre est mémorisé dans le stockage local de votre navigateur, sous la clé <code>genshin-theme</code>. Cette préférence reste sur votre appareil. Vous pouvez l’effacer dans les paramètres de votre navigateur.</p>
+    <p>Le choix du thème clair ou sombre est mémorisé dans le stockage local de votre navigateur, sous la clé <code>genshin-theme</code>. Cette préférence reste sur votre appareil, sans date d’expiration fixée par le site, jusqu’à son remplacement ou son effacement. Vous pouvez l’effacer dans les paramètres de votre navigateur.</p>
     <h2>Recherche</h2>
     <p>La recherche télécharge un index statique depuis le site et traite votre requête dans votre navigateur. Aucun service de recherche tiers n’est utilisé.</p>
     <h2>Images, icônes et polices</h2>
     <p>Les illustrations et les icônes sont servies par le site lui-même. Les polices sont celles de votre appareil, sans chargement auprès d’un fournisseur externe.</p>
     <h2>Nous contacter</h2>
-    <p>Pour une remarque ou une correction, ouvrez un ticket sur le dépôt {PLATEFORME} du projet : ce que vous y écrivez et votre compte relèvent des règles de confidentialité de {PLATEFORME}, et le ticket est public.</p>
+    <p>Pour une remarque ou une correction, vous pouvez <a href={TICKETS}>ouvrir un ticket sur le dépôt {PLATEFORME}</a> : ce que vous y écrivez et votre compte relèvent des règles de confidentialité de {PLATEFORME}, et le ticket est public. Utilisez le contact privé pour toute demande contenant des données personnelles.</p>
     <p>Pour une demande privée, notamment sur vos données personnelles, écrivez à <a href={`mailto:${CONTACT_PRIVE}`}>{CONTACT_PRIVE}</a> (traitement décrit plus haut, dans « Ce que l’éditeur traite »).</p>
     <h2>Liens externes</h2>
     <p>Les liens vers d’autres sites vous conduisent vers des services qui appliquent leurs propres règles de confidentialité.</p>

@@ -380,6 +380,11 @@ test('confidentialité : ni publicité ni mesure d’audience, mais les traiteme
   for (const attendu of ['Ce que le site ne fait pas', 'Ce que l’hébergement traite', 'Ce que l’éditeur traite', 'Vos droits', 'adresse IP', 'Ce que Vercel déclare', 'n’a pas été confirmée par Vercel', `consultables que pendant ${HEBERGEUR.journaux}`, 'Data Privacy Framework', 'clauses contractuelles types', 'intérêt légitime', 'obligation légale', 'articles 12 à 22 du RGPD', 'Proton AG', 'supprimés dès que votre demande est traitée', 'rectification', 'limitation', 'CNIL']) assert.ok(confidentialite.includes(attendu), attendu);
   for (const affirmation of [/Vercel agit ici comme sous-traitant/, /Vercel traite donc ces données comme responsable/]) assert.doesNotMatch(confidentialite, affirmation, 'aucune affirmation non établie sur le rôle de Vercel');
   assert.ok(confidentialite.includes(`href="${HEBERGEUR.confidentialite}"`), 'lien vers la politique de l’hébergeur');
+  for (const href of ['/mentions-legales', 'https://vercel.com/legal/dpa', 'https://vercel.com/docs/logs/runtime', 'https://www.cnil.fr/fr/reglement-europeen-protection-donnees/chapitre3']) {
+    assert.ok(confidentialite.includes(`href="${href}"`), `confidentialité : référence accessible ${href}`);
+  }
+  for (const attendu of ['un délai d’un mois', 'deux mois', 'sans date d’expiration', 'L’envoi d’un message est facultatif', 'Cette fenêtre de consultation ne détermine pas']) assert.ok(confidentialite.includes(attendu), attendu);
+  assert.doesNotMatch(confidentialite, /n’est fixée par aucun contrat|aucun script de suivi ni service tiers/, 'ne pas affirmer l’absence de tout contrat ou prestataire');
   const mentions = await lire('mentions-legales/index.html');
   assert.doesNotMatch(mentions, /aucune donnée personnelle/, 'plus de promesse « aucune donnée personnelle »');
   assert.match(mentions, /article 1-1, II de la loi n° 2004-575/, 'base légale de l’anonymat citée');

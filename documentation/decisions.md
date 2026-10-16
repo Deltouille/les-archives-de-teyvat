@@ -385,3 +385,12 @@ Le déploiement lui-même est fait par Deltouille ; tout le reste de l'étape 8 
 - **Test** : sections et bases juridiques présentes ; plus aucune affirmation non établie (« Vercel agit ici comme sous-traitant », « Vercel traite donc ces données comme responsable »).
 - **Non fait, possible** : demander à Vercel de confirmer la répartition des rôles pour l'offre Hobby ; la notice serait alors complétée par sa réponse.
 - **Point signalé à Deltouille** : l'article 13 du RGPD demande aussi l'identité du responsable de traitement ; l'anonymat permis par la LCEN ne règle pas explicitement cette exigence. Contact fourni (alias) ; la question reste ouverte.
+
+## D35 — Confidentialité : informations pratiques et affirmations circonscrites (16 oct. 2026)
+
+- **Contexte** : Deltouille demande de prendre en charge la page après les relectures. Conserver les faits et engagements confirmés dans D32–D34, sans inventer une réponse de Vercel ni publier d'identité personnelle.
+- **Choix** : introduction avec contact privé et mentions légales ; absence de cookies limitée au code du site ; retrait de « aucun service tiers », contradictoire avec l'hébergement ; remplacer « aucun contrat » par la limite constatée du DPA publié, avec lien direct. La répartition des rôles en Hobby reste explicitement non confirmée.
+- **Informations pratiques** : source et périmètre de la fenêtre Runtime Logs (distincte des autres conservations de Vercel), stockage du thème sans expiration applicative, caractère facultatif des messages, tickets publics cliquables, délai de réponse aux droits (un mois, prolongation maximale de deux mois motivée dans le premier mois).
+- **Sources** : politique Vercel <https://vercel.com/legal/privacy-notice>, DPA <https://vercel.com/legal/dpa>, Runtime Logs <https://vercel.com/docs/logs/runtime>, RGPD articles 12–13 <https://www.cnil.fr/fr/reglement-europeen-protection-donnees/chapitre3>.
+- **Écarté** : présenter le texte comme une conformité juridique acquise ; déduire la qualification de Vercel de son offre commerciale ; ajouter de nouvelles données personnelles. L'identification du responsable de traitement et la confirmation du rôle de Vercel restent des questions externes ouvertes (D34).
+- **Vérifié** : `npm run verify` vert (15 fichiers de tests) ; références et informations ajoutées contrôlées dans le HTML publié ; quatre captures `confidentialite` en clair/sombre, bureau/mobile sur preview, vérifications et axe-core sans violation.
