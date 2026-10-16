@@ -376,8 +376,9 @@ test('confidentialité : ni publicité ni mesure d’audience, mais les traiteme
   const { HEBERGEUR } = await import('../src/lib/projet.mjs');
   const confidentialite = await lire('confidentialite/index.html');
   // D33 : sur l'offre gratuite, pas de contrat de sous-traitance ; durées, transferts et contact privé précisés.
-  for (const attendu of ['Ce que le site ne fait pas', 'Ce que l’hébergement traite', 'adresse IP', 'comme responsable de traitement', `conservés ${HEBERGEUR.journaux}`, 'Data Privacy Framework', 'clauses contractuelles types', 'Proton AG', 'supprimés dès que votre demande est traitée', 'CNIL']) assert.ok(confidentialite.includes(attendu), attendu);
-  assert.doesNotMatch(confidentialite, /Vercel agit ici comme sous-traitant/, 'plus d’affirmation de sous-traitance (offre sans DPA)');
+  // D34 : traitements de Vercel déclarés par lui, rôles non précisés dits comme tels, traitements de l'éditeur avec leurs bases.
+  for (const attendu of ['Ce que le site ne fait pas', 'Ce que l’hébergement traite', 'Ce que l’éditeur traite', 'Vos droits', 'adresse IP', 'Ce que Vercel déclare', 'n’a pas été confirmée par Vercel', `consultables que pendant ${HEBERGEUR.journaux}`, 'Data Privacy Framework', 'clauses contractuelles types', 'intérêt légitime', 'obligation légale', 'articles 12 à 22 du RGPD', 'Proton AG', 'supprimés dès que votre demande est traitée', 'rectification', 'limitation', 'CNIL']) assert.ok(confidentialite.includes(attendu), attendu);
+  for (const affirmation of [/Vercel agit ici comme sous-traitant/, /Vercel traite donc ces données comme responsable/]) assert.doesNotMatch(confidentialite, affirmation, 'aucune affirmation non établie sur le rôle de Vercel');
   assert.ok(confidentialite.includes(`href="${HEBERGEUR.confidentialite}"`), 'lien vers la politique de l’hébergeur');
   const mentions = await lire('mentions-legales/index.html');
   assert.doesNotMatch(mentions, /aucune donnée personnelle/, 'plus de promesse « aucune donnée personnelle »');

@@ -373,3 +373,15 @@ Le déploiement lui-même est fait par Deltouille ; tout le reste de l'étape 8 
   - offre et durée des journaux dans `HEBERGEUR` (`src/lib/projet.mjs`) : **passer en Pro** (ou changer d'hébergeur) impose de revoir la notice.
   - l'adresse e-mail de Vercel n'est pas publiée (la notice renvoie vers sa politique) : le test « une seule adresse e-mail, l'alias » reste strict.
 - **SPDX** : `tests/spdx.mjs`, analyseur selon la grammaire SPDX 2.3 (parenthèses, priorité `WITH` > `AND` > `OR`, toutes les branches analysées même quand le résultat est connu) ; toute expression malformée est refusée. `tests/spdx.test.mjs` couvre le cas signalé, les priorités, `WITH`, et neuf expressions malformées. Aucune dépendance actuelle n'était concernée.
+
+## D34 — Rôles non établis dits comme tels ; bases juridiques des traitements de l'éditeur (16 oct. 2026)
+
+- **Contexte** : troisième relecture : (1) D33 déduisait de l'absence de contrat de sous-traitance en Hobby que Vercel était responsable de **tous** les traitements ; or les rôles dépendent des activités réelles, pas seulement du contrat, et l'éditeur consulte lui-même les journaux (lignes directrices 07/2020 du CEPD) ; (2) le traitement des courriels n'avait pas de base juridique, et la section des droits ne couvrait pas explicitement les données traitées par l'éditeur.
+- **Choix** : la notice ne conclut plus rien qui ne soit établi. Elle distingue :
+  - **Ce que Vercel déclare** : traitements pour son propre compte, comme responsable (sécurité, amélioration de ses produits, données générées par le service), avec son critère de conservation ;
+  - **Ce qui n'est pas précisé** : le contrat de sous-traitance ne couvre que Pro et Enterprise ; pour l'offre gratuite, la répartition des rôles pour le simple envoi des pages n'est fixée par aucun contrat et n'a pas été confirmée par Vercel ;
+  - **Ce que l'éditeur traite**, avec finalité, base juridique et durée : consultation des journaux (intérêt légitime : fonctionnement et sécurité ; consultables une heure, ni exportés ni conservés) ; messages au contact privé (échanges ordinaires : intérêt légitime de répondre ; demandes d'exercice des droits : obligation légale, articles 12 à 22 du RGPD ; Proton AG, Suisse ; supprimés une fois la demande traitée) ;
+  - **Vos droits** : accès, rectification, effacement, limitation et opposition pour les données de l'éditeur, via l'alias ; auprès de Vercel pour ses propres traitements ; CNIL.
+- **Test** : sections et bases juridiques présentes ; plus aucune affirmation non établie (« Vercel agit ici comme sous-traitant », « Vercel traite donc ces données comme responsable »).
+- **Non fait, possible** : demander à Vercel de confirmer la répartition des rôles pour l'offre Hobby ; la notice serait alors complétée par sa réponse.
+- **Point signalé à Deltouille** : l'article 13 du RGPD demande aussi l'identité du responsable de traitement ; l'anonymat permis par la LCEN ne règle pas explicitement cette exigence. Contact fourni (alias) ; la question reste ouverte.

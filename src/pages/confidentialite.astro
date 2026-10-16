@@ -3,7 +3,8 @@ import Site from '../layouts/Site.astro';
 import EnTetePage from '../components/EnTetePage.astro';
 import { PLATEFORME, HEBERGEUR, CONTACT_PRIVE } from '../lib/projet.mjs';
 // Distinguer ce que le site ne fait pas (publicité, mesure d'audience, cookies) des traitements techniques de
-// l'hébergement, décrits d'après les documents de Vercel pour l'offre utilisée (decisions.md, D30 et D33). À revoir si
+// l'hébergement, décrits d'après les documents de Vercel pour l'offre utilisée, et ceux de l'éditeur avec leurs bases
+// juridiques (decisions.md, D30, D33 et D34). Ne rien affirmer sur la répartition des rôles qui ne soit établi. À revoir si
 // l'offre ou l'hébergement change, ou si un service d'analyse est activé.
 ---
 <Site titre="Confidentialité" description="Ni publicité, ni mesure d’audience, ni cookie ; ce que l’hébergement traite, et pourquoi.">
@@ -14,10 +15,23 @@ import { PLATEFORME, HEBERGEUR, CONTACT_PRIVE } from '../lib/projet.mjs';
 
     <h2>Ce que l’hébergement traite</h2>
     <p>Comme pour tout site web, chaque visite passe par les serveurs de l’hébergeur, {HEBERGEUR.nom}. Vercel collecte alors des données techniques de connexion : votre adresse IP, la localisation approximative qui s’en déduit, des informations sur la configuration de votre appareil et de votre navigateur, et des journaux de requêtes.</p>
-    <p><strong>Qui en est responsable.</strong> Le site utilise l’offre gratuite de Vercel, qui ne prévoit pas de contrat de sous-traitance avec l’éditeur. Vercel traite donc ces données comme responsable de traitement, selon sa propre <a href={HEBERGEUR.confidentialite}>politique de confidentialité</a> : pour vous servir les pages, pour sécuriser son service (détection des menaces, de la fraude et des accès non autorisés) et pour l’améliorer. L’éditeur, de son côté, peut seulement consulter les journaux de requêtes de son site dans son espace Vercel, pour diagnostiquer un problème ; il ne les exporte ni ne les conserve.</p>
-    <p><strong>Combien de temps.</strong> Les journaux consultables par l’éditeur sont conservés {HEBERGEUR.journaux}. Pour ses propres traitements, Vercel indique supprimer ou anonymiser les données lorsqu’il n’en a plus de besoin légitime, sans durée chiffrée.</p>
+    <p><strong>Ce que Vercel déclare.</strong> Selon sa <a href={HEBERGEUR.confidentialite}>politique de confidentialité</a>, Vercel traite certaines de ces données pour son propre compte, comme responsable de traitement : pour sécuriser son service (détection des menaces, de la fraude et des accès non autorisés), pour améliorer ses produits, et pour les données générées par l’utilisation de son service. Pour ces traitements, Vercel indique supprimer ou anonymiser les données lorsqu’il n’en a plus de besoin légitime, sans durée chiffrée.</p>
+    <p><strong>Ce qui n’est pas précisé.</strong> Le contrat de sous-traitance publié par Vercel ne couvre que ses offres Pro et Enterprise. Pour l’offre gratuite utilisée par ce site, la répartition des rôles entre l’éditeur et Vercel pour le simple envoi des pages n’est fixée par aucun contrat, et n’a pas été confirmée par Vercel.</p>
     <p><strong>Où.</strong> Vercel est établi aux États-Unis. Il est certifié au cadre de protection des données UE–États-Unis (Data Privacy Framework), que la Commission européenne a reconnu comme assurant un niveau de protection adéquat (décision du 10 juillet 2023), et recourt aussi aux clauses contractuelles types de la Commission.</p>
-    <p><strong>Vos droits.</strong> Vous disposez de droits d’accès, d’effacement et d’opposition. Pour les traitements de Vercel, exercez-les auprès de Vercel (coordonnées dans sa politique de confidentialité) ; pour toute question sur ce site, écrivez à l’éditeur à <a href={`mailto:${CONTACT_PRIVE}`}>{CONTACT_PRIVE}</a>. Vous pouvez aussi introduire une réclamation auprès de la <a href="https://www.cnil.fr/">CNIL</a>.</p>
+
+    <h2>Ce que l’éditeur traite</h2>
+    <p><strong>Journaux de requêtes.</strong> L’éditeur peut consulter les journaux de requêtes de son site dans son espace Vercel, uniquement pour diagnostiquer un problème ou un abus. Base juridique : l’intérêt légitime de l’éditeur à faire fonctionner et à sécuriser son site. Ces journaux ne restent consultables que pendant {HEBERGEUR.journaux} ; l’éditeur ne les exporte ni ne les conserve.</p>
+    <p><strong>Messages envoyés au contact privé.</strong> Ce que vous écrivez à <a href={`mailto:${CONTACT_PRIVE}`}>{CONTACT_PRIVE}</a>, et votre adresse, servent uniquement à traiter votre message :</p>
+    <ul>
+      <li>pour une question, une remarque ou une demande ordinaire, la base juridique est l’intérêt légitime de l’éditeur à répondre aux messages qu’il reçoit ;</li>
+      <li>pour une demande d’exercice de vos droits sur vos données, la base juridique est l’obligation légale de l’éditeur d’y répondre (articles 12 à 22 du RGPD).</li>
+    </ul>
+    <p>Cette adresse est un alias Proton Pass, qui transfère votre message vers la boîte de l’éditeur, également chez Proton : vos messages sont donc traités par Proton AG, établie en Suisse, pays reconnu par la Commission européenne comme assurant un niveau de protection adéquat. Ils sont supprimés dès que votre demande est traitée.</p>
+
+    <h2>Vos droits</h2>
+    <p>Pour les données que traite l’éditeur (vos messages, et les journaux le temps où il peut les consulter), vous pouvez demander l’accès, la rectification, l’effacement ou la limitation, et vous opposer aux traitements fondés sur son intérêt légitime, en écrivant à <a href={`mailto:${CONTACT_PRIVE}`}>{CONTACT_PRIVE}</a>. L’éditeur ne conservant pas les journaux, il ne peut en fournir que ce qui est encore consultable.</p>
+    <p>Pour les traitements que Vercel réalise pour son propre compte, adressez-vous à Vercel (coordonnées dans sa politique de confidentialité). Dans tous les cas, vous pouvez introduire une réclamation auprès de la <a href="https://www.cnil.fr/">CNIL</a>.</p>
+
     <h2>Préférence de thème</h2>
     <p>Le choix du thème clair ou sombre est mémorisé dans le stockage local de votre navigateur, sous la clé <code>genshin-theme</code>. Cette préférence reste sur votre appareil. Vous pouvez l’effacer dans les paramètres de votre navigateur.</p>
     <h2>Recherche</h2>
@@ -26,7 +40,7 @@ import { PLATEFORME, HEBERGEUR, CONTACT_PRIVE } from '../lib/projet.mjs';
     <p>Les illustrations et les icônes sont servies par le site lui-même. Les polices sont celles de votre appareil, sans chargement auprès d’un fournisseur externe.</p>
     <h2>Nous contacter</h2>
     <p>Pour une remarque ou une correction, ouvrez un ticket sur le dépôt {PLATEFORME} du projet : ce que vous y écrivez et votre compte relèvent des règles de confidentialité de {PLATEFORME}, et le ticket est public.</p>
-    <p>Pour une demande privée, notamment sur vos données personnelles, écrivez à <a href={`mailto:${CONTACT_PRIVE}`}>{CONTACT_PRIVE}</a>. Cette adresse est un alias Proton Pass, qui transfère votre message vers la boîte de l’éditeur, également chez Proton : vos messages sont donc traités par Proton AG, établie en Suisse, pays reconnu par la Commission européenne comme assurant un niveau de protection adéquat. Votre message et votre adresse ne servent qu’à vous répondre, et sont supprimés dès que votre demande est traitée.</p>
+    <p>Pour une demande privée, notamment sur vos données personnelles, écrivez à <a href={`mailto:${CONTACT_PRIVE}`}>{CONTACT_PRIVE}</a> (traitement décrit plus haut, dans « Ce que l’éditeur traite »).</p>
     <h2>Liens externes</h2>
     <p>Les liens vers d’autres sites vous conduisent vers des services qui appliquent leurs propres règles de confidentialité.</p>
   </article>
