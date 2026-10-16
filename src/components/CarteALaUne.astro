@@ -2,18 +2,19 @@
 import { Image } from 'astro:assets';
 import Icon from './Icon.astro';
 import { cheminArticle, imageDe, type Article } from '../lib/contenu';
-// Grande carte éditoriale de l'accueil : un article mis en avant, avec ses propres accroches.
-interface Props { article: Article; badge: string; surTitre: string; titre: string; chapeau: string; action: string; }
-const { article, badge, surTitre, titre, chapeau, action } = Astro.props;
+// Grande carte de l'accueil : l'article « à la une » (articleALaUne), présenté avec son propre titre et sa description,
+// pour qu'elle fonctionne quel que soit l'article choisi.
+interface Props { article: Article; surTitre: string; }
+const { article, surTitre } = Astro.props;
 ---
 <a href={cheminArticle(article)} class="group relative isolate flex min-h-[26rem] flex-col justify-between overflow-hidden rounded-carte bg-nuit p-6 text-white sm:p-8 lg:min-h-[30rem]">
   <Image class="absolute inset-0 -z-20 size-full object-cover transition-transform duration-700 ease-standard group-hover:scale-105" src={imageDe(article.data.image)} alt="" width={1500} widths={[640, 1000, 1500]} sizes="(min-width: 840px) 65vw, 100vw" loading="lazy" />
   <div class="absolute inset-0 -z-10 bg-linear-to-t from-nuit/90 via-nuit/35 to-nuit/15" aria-hidden="true"></div>
-  <span class="text-etiquette-m inline-flex items-center gap-2 self-start rounded-full border border-white/30 bg-white/12 px-3 py-1.5 uppercase tracking-wider backdrop-blur-md"><Icon nom="boussole" taille={16} /> {badge}</span>
+  <span class="text-etiquette-m inline-flex items-center gap-2 self-start rounded-full border border-white/30 bg-white/12 px-3 py-1.5 uppercase tracking-wider backdrop-blur-md"><Icon nom="boussole" taille={16} /> À la une</span>
   <div>
     <p class="sur-titre text-ambre">{surTitre}</p>
-    <h2 class="text-affichage-p lg:text-affichage-m mt-3 mb-3 max-w-[12ch]">{titre}</h2>
-    <p class="text-corps-g max-w-md text-white/85">{chapeau}</p>
-    <span class="text-etiquette-g mt-6 flex items-center justify-between">{action} <span class="fleche-ronde bg-white text-nuit"><Icon nom="fleche" /></span></span>
+    <h2 class="text-grand-titre-g lg:text-affichage-p mt-3 mb-3 max-w-[20ch]">{article.data.titre}</h2>
+    <p class="text-corps-g max-w-md text-white/85">{article.data.description}</p>
+    <span class="text-etiquette-g mt-6 flex items-center justify-between">Lire l’article <span class="fleche-ronde bg-white text-nuit"><Icon nom="fleche" /></span></span>
   </div>
 </a>

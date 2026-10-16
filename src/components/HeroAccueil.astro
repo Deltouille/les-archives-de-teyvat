@@ -3,14 +3,13 @@ import Icon from './Icon.astro';
 import Banniere from './Banniere.astro';
 import { cheminTag, imageDe } from '../lib/contenu';
 
-interface Props { lectures: number; themes: number; }
-const { lectures, themes } = Astro.props;
+interface Props { lectures: number; themes: number; sujets: string[]; }
+const { lectures, themes, sujets: tous } = Astro.props;
 
-// Sujets de la machine à écrire. Le premier est écrit en dur dans le HTML : c'est ce que lisent les moteurs,
-// les visiteurs sans JavaScript et ceux qui demandent moins d'animations.
-const sujets = ['les sept Archontes', 'le Cataclysme', 'l’Ordre de l’Abysse', 'la liberté de Mondstadt', 'les pas du Voyageur'];
-// Un lecteur d'écran lit la phrase entière une fois, jamais les lettres qui défilent.
-const phrase = `${sujets.slice(0, -1).join(', ')} et ${sujets.at(-1)}`;
+// Sujets de la machine à écrire : un par article (sujetDAccueil), mélangés à chaque visite par le script.
+// Le premier est écrit dans le HTML : c'est ce que lisent les moteurs, les visiteurs sans JavaScript et ceux qui
+// demandent moins d'animations. Sans article, une phrase fixe.
+const sujets = tous.length ? tous : ['l’histoire de Teyvat'];
 const bouton = 'text-etiquette-g inline-flex h-12 items-center justify-center gap-2 rounded-full px-6 transition-colors duration-200 ease-standard';
 ---
 <Banniere image={imageDe('fond-d-ecran')} titre="accueil-titre" class="h-[clamp(37.5rem,100svh,68.75rem)]">
@@ -20,7 +19,8 @@ const bouton = 'text-etiquette-g inline-flex h-12 items-center justify-center ga
     <h1 id="accueil-titre" class="mt-4 mb-6 max-w-[14ch] text-shadow-lg [&_em]:text-ciel">Chaque voyage commence par une <em>histoire.</em></h1>
 
     <p class="group/machine text-titre-g flex min-h-8 flex-wrap items-center gap-x-1 text-white/85" data-machine>
-      <span>Ici, on vous raconte <span class="sr-only">{phrase}.</span></span>
+      {/* Un lecteur d'écran lit une phrase stable, jamais les lettres qui défilent (texte animé en aria-hidden). */}
+      <span>Ici, on vous raconte <span class="sr-only">les histoires de Teyvat.</span></span>
       <span class="font-semibold text-white" aria-hidden="true" data-sujets={JSON.stringify(sujets)}>{sujets[0]}</span>
       {/* Curseur : il ne clignote que pendant l'animation, jamais en pause ni en mouvement réduit. */}
       <span class="inline-block h-[1.1em] w-0.5 bg-ambre group-data-[anime]/machine:animate-clignote" aria-hidden="true"></span>
@@ -49,12 +49,13 @@ const bouton = 'text-etiquette-g inline-flex h-12 items-center justify-center ga
 </Banniere>
 
 <script>
+  import { melanger } from '../lib/aleatoire.mjs';
   // Machine à écrire, façon Mizuki. Rien ne bouge si le visiteur demande moins d'animations.
   const machine = document.querySelector<HTMLElement>('[data-machine]');
   const cible = machine?.querySelector<HTMLElement>('[data-sujets]');
   const pause = machine?.querySelector<HTMLButtonElement>('[data-pause]');
-  if (machine && cible && pause && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
-    const sujets: string[] = JSON.parse(cible.dataset.sujets ?? '[]');
+  const sujets: string[] = JSON.parse(cible?.dataset.sujets ?? '[]');
+  if (machine && cible && pause && sujets.length > 1 && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
     let enPause = false;
     let reprendre: () => void = () => {};
     const attendre = (ms: number) => new Promise<void>(r => setTimeout(r, ms));
@@ -70,13 +71,17 @@ const bouton = 'text-etiquette-g inline-flex h-12 items-center justify-center ga
       if (!enPause) reprendre();
     });
     (async () => {
-      let i = 0;
+      // Ordre aléatoire à chaque visite : on part du sujet écrit dans le HTML, puis une file mélangée, remélangée à
+      // chaque tour sans jamais répéter deux fois de suite le même sujet.
+      let courant = sujets[0];
+      let file = melanger(sujets.slice(1));
       for (;;) {
         await pas(2600);
-        for (let n = sujets[i].length; n >= 0; n--) { cible.textContent = sujets[i].slice(0, n); await pas(28); }
-        i = (i + 1) % sujets.length;
+        for (let n = courant.length; n >= 0; n--) { cible.textContent = courant.slice(0, n); await pas(28); }
+        if (!file.length) file = melanger(sujets.filter(s => s !== courant));
+        courant = file.shift()!;
         await pas(250);
-        for (let n = 1; n <= sujets[i].length; n++) { cible.textContent = sujets[i].slice(0, n); await pas(62); }
+        for (let n = 1; n <= courant.length; n++) { cible.textContent = courant.slice(0, n); await pas(62); }
       }
     })();
   }

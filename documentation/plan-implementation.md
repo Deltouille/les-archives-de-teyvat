@@ -2,7 +2,7 @@
 
 > Réécriture propre du prototype `old/`, d'après son cahier des charges
 > `old/documentation/refonte-astro.md` (cité « CDC §n » ci-dessous).
-> Commencé le 13 octobre 2026. **État : étapes 0 à 14 réalisées ; reste le déploiement (Deltouille).** Les décisions prises en route vont dans
+> Commencé le 13 octobre 2026. **État : étapes 0 à 15 réalisées ; reste le déploiement (Deltouille).** Les décisions prises en route vont dans
 > [`decisions.md`](decisions.md) ; ce fichier dit **quoi faire et dans quel ordre**.
 
 ## Règles du jeu
@@ -154,6 +154,12 @@ Chaque étape se termine seulement quand :
 - [x] Le site s'appelle « Les Archives de Teyvat », nom écrit une seule fois (D24).
 - [x] Correctif : articles déplacés en sous-dossier invisibles en dev (D25).
 - **Décisions** : D23, D24, D25.
+
+## Étape 15 — Accueil indépendant des articles ✅ (ajoutée à la demande)
+
+- [x] Sujets de la machine à écrire tirés de tous les articles (`accroche` ou titre), ordre aléatoire à chaque visite.
+- [x] « À la une » choisi par le contenu (`aLaUne`, sinon le plus récent) ; l'accueil se construit même sans article.
+- **Décision** : D28.
 
 ---
 

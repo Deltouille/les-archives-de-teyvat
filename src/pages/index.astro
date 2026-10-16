@@ -9,13 +9,14 @@ import TuileTheme from '../components/TuileTheme.astro';
 import GrilleArticles from '../components/GrilleArticles.astro';
 import BandeauTags from '../components/BandeauTags.astro';
 import { bibliotheque } from '../lib/contenu';
+import { articleALaUne, sujetDAccueil } from '../lib/bibliotheque.mjs';
 
-const { articles, themes, tag, avecTag } = await bibliotheque();
+const { articles, themes, tag, avecTag, themeDe } = await bibliotheque();
 
-// Choix éditoriaux de l'accueil. Un identifiant inconnu fait échouer le build (tag() et la recherche ci-dessous).
-const A_LA_UNE = 'mondstadt';
-const aLaUne = articles.find(a => a.id === A_LA_UNE);
-if (!aLaUne) throw new Error(`Article « à la une » introuvable : src/content/articles/${A_LA_UNE}.md (cf. src/pages/index.astro)`);
+// L'accueil ne dépend d'aucun article précis (D28) : « à la une » et sujets de la machine à écrire viennent du contenu.
+// Un tag inconnu dans les entrées par thème fait échouer le build (tag()).
+const aLaUne = articleALaUne(articles);
+const sujets = articles.map(sujetDAccueil);
 // Quatre entrées par thème, chacune avec une teinte M3 (conteneur + « sur ») pour les distinguer d'un coup d'œil.
 const entrees = [
   { id: 'quetes', accroche: 'Revivez l’aventure', teinte: 'bg-conteneur-primaire text-sur-conteneur-primaire' },
@@ -27,11 +28,11 @@ const NOMBRE_RECENTS = 6;
 const recents = articles.slice(0, NOMBRE_RECENTS);
 ---
 <Site titre="Les histoires de Teyvat commencent ici">
-  <HeroAccueil slot="hero" lectures={articles.length} themes={themes.length} />
+  <HeroAccueil slot="hero" lectures={articles.length} themes={themes.length} sujets={sujets} />
 
   <EnTeteSection surTitre="À la une" titre="Par où commencer ?" class="mt-4" />
   <section class="grid gap-4 md:grid-cols-[minmax(0,1.7fr)_minmax(16rem,1fr)] lg:gap-6" aria-label="À découvrir" data-a-la-une>
-    <CarteALaUne article={aLaUne} badge="Carnet de voyage" surTitre="Là où le vent nous mène" titre="La liberté a une histoire." chapeau="Entrez dans Mondstadt, la cité où les dieux laissent les hommes choisir leur chemin." action="Découvrir Mondstadt" />
+    {aLaUne && <CarteALaUne article={aLaUne} surTitre={themeDe(aLaUne).data.libelle} />}
     <CartePremiersPas lectures={avecTag('premiers-pas').length} />
   </section>
 
@@ -44,12 +45,14 @@ const recents = articles.slice(0, NOMBRE_RECENTS);
     </div>
   </section>
 
-  <section aria-labelledby="recents-titre">
-    <EnTeteSection surTitre="Il était une fois Teyvat" titre="Des histoires à découvrir" id="recents-titre">
-      {articles.length > NOMBRE_RECENTS && <a class="lien-texte shrink-0" href="/lore">Les {articles.length} lectures <Icon nom="fleche" taille={18} /></a>}
-    </EnTeteSection>
-    <GrilleArticles articles={recents} />
-  </section>
+  {recents.length > 0 && (
+    <section aria-labelledby="recents-titre">
+      <EnTeteSection surTitre="Il était une fois Teyvat" titre="Des histoires à découvrir" id="recents-titre">
+        {articles.length > NOMBRE_RECENTS && <a class="lien-texte shrink-0" href="/lore">Les {articles.length} lectures <Icon nom="fleche" taille={18} /></a>}
+      </EnTeteSection>
+      <GrilleArticles articles={recents} />
+    </section>
+  )}
 
   <BandeauTags />
 </Site>

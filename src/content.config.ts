@@ -17,6 +17,10 @@ const articles = defineCollection({
     publieLe: z.coerce.date(),
     modifieLe: z.coerce.date().optional(),
     brouillon: z.boolean().default(false),
+    // Accueil : sujet de la machine à écrire (« Ici, on vous raconte <accroche> ») ; à défaut, le titre entre guillemets.
+    accroche: z.string().optional(),
+    // Accueil : article mis « à la une » (le plus récent des articles marqués ; à défaut, le plus récent).
+    aLaUne: z.boolean().default(false),
     // Identifiants déclarés dans tags.yaml ; au moins un doit être un thème.
     tags: z.array(z.string()).min(1),
     // Encadrés facultatifs : ils ne s'affichent que s'ils sont remplis.

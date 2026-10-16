@@ -3,6 +3,7 @@ titre: "Le Cataclysme, une blessure dans l’histoire"
 description: "Il y a cinq cents ans, une catastrophe bouleversait Teyvat. Pourquoi ses conséquences sont-elles encore partout ?"
 image: snezhnaya
 imageAlt: "Un paysage sombre et enneigé de Teyvat, illustration d’ambiance"
+accroche: "le Cataclysme"
 publieLe: 2025-03-20
 tags: [evenements, khaenri-ah, histoire, abysse]
 spoilers: "Événements de Khaenri’ah et quêtes impliquant Dainsleif."

@@ -3,6 +3,7 @@ titre: "L’Ordre de l’Abysse, l’autre côté du voyage"
 description: "Une organisation liée à Khaenri’ah, un conflit avec les dieux et une rencontre qui bouleverse le Voyageur."
 image: teyvat
 imageAlt: "Les paysages lointains de Teyvat"
+accroche: "l’Ordre de l’Abysse"
 publieLe: 2025-03-22
 tags: [factions, abysse, khaenri-ah, voyageur]
 spoilers: "Quête d’Archons « Nous serons réunis » et identité du dirigeant de l’Ordre."

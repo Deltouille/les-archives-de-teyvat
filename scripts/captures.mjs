@@ -81,7 +81,8 @@ const SCENES = [
     verifier: `(() => {
       const p = [];
       const machine = document.querySelector('[data-machine]');
-      if (machine.querySelector('[data-sujets]').textContent !== 'les sept Archontes') p.push('en mouvement réduit, le premier sujet devrait rester affiché');
+      const cible = machine.querySelector('[data-sujets]');
+      if (cible.textContent !== JSON.parse(cible.dataset.sujets)[0]) p.push('en mouvement réduit, le premier sujet devrait rester affiché');
       if (!machine.querySelector('[data-pause]').hidden) p.push('sans animation, pas de bouton pause');
       if (getComputedStyle(machine.querySelector('[data-sujets] + span')).animationName !== 'none') p.push('le curseur ne devrait pas clignoter');
       return p;

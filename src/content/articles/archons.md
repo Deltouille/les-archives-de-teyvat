@@ -3,6 +3,7 @@ titre: "Les Archontes, sept dieux et sept idéaux"
 description: "Éléments, nations, idéaux : les repères essentiels pour comprendre la place des Archontes dans Teyvat."
 image: teyvat
 imageAlt: "Une vue de Teyvat et de ses paysages"
+accroche: "les sept Archontes"
 publieLe: 2026-08-18
 tags: [concepts, factions, teyvat, archontes, elements, premiers-pas]
 spoilers: "Présentation générale du monde et identité de l’Archonte de Mondstadt."

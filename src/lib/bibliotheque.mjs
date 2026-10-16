@@ -44,3 +44,22 @@ export const minutesDeLecture = texte => Math.max(1, Math.ceil(texte.split(/\s+/
 
 /** « 13 octobre 2026 ». En UTC : les dates du frontmatter sont des jours, pas des instants. @param {Date} date */
 export const dateFr = date => date.toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' });
+
+/**
+ * Sujet de la machine à écrire de l'accueil (« Ici, on vous raconte … ») : l'accroche de l'article si elle existe,
+ * sinon son titre entre guillemets, qui reste correct en français quel que soit le titre.
+ * @param {{ data: { titre: string, accroche?: string } }} article
+ */
+export const sujetDAccueil = article => article.data.accroche ?? `« ${article.data.titre} »`;
+
+/**
+ * Article « à la une » : le plus récent des articles marqués `aLaUne`, sinon le plus récent tout court.
+ * Aucun article : undefined (la section ne s'affiche pas).
+ * @template {{ data: { publieLe: Date, aLaUne?: boolean } }} A
+ * @param {A[]} articles
+ * @returns {A | undefined}
+ */
+export function articleALaUne(articles) {
+  const parDate = [...articles].sort(plusRecentDAbord);
+  return parDate.find(a => a.data.aLaUne) ?? parDate[0];
+}

@@ -3,6 +3,8 @@ titre: "Mondstadt, la cité de la liberté"
 description: "Une ville portée par le vent, un dieu discret et un idéal qui traverse les siècles. Bienvenue à Mondstadt."
 image: mondstadt
 imageAlt: "La cité de Mondstadt entourée du lac et des montagnes"
+accroche: "la liberté de Mondstadt"
+aLaUne: true
 publieLe: 2025-03-10
 tags: [regions, mondstadt, liberte, anemo, premiers-pas]
 spoilers: "Prologue des quêtes d’Archons de Mondstadt."
