@@ -1,6 +1,7 @@
 ---
 import Site from '../layouts/Site.astro';
 import EnTetePage from '../components/EnTetePage.astro';
+import { PLATEFORME } from '../lib/projet.mjs';
 ---
 <Site titre="Confidentialité" description="Ni compte, ni publicité, ni mesure d’audience : ce que le site garde, et où.">
   <EnTetePage surTitre="Votre tranquillité">Une lecture <em>sans suivi publicitaire.</em></EnTetePage>
@@ -13,7 +14,7 @@ import EnTetePage from '../components/EnTetePage.astro';
     <h2>Images, icônes et polices</h2>
     <p>Les illustrations et les icônes sont servies par le site lui-même. Les polices sont celles de votre appareil, sans chargement auprès d’un fournisseur externe.</p>
     <h2>Nous contacter</h2>
-    <p>Le contact passe par les tickets du dépôt GitLab du projet. Si vous en ouvrez un, ce que vous écrivez et votre compte relèvent des règles de confidentialité de GitLab, et le ticket est public.</p>
+    <p>Le contact passe par les tickets du dépôt {PLATEFORME} du projet. Si vous en ouvrez un, ce que vous écrivez et votre compte relèvent des règles de confidentialité de {PLATEFORME}, et le ticket est public.</p>
     <h2>Liens externes</h2>
     <p>Les liens vers d’autres sites vous conduisent vers des services qui appliquent leurs propres règles de confidentialité.</p>
   </article>

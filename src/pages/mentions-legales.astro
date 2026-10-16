@@ -1,7 +1,7 @@
 ---
 import Site from '../layouts/Site.astro';
 import EnTetePage from '../components/EnTetePage.astro';
-import { DEPOT, TICKETS, HEBERGEUR, NOM } from '../lib/projet.mjs';
+import { DEPOT, TICKETS, HEBERGEUR, NOM, PLATEFORME } from '../lib/projet.mjs';
 // Éditeur particulier, à titre non professionnel, anonyme : la LCEN l'autorise s'il identifie l'hébergeur et lui a
 // communiqué ses coordonnées (decisions.md, D22).
 ---
@@ -13,13 +13,13 @@ import { DEPOT, TICKETS, HEBERGEUR, NOM } from '../lib/projet.mjs';
     <p>Ce projet de fans est indépendant : il n’est ni affilié ni approuvé par HoYoverse ou Fandom.</p>
 
     <h2>Contact</h2>
-    <p>Pour toute question, correction ou demande, <a href={TICKETS}>ouvrez un ticket sur le dépôt GitLab du projet</a>.</p>
+    <p>Pour toute question, correction ou demande, <a href={TICKETS}>ouvrez un ticket sur le dépôt {PLATEFORME} du projet</a>.</p>
 
     <h2>Hébergeur</h2>
     <p>{HEBERGEUR.nom}<br />{HEBERGEUR.adresse}<br /><a href={HEBERGEUR.site}>{HEBERGEUR.site.replace('https://', '')}</a></p>
 
     <h2>Code source et licences</h2>
-    <p>Le code du site est publié sur <a href={DEPOT}>GitLab</a>. Licences des textes, du code et des éléments de Genshin Impact : voir <a href="/credits">Crédits et licences</a>.</p>
+    <p>Le code du site est publié sur <a href={DEPOT}>{PLATEFORME}</a>. Licences des textes, du code et des éléments de Genshin Impact : voir <a href="/credits">Crédits et licences</a>.</p>
 
     <h2>Données personnelles</h2>
     <p>Le site ne collecte aucune donnée personnelle : voir la page <a href="/confidentialite">Confidentialité</a>.</p>

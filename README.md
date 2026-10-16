@@ -2,7 +2,7 @@
 
 Blog statique qui raconte le lore de Genshin Impact, en français. Projet de fans indépendant, non affilié à HoYoverse.
 
-Dépôt : <https://gitlab.com/Choumo/les-archives-de-teyvat> ; remarques et corrections par les [tickets](https://gitlab.com/Choumo/les-archives-de-teyvat/-/issues).
+Dépôt : <https://github.com/Deltouille/les-archives-de-teyvat> ; remarques et corrections par les [tickets](https://github.com/Deltouille/les-archives-de-teyvat/issues).
 
 Astro (sortie statique), Tailwind CSS v4 avec un système de design Material 3 généré, Pagefind pour la recherche. Aucune webfont, aucun service tiers.
 

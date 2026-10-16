@@ -291,3 +291,10 @@ Le déploiement lui-même est fait par Deltouille ; tout le reste de l'étape 8 
 - **Choix** : dans l'intégration `outillageDeDev`, après chaque suppression d'un fichier d'article (300 ms, le temps que le chargeur la traite), les fichiers **homonymes** encore présents sont relus (`homonymes()` dans `src/lib/identifiant.mjs`, testée).
 - **Vérifié dans la copie du projet** : déplacement dans un nouveau sous-dossier → articles toujours servis (avant : 404) ; retour à la racine → servis ; vraie suppression → l'article disparaît, les autres restent.
 - Le build n'a jamais été concerné.
+
+## D26 — Dépôt déplacé sur GitHub (16 oct. 2026)
+
+- **Contexte** : Deltouille déplace le dépôt de GitLab vers GitHub : <https://github.com/Deltouille/les-archives-de-teyvat> (vérifié : public, vide, tickets ouverts à tous — page `/issues` en 200, alors que ceux de GitLab restaient à activer).
+- **Choix** : `src/lib/projet.mjs` porte désormais aussi le **nom de la plateforme** (`PLATEFORME = 'GitHub'`) ; les pages (« À propos », Confidentialité, Crédits, Mentions légales) le reprennent au lieu d'écrire la plateforme en dur. Changer de plateforme = `PLATEFORME`, `DEPOT`, `TICKETS`. Contact : `…/issues`. README, `LICENCES.md` et CLAUDE.md mis à jour.
+- **Test** : `PLATEFORME`, `DEPOT` et `TICKETS` cohérents, et plus aucune mention de « GitLab » dans les pages publiées.
+- **Non fait** : la télécommande git `origin` pointe encore vers GitLab ; à changer par Deltouille (`git remote set-url origin …`). L'historique contient toujours son adresse e-mail : à nettoyer **avant** tout envoi sur GitHub (adresse « noreply » GitHub, de la forme `ID+pseudo@users.noreply.github.com`).

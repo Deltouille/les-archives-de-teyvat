@@ -284,7 +284,7 @@ test('lecture : barre de progression décorative et sommaire suivi sur chaque ar
   assert.match(await readFile(path.join(racine, '_astro', feuille), 'utf8'), /scroll-padding-top:\s*5rem/);
 });
 
-test('aucune adresse e-mail ni lien mailto: dans le site publié (contact par GitLab, D22)', async () => {
+test('aucune adresse e-mail ni lien mailto: dans le site publié (contact par les tickets du dépôt, D22)', async () => {
   const erreurs = [];
   for (const fichier of pages) {
     const html = await readFile(fichier, 'utf8');
@@ -293,17 +293,17 @@ test('aucune adresse e-mail ni lien mailto: dans le site publié (contact par Gi
   assert.deepEqual(erreurs, []);
 });
 
-test('mentions légales : éditeur anonyme, contact GitLab, hébergeur identifié ; liens en pied de page', async () => {
+test('mentions légales : éditeur anonyme, contact par les tickets, hébergeur identifié ; liens en pied de page', async () => {
   const { DEPOT, TICKETS, HEBERGEUR } = await import('../src/lib/projet.mjs');
   const html = await lire('mentions-legales/index.html');
   for (const attendu of ['Éditeur', 'Hébergeur', HEBERGEUR.nom, HEBERGEUR.adresse, 'à titre non professionnel']) assert.ok(html.includes(attendu), attendu);
-  assert.ok(html.includes(`href="${TICKETS}"`), 'contact par les tickets GitLab');
+  assert.ok(html.includes(`href="${TICKETS}"`), 'contact par les tickets du dépôt');
   for (const page of ['index.html', 'lore/venti/index.html']) {
     const pied = (await lire(page)).split('<footer')[1];
     assert.match(pied, /href="\/mentions-legales"/, page);
     assert.ok(pied.includes(`href="${DEPOT}"`), `${page} : lien vers le code source`);
   }
-  assert.ok((await lire('a-propos/index.html')).includes(`href="${TICKETS}"`), 'À propos : contact par GitLab');
+  assert.ok((await lire('a-propos/index.html')).includes(`href="${TICKETS}"`), 'À propos : contact par les tickets');
   assert.ok((await lire('credits/index.html')).includes(`href="${DEPOT}"`), 'Crédits : lien vers le dépôt');
   assert.match(await lire('sitemap-0.xml'), /\/mentions-legales<\/loc>/);
 });
@@ -327,4 +327,11 @@ test('le site s’appelle « Les Archives de Teyvat » partout, et plus jamais p
     assert.match(html, new RegExp(`<title>[^<]* · ${NOM}</title>`), path.relative(racine, fichier));
     assert.match(html, new RegExp(`property="og:site_name" content="${NOM}"`), path.relative(racine, fichier));
   }
+});
+
+test('le dépôt est sur GitHub : plus aucune mention de l’ancienne plateforme GitLab (D26)', async () => {
+  const { PLATEFORME, DEPOT, TICKETS } = await import('../src/lib/projet.mjs');
+  assert.equal(PLATEFORME, 'GitHub');
+  assert.ok(DEPOT.startsWith('https://github.com/') && TICKETS === `${DEPOT}/issues`);
+  for (const fichier of pages) assert.doesNotMatch(await readFile(fichier, 'utf8'), /gitlab/i, path.relative(racine, fichier));
 });

@@ -3,7 +3,7 @@ import Site from '../layouts/Site.astro';
 import EnTetePage from '../components/EnTetePage.astro';
 import { bibliotheque, cheminArticle, type Article } from '../lib/contenu';
 import { presenterCredit, LICENCE_WIKI } from '../lib/credits.mjs';
-import { DEPOT, NOM } from '../lib/projet.mjs';
+import { DEPOT, NOM, PLATEFORME } from '../lib/projet.mjs';
 import { TIERS, TEXTES_LICENCES } from '../lib/tiers.mjs';
 
 // Le texte vient de Deltouille (contenus originaux sous CC BY-SA 3.0 : decisions.md, D18 ; code sous GPL : D19) ; les deux listes du bas sont générées depuis le frontmatter des articles (champ credits).
@@ -28,7 +28,7 @@ const theories = credites.flatMap(({ article, credit }) => (credit.type === 'com
 
     <h2>Code source</h2>
     <p>Le code du site est un logiciel libre, distribué sous licence <a href="https://www.gnu.org/licenses/gpl-3.0.fr.html">GNU GPL version 3 ou ultérieure</a>. Les deux licences sont indépendantes : la GPL couvre le code, la CC BY-SA couvre les textes, et aucune ne couvre les éléments de Genshin Impact.</p>
-    <p>Le code et les textes sont publiés sur le <a href={DEPOT}>dépôt GitLab du projet</a>.</p>
+    <p>Le code et les textes sont publiés sur le <a href={DEPOT}>dépôt {PLATEFORME} du projet</a>.</p>
 
     <h2 id="logiciels">Logiciels libres utilisés</h2>
     <p>Ces projets sont distribués avec le site (leur code ou leurs ressources sont envoyés à votre navigateur) :</p>

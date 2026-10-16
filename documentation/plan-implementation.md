@@ -144,7 +144,8 @@ Chaque étape se termine seulement quand :
 - [x] Adresse e-mail retirée du site ; contact par les tickets GitLab.
 - [x] Page `/mentions-legales` (éditeur anonyme non professionnel, hébergeur Vercel).
 - [x] Liens vers le dépôt (pied de page, crédits, README, LICENCES.md).
-- [ ] Ouvrir les tickets GitLab à tous ; nettoyer l'adresse de l'historique git avant le premier envoi (Deltouille).
+- [x] Tickets ouverts à tous : le dépôt a déménagé sur GitHub, où ils le sont (D26).
+- [ ] Nettoyer l'adresse e-mail de l'historique git avant le premier envoi (Deltouille).
 - **Décision** : D22.
 
 ## Étape 14 — Crédits des logiciels, nouveau nom ✅ (ajoutée à la demande)
