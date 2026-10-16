@@ -293,13 +293,17 @@ test('lecture : barre de progression décorative et sommaire suivi sur chaque ar
   assert.match(await readFile(path.join(racine, '_astro', feuille), 'utf8'), /scroll-padding-top:\s*5rem/);
 });
 
-test('aucune adresse e-mail ni lien mailto: dans le site publié (contact par les tickets du dépôt, D22)', async () => {
+test('aucune adresse e-mail dans le site publié, sauf l’alias du contact privé (D22, D32)', async () => {
+  const { CONTACT_PRIVE } = await import('../src/lib/projet.mjs');
   const erreurs = [];
   for (const fichier of pages) {
     const html = await readFile(fichier, 'utf8');
-    for (const [adresse] of html.matchAll(/(?:mailto:)?[\w.+-]+@[\w-]+(?:\.[\w-]+)*\.[a-z]{2,}/gi)) erreurs.push(`${path.relative(racine, fichier)} : ${adresse}`);
+    for (const [, adresse] of html.matchAll(/(?:mailto:)?([\w.+-]+@[\w-]+(?:\.[\w-]+)*\.[a-z]{2,})/gi)) {
+      if (adresse !== CONTACT_PRIVE) erreurs.push(`${path.relative(racine, fichier)} : ${adresse}`);
+    }
   }
   assert.deepEqual(erreurs, []);
+  for (const page of ['confidentialite/index.html', 'mentions-legales/index.html']) assert.ok((await lire(page)).includes(`href="mailto:${CONTACT_PRIVE}"`), `${page} : contact privé`);
 });
 
 test('mentions légales : éditeur anonyme, contact par les tickets, hébergeur identifié ; liens en pied de page', async () => {

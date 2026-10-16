@@ -1,7 +1,7 @@
 ---
 import Site from '../layouts/Site.astro';
 import EnTetePage from '../components/EnTetePage.astro';
-import { PLATEFORME, HEBERGEUR } from '../lib/projet.mjs';
+import { PLATEFORME, HEBERGEUR, CONTACT_PRIVE } from '../lib/projet.mjs';
 // Distinguer ce que le site ne fait pas (publicité, mesure d'audience, cookies) des traitements techniques de
 // l'hébergement, décrits d'après la politique de Vercel (decisions.md, D30). À revoir si l'hébergement change
 // ou si un service d'analyse est activé.
@@ -15,7 +15,7 @@ import { PLATEFORME, HEBERGEUR } from '../lib/projet.mjs';
     <h2>Ce que l’hébergement traite</h2>
     <p>Comme pour tout site web, chaque visite passe par les serveurs de l’hébergeur, {HEBERGEUR.nom}. Pour vous envoyer les pages et protéger le service, Vercel traite des données techniques de connexion : votre adresse IP, la localisation approximative qui s’en déduit, des informations sur la configuration de votre appareil et de votre navigateur, et des journaux de requêtes.</p>
     <p>Vercel agit ici comme sous-traitant, pour le compte de l’éditeur du site, responsable de ce traitement. Ces données servent uniquement au fonctionnement et à la sécurité du site (intérêt légitime de l’éditeur) ; elles ne sont utilisées ni pour de la publicité ni pour de la mesure d’audience. Vercel est établi aux États-Unis ; sa politique de confidentialité ne précise pas de durée de conservation de ces journaux : voir la <a href={HEBERGEUR.confidentialite}>politique de confidentialité de Vercel</a>.</p>
-    <p>Vous disposez de droits d’accès, d’effacement et d’opposition sur ces données, que vous pouvez exercer auprès de l’éditeur (voir « Nous contacter »), et du droit d’introduire une réclamation auprès de la <a href="https://www.cnil.fr/">CNIL</a>.</p>
+    <p>Vous disposez de droits d’accès, d’effacement et d’opposition sur ces données, que vous pouvez exercer auprès de l’éditeur en écrivant à <a href={`mailto:${CONTACT_PRIVE}`}>{CONTACT_PRIVE}</a>, et du droit d’introduire une réclamation auprès de la <a href="https://www.cnil.fr/">CNIL</a>.</p>
     <h2>Préférence de thème</h2>
     <p>Le choix du thème clair ou sombre est mémorisé dans le stockage local de votre navigateur, sous la clé <code>genshin-theme</code>. Cette préférence reste sur votre appareil. Vous pouvez l’effacer dans les paramètres de votre navigateur.</p>
     <h2>Recherche</h2>
@@ -23,7 +23,8 @@ import { PLATEFORME, HEBERGEUR } from '../lib/projet.mjs';
     <h2>Images, icônes et polices</h2>
     <p>Les illustrations et les icônes sont servies par le site lui-même. Les polices sont celles de votre appareil, sans chargement auprès d’un fournisseur externe.</p>
     <h2>Nous contacter</h2>
-    <p>Le contact passe par les tickets du dépôt {PLATEFORME} du projet. Si vous en ouvrez un, ce que vous écrivez et votre compte relèvent des règles de confidentialité de {PLATEFORME}, et le ticket est public.</p>
+    <p>Pour une remarque ou une correction, ouvrez un ticket sur le dépôt {PLATEFORME} du projet : ce que vous y écrivez et votre compte relèvent des règles de confidentialité de {PLATEFORME}, et le ticket est public.</p>
+    <p>Pour une demande privée, notamment sur vos données personnelles, écrivez à <a href={`mailto:${CONTACT_PRIVE}`}>{CONTACT_PRIVE}</a>. Votre message n’est utilisé que pour vous répondre.</p>
     <h2>Liens externes</h2>
     <p>Les liens vers d’autres sites vous conduisent vers des services qui appliquent leurs propres règles de confidentialité.</p>
   </article>

@@ -1,7 +1,7 @@
 ---
 import Site from '../layouts/Site.astro';
 import EnTetePage from '../components/EnTetePage.astro';
-import { DEPOT, TICKETS, HEBERGEUR, NOM, PLATEFORME } from '../lib/projet.mjs';
+import { DEPOT, TICKETS, HEBERGEUR, NOM, PLATEFORME, CONTACT_PRIVE } from '../lib/projet.mjs';
 // Éditeur particulier, à titre non professionnel, anonyme : LCEN art. 1-1, II, à condition d'avoir communiqué à
 // l'hébergeur ses éléments d'identification personnelle (decisions.md, D22 et D30). Condition à vérifier par Deltouille.
 ---
@@ -13,7 +13,7 @@ import { DEPOT, TICKETS, HEBERGEUR, NOM, PLATEFORME } from '../lib/projet.mjs';
     <p>Ce projet de fans est indépendant : il n’est ni affilié ni approuvé par HoYoverse ou Fandom.</p>
 
     <h2>Contact</h2>
-    <p>Pour toute question, correction ou demande, <a href={TICKETS}>ouvrez un ticket sur le dépôt {PLATEFORME} du projet</a>.</p>
+    <p>Pour une question ou une correction, <a href={TICKETS}>ouvrez un ticket sur le dépôt {PLATEFORME} du projet</a> (public). Pour une demande privée, notamment sur vos données personnelles ou une réclamation, écrivez à <a href={`mailto:${CONTACT_PRIVE}`}>{CONTACT_PRIVE}</a>.</p>
 
     <h2>Hébergeur</h2>
     <p>{HEBERGEUR.nom}<br />{HEBERGEUR.adresse}<br /><a href={HEBERGEUR.site}>{HEBERGEUR.site.replace('https://', '')}</a></p>

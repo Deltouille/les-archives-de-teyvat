@@ -1,7 +1,7 @@
 ---
 import Site from '../layouts/Site.astro';
 import EnTetePage from '../components/EnTetePage.astro';
-import { DEPOT, TICKETS, NOM, PLATEFORME } from '../lib/projet.mjs';
+import { DEPOT, TICKETS, NOM, PLATEFORME, CONTACT_PRIVE } from '../lib/projet.mjs';
 ---
 <Site titre="À propos du projet" description="Pourquoi ce site, comment il est fait, et comment nous écrire.">
   <EnTetePage surTitre="Pour les curieux de Teyvat">Prendre le temps de <em>comprendre.</em></EnTetePage>
@@ -10,7 +10,7 @@ import { DEPOT, TICKETS, NOM, PLATEFORME } from '../lib/projet.mjs';
     <h2>Des histoires qui se répondent</h2>
     <p>Chaque article propose des repères, un résumé et des lectures complémentaires. Les sources indiquent où retrouver les événements dans le jeu. Le périmètre des révélations est précisé au début des articles.</p>
     <h2>Contact</h2>
-    <p>Une remarque, une correction ou une idée de sujet ? <a href={TICKETS}>Ouvrez un ticket sur le dépôt {PLATEFORME} du projet</a> (un compte {PLATEFORME} gratuit est nécessaire). Le code et les textes du site y sont publics : les propositions de correction sont les bienvenues.</p>
+    <p>Une remarque, une correction ou une idée de sujet ? <a href={TICKETS}>Ouvrez un ticket sur le dépôt {PLATEFORME} du projet</a> (un compte {PLATEFORME} gratuit est nécessaire). Le code et les textes du site y sont publics : les propositions de correction sont les bienvenues. Pour une demande privée : <a href={`mailto:${CONTACT_PRIVE}`}>{CONTACT_PRIVE}</a>.</p>
     <p>Pour les informations sur l’éditeur et l’hébergeur, voir les <a href="/mentions-legales">mentions légales</a>.</p>
     <h2>Crédits</h2>
     <p>Projet de fans indépendant, non affilié à HoYoverse. Genshin Impact, ses personnages et les illustrations issues du jeu appartiennent à leurs ayants droit. Les textes sont des synthèses et interprétations éditoriales ; certains adaptent des pages du Genshin Impact Wiki ou s’appuient sur des théories de la communauté, crédités sur chaque article et dans <a href="/credits">Crédits et licences</a>.</p>

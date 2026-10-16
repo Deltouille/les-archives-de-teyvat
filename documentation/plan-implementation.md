@@ -146,7 +146,7 @@ Chaque étape se termine seulement quand :
 - [x] Liens vers le dépôt (pied de page, crédits, README, LICENCES.md).
 - [x] Tickets ouverts à tous : le dépôt a déménagé sur GitHub, où ils le sont (D26).
 - [x] Historique git nettoyé avant le premier envoi sur GitHub (D27).
-- [ ] Vérifier que les éléments d'identification personnelle ont bien été communiqués à Vercel (condition de l'anonymat, LCEN art. 1-1, II ; D30) — Deltouille.
+- [x] Éléments d'identification personnelle communiqués à Vercel : nom et prénoms, domicile, téléphone (condition de l'anonymat, LCEN art. 1-1, II) — vérifié par Deltouille le 16 oct. 2026 (D30).
 - **Décision** : D22.
 
 ## Étape 14 — Crédits des logiciels, nouveau nom ✅ (ajoutée à la demande)

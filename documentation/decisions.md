@@ -339,6 +339,7 @@ Le déploiement lui-même est fait par Deltouille ; tout le reste de l'étape 8 
 - **Tests indépendants du contenu** : plusieurs tests et captures visaient l'article Venti en dur ; ils prennent maintenant un **article d'exemple** (`articleExemple()` dans `tests/sources.mjs` : le publié qui a le plus de sections), et la capture de recherche cherche le plus long mot de son titre. Défaut révélé par la suppression des articles de la racine.
 - **Tests ajoutés** : confidentialité (sections, adresse IP, sous-traitant, responsable, CNIL, lien Vercel ; plus de « aucune donnée personnelle » ; article 1-1 cité) ; licences (texte complet de chaque logiciel, lié depuis les crédits, notice MIT ou texte Apache complet).
 - **Limite signalée** : les droits (accès, effacement…) s'exercent auprès de l'éditeur par les tickets publics du dépôt ; un canal privé (adresse dédiée) serait plus adapté. Décision de Deltouille.
+- **Mise à jour (16 oct. 2026)** : Deltouille a vérifié que son compte Vercel contient les quatre éléments exigés par l'article 1-1, I (nom et prénoms, domicile, numéro de téléphone) ; la condition de l'anonymat est remplie et la phrase des mentions légales est exacte. Ces informations restent chez l'hébergeur, jamais dans le dépôt.
 
 ## D31 — Articles et tags supprimés : redirigés vers la page la plus proche (16 oct. 2026)
 
@@ -351,3 +352,9 @@ Le déploiement lui-même est fait par Deltouille ; tout le reste de l'étape 8 
 - **Écarté** : laisser ces adresses en 404 en les retirant de la liste des URL publiées.
 - **Article de référence des tests** : l'acte I du prologue (`mondstadt-act-i`), choisi par Deltouille comme contenu stable ; à défaut, le publié qui a le plus de sections.
 - **Tests** : redirections des articles et tags supprimés, résolution des chaînes ; tag supprimé redéclaré refusé ; les tests unitaires n'utilisent plus `venti` comme nom libre (il est désormais réservé).
+
+## D32 — Contact privé par un alias e-mail (16 oct. 2026)
+
+- **Contexte** : les droits sur les données (D30) ne pouvaient s'exercer que par des tickets publics. Deltouille a d'abord proposé son adresse personnelle ; écartée parce qu'elle contient son nom (elle lèverait l'anonymat des mentions légales) et qu'elle serait revenue dans l'historique git public tout juste nettoyé (D27).
+- **Choix** : un **alias Proton Pass** dédié au projet (offre gratuite : 10 alias), qui transfère vers sa boîte sans la révéler et peut être désactivé en cas de spam : `CONTACT_PRIVE` dans `src/lib/projet.mjs`. Canal privé (données personnelles, réclamations) dans Confidentialité, Mentions légales et « À propos » ; les tickets GitHub restent le canal public pour remarques et corrections.
+- **Garde-fou** : le test des adresses e-mail n'autorise plus que cet alias ; toute autre adresse dans une page publiée le fait échouer (vu en échec avec une adresse d'essai). Confidentialité et Mentions légales doivent proposer le contact privé.
