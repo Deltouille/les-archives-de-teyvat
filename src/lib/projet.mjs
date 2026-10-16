@@ -11,4 +11,7 @@ export const TICKETS = `${DEPOT}/issues`;
 export const CONTACT_PRIVE = 'les-archives-de-teyvat.portal337@passinbox.com';
 
 /** Hébergeur, à identifier dans les mentions légales (LCEN). Vérifié sur vercel.com/legal le 16 oct. 2026. */
-export const HEBERGEUR = { nom: 'Vercel Inc.', adresse: '440 N Barranca Avenue #4133, Covina, CA 91723, États-Unis', site: 'https://vercel.com', confidentialite: 'https://vercel.com/legal/privacy-notice' };
+export const HEBERGEUR = { nom: 'Vercel Inc.', adresse: '440 N Barranca Avenue #4133, Covina, CA 91723, États-Unis', site: 'https://vercel.com', confidentialite: 'https://vercel.com/legal/privacy-notice',
+  // Offre utilisée : Hobby, gratuite. Le contrat de sous-traitance (DPA) de Vercel ne couvre que Pro et Enterprise ;
+  // journaux consultables par l'éditeur : 1 heure (docs Vercel, « Runtime Logs »). Vérifié le 16 oct. 2026 (D33).
+  offre: 'Hobby', journaux: 'une heure' };

@@ -375,7 +375,9 @@ test('licences des logiciels : texte complet publié et lié depuis les crédits
 test('confidentialité : ni publicité ni mesure d’audience, mais les traitements de l’hébergement sont décrits (D30)', async () => {
   const { HEBERGEUR } = await import('../src/lib/projet.mjs');
   const confidentialite = await lire('confidentialite/index.html');
-  for (const attendu of ['Ce que le site ne fait pas', 'Ce que l’hébergement traite', 'adresse IP', 'sous-traitant', 'responsable de ce traitement', 'CNIL']) assert.ok(confidentialite.includes(attendu), attendu);
+  // D33 : sur l'offre gratuite, pas de contrat de sous-traitance ; durées, transferts et contact privé précisés.
+  for (const attendu of ['Ce que le site ne fait pas', 'Ce que l’hébergement traite', 'adresse IP', 'comme responsable de traitement', `conservés ${HEBERGEUR.journaux}`, 'Data Privacy Framework', 'clauses contractuelles types', 'Proton AG', 'supprimés dès que votre demande est traitée', 'CNIL']) assert.ok(confidentialite.includes(attendu), attendu);
+  assert.doesNotMatch(confidentialite, /Vercel agit ici comme sous-traitant/, 'plus d’affirmation de sous-traitance (offre sans DPA)');
   assert.ok(confidentialite.includes(`href="${HEBERGEUR.confidentialite}"`), 'lien vers la politique de l’hébergeur');
   const mentions = await lire('mentions-legales/index.html');
   assert.doesNotMatch(mentions, /aucune donnée personnelle/, 'plus de promesse « aucune donnée personnelle »');

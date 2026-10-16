@@ -358,3 +358,18 @@ Le déploiement lui-même est fait par Deltouille ; tout le reste de l'étape 8 
 - **Contexte** : les droits sur les données (D30) ne pouvaient s'exercer que par des tickets publics. Deltouille a d'abord proposé son adresse personnelle ; écartée parce qu'elle contient son nom (elle lèverait l'anonymat des mentions légales) et qu'elle serait revenue dans l'historique git public tout juste nettoyé (D27).
 - **Choix** : un **alias Proton Pass** dédié au projet (offre gratuite : 10 alias), qui transfère vers sa boîte sans la révéler et peut être désactivé en cas de spam : `CONTACT_PRIVE` dans `src/lib/projet.mjs`. Canal privé (données personnelles, réclamations) dans Confidentialité, Mentions légales et « À propos » ; les tickets GitHub restent le canal public pour remarques et corrections.
 - **Garde-fou** : le test des adresses e-mail n'autorise plus que cet alias ; toute autre adresse dans une page publiée le fait échouer (vu en échec avec une adresse d'essai). Confidentialité et Mentions légales doivent proposer le contact privé.
+
+## D33 — Notice de confidentialité complétée ; analyse SPDX corrigée (16 oct. 2026)
+
+- **Contexte** : seconde relecture : (1) la notice ne donnait ni durée de conservation ni mécanisme de transfert, et rien sur le contact par courriel (RGPD, article 13) ; (2) elle présentait Vercel comme sous-traitant pour tous les traitements, alors que Vercel distingue ce qu'il traite pour ses clients et ce qu'il traite comme responsable ; (3) le test de compatibilité des licences acceptait `(MIT OR Apache-2.0) AND CC-BY-NC-4.0` (parenthèses supprimées).
+- **Faits vérifiés** (16 oct. 2026) :
+  - le contrat de sous-traitance (DPA) de Vercel « s'applique […] pour les clients des offres Enterprise et Pro » ; le site est sur l'offre **Hobby** (confirmé par Deltouille) : **aucun contrat de sous-traitance** ;
+  - Vercel se déclare responsable pour la sécurité (menaces, fraude, accès non autorisés), l'amélioration de ses produits et les « données générées par le service » ;
+  - transferts : Vercel certifié **EU-U.S. Data Privacy Framework** (décision d'adéquation de la Commission du 10 juillet 2023) et clauses contractuelles types ;
+  - conservation : journaux consultables par le client **1 heure en Hobby** (1 jour en Pro, docs « Runtime Logs ») ; pour ses propres traitements, Vercel supprime ou anonymise « lorsqu'il n'a plus de besoin légitime », sans durée chiffrée.
+- **Choix** :
+  - la notice présente Vercel comme **responsable** de ses traitements techniques (selon sa politique), et l'éditeur comme simple consultant des journaux de son site (sans export ni conservation) ; durées (1 heure ; critère de Vercel) ; transferts (DPF et clauses types) ; droits à exercer auprès de Vercel pour ses traitements, auprès de l'éditeur par l'alias pour le reste ; CNIL. **Corrige D30**, qui affirmait la sous-traitance.
+  - contact privé : alias Proton Pass vers une boîte Proton, donc traitement par **Proton AG (Suisse, pays reconnu adéquat)** ; messages **supprimés dès que la demande est traitée** (engagement choisi par Deltouille).
+  - offre et durée des journaux dans `HEBERGEUR` (`src/lib/projet.mjs`) : **passer en Pro** (ou changer d'hébergeur) impose de revoir la notice.
+  - l'adresse e-mail de Vercel n'est pas publiée (la notice renvoie vers sa politique) : le test « une seule adresse e-mail, l'alias » reste strict.
+- **SPDX** : `tests/spdx.mjs`, analyseur selon la grammaire SPDX 2.3 (parenthèses, priorité `WITH` > `AND` > `OR`, toutes les branches analysées même quand le résultat est connu) ; toute expression malformée est refusée. `tests/spdx.test.mjs` couvre le cas signalé, les priorités, `WITH`, et neuf expressions malformées. Aucune dépendance actuelle n'était concernée.

@@ -5,6 +5,7 @@ import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 import { existsSync, readdirSync, readFileSync } from 'node:fs';
 import path from 'node:path';
+import { compatibleSpdx } from './spdx.mjs';
 
 test('LICENSE est le texte officiel de la GNU GPL v3 (gnu.org)', () => {
   const texte = readFileSync('LICENSE');
@@ -35,8 +36,8 @@ const licenceDe = paquet => {
   const { license, licenses } = JSON.parse(readFileSync(path.join(paquet, 'package.json'), 'utf8'));
   return typeof license === 'string' ? license : license?.type ?? licenses?.map(l => l.type).join(' OR ') ?? 'inconnue';
 };
-// Expression SPDX simple : « A OR B » compatible si l'une l'est, « A AND B » si toutes le sont.
-const compatible = expression => expression.replace(/[()]/g, '').split(/\s+OR\s+/).some(alt => alt.split(/\s+AND\s+/).every(l => COMPATIBLES.has(l.trim())));
+// Expression SPDX analysée selon sa grammaire (parenthèses, priorités), cf. tests/spdx.mjs et tests/spdx.test.mjs.
+const compatible = expression => compatibleSpdx(expression, COMPATIBLES);
 
 function* sources(dossier) {
   for (const entree of readdirSync(dossier, { withFileTypes: true })) {
@@ -61,10 +62,7 @@ test('toutes les dépendances installées sont sous une licence compatible avec 
   assert.deepEqual(problemes, []);
 });
 
-test('l’analyse des expressions SPDX est correcte', () => {
-  assert.ok(compatible('MIT'));
-  assert.ok(compatible('(MIT OR GPL-2.0-only)'));
-  assert.ok(!compatible('GPL-2.0-only'));
-  assert.ok(!compatible('MIT AND CC-BY-NC-4.0'));
-  assert.ok(!compatible('inconnue'));
+test('l’analyse SPDX refuse le cas signalé en relecture', () => {
+  assert.ok(!compatible('(MIT OR Apache-2.0) AND CC-BY-NC-4.0'));
+  assert.ok(compatible('(MIT OR Apache-2.0)'));
 });
