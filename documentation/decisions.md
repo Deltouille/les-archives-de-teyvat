@@ -251,3 +251,19 @@ Le déploiement lui-même est fait par Deltouille ; tout le reste de l'étape 8 
 - **Conséquence du renommage** : `prologue-mondstadt.md` → `mondstadt-act-I.md` a changé une URL publiée. Redirections ajoutées dans `src/lib/redirections.mjs` (`ARTICLES_RENOMMES`) : `/lore/prologue-mondstadt` → `/lore/mondstadt-act-i`, et `/lore/quetes/prologue-mondstadt` repointée directement (pas de chaîne) ; `vercel.json` régénéré (34 redirections) ; lien interne de `mondstadt.md` mis à jour. Les tests de surface d'URL et de redirections l'auraient exigé.
 - **Tests** : `tests/identifiant.test.mjs` (nom seul, slug, doublons). **Vérifié sur un vrai build** : `venti.md` déplacé dans `personnages/` → toujours `/lore/venti`, tous les tests verts ; deux `venti.md` dans deux dossiers → « Même URL /lore/venti pour src/content/articles/personnages/venti.md et src/content/articles/venti.md : renommez l'un des fichiers ».
 - **Outillage** : `scripts/captures.mjs` attend la fin réelle du navigateur avant de supprimer son profil temporaire (échec intermittent `ENOTEMPTY` à la fermeture).
+
+## D22 — Pas d'adresse e-mail : contact par GitLab, mentions légales (16 oct. 2026)
+
+- **Contexte** : Deltouille ne veut pas publier ses informations personnelles ; l'adresse e-mail figurait dans « À propos ». Dépôt public : <https://gitlab.com/Choumo/les-archives-de-teyvat>.
+- **Choix** :
+  - **contact par les tickets GitLab** du dépôt (« À propos », mentions légales) ; l'adresse e-mail est retirée du site ;
+  - adresses du projet (dépôt, tickets) et de l'hébergeur écrites **une seule fois**, `src/lib/projet.mjs` ;
+  - **page `/mentions-legales`** : la LCEN permet à un particulier éditant **à titre non professionnel** de garder l'anonymat, à condition d'identifier l'**hébergeur** et de lui avoir communiqué ses coordonnées. La page donne donc l'éditeur (particulier, non professionnel, anonyme), le contact GitLab et l'hébergeur : Vercel Inc., 440 N Barranca Avenue #4133, Covina, CA 91723, États-Unis (vérifié sur vercel.com/legal le 16 oct. 2026). Le numéro d'article de la LCEN n'est volontairement pas cité (loi remaniée en 2024). Ce n'est pas un avis juridique ;
+  - liens « Mentions légales » et « Code source » dans le pied de page ; lien vers le dépôt sur `/credits`, dans `LICENCES.md` et le README ;
+  - « Confidentialité » précise qu'un ticket GitLab est public et relève des règles de GitLab.
+- **Garde-fou** : un test échoue si une adresse e-mail ou un lien `mailto:` apparaît dans une page publiée (vu en échec avec une adresse d'essai).
+- **À faire par Deltouille** :
+  - ouvrir les **tickets** du dépôt à tous (aujourd'hui `/-/issues` répond 404 sans connexion) ;
+  - s'assurer d'avoir fourni son identité à Vercel (compte) : c'est ce qui rend l'anonymat légal ;
+  - l'adresse reste dans l'**historique git** (auteur des commits, et contenu du commit de l'étape 4) : la nettoyer **avant** le premier envoi sur GitLab.
+- **En passant** : le test du sommaire comparait les titres caractère pour caractère ; Astro rend les apostrophes droites en typographiques (« L'attaque » → « L’attaque »). Comparaison normalisée.

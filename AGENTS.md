@@ -65,7 +65,8 @@ Pas de linter. `tests/site.test.mjs`, `pages.test.mjs` et `poids.test.mjs` lisen
 - **URL sans barre finale** (`trailingSlash: 'never'`) : liens, canoniques et sitemap ont la même forme. `<Image>` reçoit `width` = la plus grande valeur de `widths` (sinon son `src` de repli est l'original ré-encodé).
 - **Cartes et listes cliquables** : un seul lien par carte (le titre, étendu par `after:absolute after:inset-0`), contour de focus porté par la carte (`has-[a:focus-visible]:outline-3 …`). Composants de page dans `src/components/` (bannière, en-têtes, fil d'Ariane, puces, encadrés, sommaire).
 - `premiers-pas` est un tag ordinaire, cible des boutons « Commencer le voyage ».
-- Pages : `/`, `/lore`, `/lore/<article>`, `/lore/tags`, `/lore/tags/<tag>` (pas `/lore/<tag>` : collision avec les articles), `/a-propos`, `/confidentialite`, `/credits`, `/404`.
+- Pages : `/`, `/lore`, `/lore/<article>`, `/lore/tags`, `/lore/tags/<tag>` (pas `/lore/<tag>` : collision avec les articles), `/a-propos`, `/confidentialite`, `/credits`, `/mentions-legales`, `/404`.
+- **Aucune information personnelle de Deltouille** sur le site ni dans le dépôt (ni e-mail ni identité ; un test refuse toute adresse e-mail dans `dist/`). Contact : tickets GitLab. Adresses du dépôt et de l'hébergeur : `src/lib/projet.mjs`.
 - **Redirections figées** dans `src/lib/redirections.mjs` (lu par `astro.config.mjs` et par la validation, qui en dérive les noms d'articles réservés) : elles décrivent des URL ayant existé, **ne jamais les dériver du contenu**. Aucune URL publiée ne doit disparaître : `tests/donnees/urls-publiees.txt` liste celles qui doivent répondre ; renommer un article = ajouter sa redirection **et** son ancienne URL à cette liste.
 
 ## Pièges connus (refonte-astro.md §8)

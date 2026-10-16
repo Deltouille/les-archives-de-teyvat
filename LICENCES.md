@@ -1,6 +1,6 @@
 # Licences
 
-Ce dépôt réunit trois sortes d'éléments, sous des régimes distincts. Ils sont simplement **réunis** (un « agrégat » au sens de la section 5 de la GNU GPL v3) : la licence de l'un ne s'étend pas aux autres. Voir aussi la page [Crédits et licences](https://l-histoire-de-genshin-expliquee.vercel.app/credits) du site.
+Ce dépôt réunit trois sortes d'éléments, sous des régimes distincts. Ils sont simplement **réunis** (un « agrégat » au sens de la section 5 de la GNU GPL v3) : la licence de l'un ne s'étend pas aux autres. Dépôt : <https://gitlab.com/Choumo/les-archives-de-teyvat>. Voir aussi la page [Crédits et licences](https://l-histoire-de-genshin-expliquee.vercel.app/credits) du site.
 
 ## 1. Le code : GNU GPL v3 ou ultérieure
 

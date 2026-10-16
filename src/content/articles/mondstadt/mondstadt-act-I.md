@@ -50,7 +50,7 @@ Cependant, une réaction soudaine des pouvoirs Anémo récemment acquis par le V
 
 Après leur départ, le Voyageur découvre un étrange cristal rouge en forme de larme, abandonné sur les lieux, et décide de le conserver.
 
-### À la découverte de Mondstadt
+## À la découverte de Mondstadt
 
 À leur sortie de la forêt, les deux compagnons sont interpellés par Amber, une éclaireuse de l'Ordre de Favonius, chargée de surveiller les environs de Mondstadt.
 
@@ -62,7 +62,7 @@ Impressionnée par leurs capacités, Amber offre au Voyageur un planeur, lui per
 
 Mais alors qu'il effectue un vol d'essai, le calme de Mondstadt est brutalement interrompu.
 
-### L'attaque de Stormterror
+## L'attaque de Stormterror
 
 Le dragon aperçu précédemment, surnommé « Stormterror » par les habitants, apparaît au-dessus de Mondstadt et commence à ravager la ville.
 
@@ -74,7 +74,7 @@ Avec l'aide du mystérieux inconnu rencontré dans la forêt, dont il ignore alo
 
 Cet exploit attire rapidement l'attention de l'Ordre de Favonius.
 
-### L'Ordre de Favonius et les temples des Quatre Vents
+## L'Ordre de Favonius et les temples des Quatre Vents
 
 Après l'affrontement, Kaeya, capitaine de cavalerie de l'Ordre de Favonius, prend contact avec le Voyageur et Paimon.
 
@@ -88,7 +88,7 @@ Afin d'affaiblir le dragon et de réduire la menace qui pèse sur Mondstadt, Jea
 
 Le Voyageur accepte cette mission et, avec l'aide des membres de l'Ordre de Favonius, parvient à rétablir la situation dans les différents sanctuaires.
 
-### Retour au quartier général
+## Retour au quartier général
 
 Une fois les trois temples sécurisés et les perturbations dissipées, la menace que représente Stormterror semble temporairement affaiblie.
 

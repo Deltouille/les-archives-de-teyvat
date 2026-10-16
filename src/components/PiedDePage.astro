@@ -1,5 +1,6 @@
 ---
 import Marque from './Marque.astro';
+import { DEPOT } from '../lib/projet.mjs';
 ---
 <footer class="mx-auto max-w-site px-4 sm:px-6 lg:px-10" data-pagefind-ignore>
   <div class="text-corps-p flex flex-wrap items-start justify-between gap-6 border-t border-ligne pt-8 pb-6 text-discret">
@@ -11,6 +12,8 @@ import Marque from './Marque.astro';
       <a href="/a-propos" class="hover:text-primaire">À propos</a>
       <a href="/confidentialite" class="hover:text-primaire">Confidentialité</a>
       <a href="/credits" class="hover:text-primaire">Crédits et licences</a>
+      <a href="/mentions-legales" class="hover:text-primaire">Mentions légales</a>
+      <a href={DEPOT} class="hover:text-primaire">Code source</a>
       <a href="/lore" class="hover:text-primaire">Tous les articles</a>
     </nav>
     <p class="w-full">Projet de fans indépendant, non affilié à HoYoverse. Genshin Impact et ses visuels appartiennent à leurs ayants droit. Textes sous licence <a href="https://creativecommons.org/licenses/by-sa/3.0/deed.fr" class="underline underline-offset-4 hover:text-primaire">CC BY-SA 3.0</a>, code sous licence <a href="https://www.gnu.org/licenses/gpl-3.0.fr.html" class="underline underline-offset-4 hover:text-primaire">GNU GPL v3</a>, sauf mention contraire.</p>

@@ -232,6 +232,7 @@ const SCENES = [
   { nom: 'tag-simple', url: '/lore/tags/mondstadt', largeurs: [1440, 390] },
   { nom: 'a-propos', url: '/a-propos', largeurs: [1440, 390] },
   { nom: 'credits', url: '/credits', largeurs: [1440, 390] },
+  { nom: 'mentions-legales', url: '/mentions-legales', largeurs: [1440, 390] },
   { nom: 'page-introuvable', url: '/cette-page-n-existe-pas', largeurs: [1440, 390] },
   {
     nom: 'carte-au-clavier',

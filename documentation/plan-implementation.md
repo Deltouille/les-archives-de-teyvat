@@ -2,7 +2,7 @@
 
 > Réécriture propre du prototype `old/`, d'après son cahier des charges
 > `old/documentation/refonte-astro.md` (cité « CDC §n » ci-dessous).
-> Commencé le 13 octobre 2026. **État : étapes 0 à 12 réalisées ; reste le déploiement (Deltouille).** Les décisions prises en route vont dans
+> Commencé le 13 octobre 2026. **État : étapes 0 à 13 réalisées ; reste le déploiement (Deltouille).** Les décisions prises en route vont dans
 > [`decisions.md`](decisions.md) ; ce fichier dit **quoi faire et dans quel ordre**.
 
 ## Règles du jeu
@@ -138,6 +138,14 @@ Chaque étape se termine seulement quand :
 - [x] Doublons de noms détectés au build ; messages avec le vrai chemin.
 - [x] Redirection de l'article renommé (`prologue-mondstadt` → `mondstadt-act-i`).
 - **Décision** : D21.
+
+## Étape 13 — Contact et mentions légales ✅ (ajoutée à la demande)
+
+- [x] Adresse e-mail retirée du site ; contact par les tickets GitLab.
+- [x] Page `/mentions-legales` (éditeur anonyme non professionnel, hébergeur Vercel).
+- [x] Liens vers le dépôt (pied de page, crédits, README, LICENCES.md).
+- [ ] Ouvrir les tickets GitLab à tous ; nettoyer l'adresse de l'historique git avant le premier envoi (Deltouille).
+- **Décision** : D22.
 
 ---
 

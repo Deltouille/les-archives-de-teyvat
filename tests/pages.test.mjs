@@ -56,7 +56,9 @@ test('les encadrés d’un article suivent son frontmatter, et le sommaire ses t
       assert.equal(html.includes(`data-encadre="${encadre}"`), article[encadre], `${article.id} : encadré ${encadre}`);
     }
     const sommaire = html.split('aria-label="Sommaire"')[2]?.split('</nav>')[0] ?? '';
-    for (const titre of article.titres) assert.ok(sommaire.includes(titre), `${article.id} : « ${titre} » au sommaire`);
+    // Astro rend les apostrophes et guillemets droits en typographiques (’ “ ”) : on compare sans en tenir compte.
+    const typo = texte => texte.replace(/&#39;|['‘’]/g, '\'').replace(/&quot;|["“”]/g, '"');
+    for (const titre of article.titres) assert.ok(typo(sommaire).includes(typo(titre)), `${article.id} : « ${titre} » au sommaire`);
   }
 });
 
@@ -280,4 +282,28 @@ test('lecture : barre de progression décorative et sommaire suivi sur chaque ar
   assert.doesNotMatch(await lire('lore/index.html'), /data-progression/, 'pas de barre hors des articles');
   const feuille = (await readdir(path.join(racine, '_astro'))).find(f => f.endsWith('.css'));
   assert.match(await readFile(path.join(racine, '_astro', feuille), 'utf8'), /scroll-padding-top:\s*5rem/);
+});
+
+test('aucune adresse e-mail ni lien mailto: dans le site publié (contact par GitLab, D22)', async () => {
+  const erreurs = [];
+  for (const fichier of pages) {
+    const html = await readFile(fichier, 'utf8');
+    for (const [adresse] of html.matchAll(/(?:mailto:)?[\w.+-]+@[\w-]+(?:\.[\w-]+)*\.[a-z]{2,}/gi)) erreurs.push(`${path.relative(racine, fichier)} : ${adresse}`);
+  }
+  assert.deepEqual(erreurs, []);
+});
+
+test('mentions légales : éditeur anonyme, contact GitLab, hébergeur identifié ; liens en pied de page', async () => {
+  const { DEPOT, TICKETS, HEBERGEUR } = await import('../src/lib/projet.mjs');
+  const html = await lire('mentions-legales/index.html');
+  for (const attendu of ['Éditeur', 'Hébergeur', HEBERGEUR.nom, HEBERGEUR.adresse, 'à titre non professionnel']) assert.ok(html.includes(attendu), attendu);
+  assert.ok(html.includes(`href="${TICKETS}"`), 'contact par les tickets GitLab');
+  for (const page of ['index.html', 'lore/venti/index.html']) {
+    const pied = (await lire(page)).split('<footer')[1];
+    assert.match(pied, /href="\/mentions-legales"/, page);
+    assert.ok(pied.includes(`href="${DEPOT}"`), `${page} : lien vers le code source`);
+  }
+  assert.ok((await lire('a-propos/index.html')).includes(`href="${TICKETS}"`), 'À propos : contact par GitLab');
+  assert.ok((await lire('credits/index.html')).includes(`href="${DEPOT}"`), 'Crédits : lien vers le dépôt');
+  assert.match(await lire('sitemap-0.xml'), /\/mentions-legales<\/loc>/);
 });

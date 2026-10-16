@@ -1,6 +1,7 @@
 ---
 import Site from '../layouts/Site.astro';
 import EnTetePage from '../components/EnTetePage.astro';
+import { DEPOT, TICKETS } from '../lib/projet.mjs';
 ---
 <Site titre="À propos du projet" description="Pourquoi ce site, comment il est fait, et comment nous écrire.">
   <EnTetePage surTitre="Pour les curieux de Teyvat">Prendre le temps de <em>comprendre.</em></EnTetePage>
@@ -11,9 +12,10 @@ import EnTetePage from '../components/EnTetePage.astro';
     <h2>Un projet vivant</h2>
     <p>Ces premières lectures reprennent et remanient les textes de la précédente version du site. Les articles ont vocation à être enrichis et corrigés au fil des relectures et des révélations du jeu.</p>
     <h2>Contact</h2>
-    <p>Une remarque, une correction ou une idée de sujet ? Écrivez à <a href="https://github.com/Deltouille/les-archives-de-teyvat/issues">les tickets du dépôt</a>.</p>
+    <p>Une remarque, une correction ou une idée de sujet ? <a href={TICKETS}>Ouvrez un ticket sur le dépôt GitLab du projet</a> (un compte GitLab gratuit est nécessaire). Le code et les textes du site y sont publics : les propositions de correction sont les bienvenues.</p>
+    <p>Pour les informations sur l’éditeur et l’hébergeur, voir les <a href="/mentions-legales">mentions légales</a>.</p>
     <h2>Crédits</h2>
     <p>Projet de fans indépendant, non affilié à HoYoverse. Genshin Impact, ses personnages et les illustrations issues du jeu appartiennent à leurs ayants droit. Les textes sont des synthèses et interprétations éditoriales ; certains adaptent des pages du Genshin Impact Wiki ou s’appuient sur des théories de la communauté, crédités sur chaque article et dans <a href="/credits">Crédits et licences</a>.</p>
-    <p>L’interface suit le langage <a href="https://m3.material.io/">Material 3</a> ; ses bannières s’inspirent du thème Astro <a href="https://github.com/LyraVoid/Mizuki">Mizuki</a>. Icônes : <a href="https://fonts.google.com/icons">Material Symbols</a>.</p>
+    <p>L’interface suit le langage <a href="https://m3.material.io/">Material 3</a> ; ses bannières s’inspirent du thème Astro <a href="https://github.com/LyraVoid/Mizuki">Mizuki</a>. Icônes : <a href="https://fonts.google.com/icons">Material Symbols</a>. Code source : <a href={DEPOT}>dépôt GitLab</a>.</p>
   </article>
 </Site>
