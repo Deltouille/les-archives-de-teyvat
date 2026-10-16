@@ -3,7 +3,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readdir, readFile, stat } from 'node:fs/promises';
 import path from 'node:path';
-import { lireArticlesPublies, lireTags } from './sources.mjs';
+import { lireArticlesPublies, lireTags, articleExemple } from './sources.mjs';
 
 const racine = path.resolve('dist');
 const existe = async fichier => { try { return (await stat(fichier)).isFile(); } catch { return false; } };
@@ -15,6 +15,7 @@ async function fichiers(dossier) {
 const pages = (await fichiers(racine)).filter(f => f.endsWith('.html'));
 const articles = await lireArticlesPublies();
 const tags = await lireTags();
+const EXEMPLE = `lore/${(await articleExemple()).id}/index.html`;
 const cartes = html => (html.match(/<article\b[^>]*rounded-carte/g) ?? []).length;
 
 test('chaque lien interne et chaque ancre du HTML généré a une cible', async () => {
@@ -151,7 +152,7 @@ test('recherche : l’index Pagefind couvre exactement les articles publiés, en
 });
 
 test('recherche : fenêtre accessible et boutons d’ouverture sur chaque page', async () => {
-  for (const page of ['index.html', 'lore/index.html', 'lore/venti/index.html', '404.html']) {
+  for (const page of ['index.html', 'lore/index.html', EXEMPLE, '404.html']) {
     const html = await lire(page);
     assert.match(html, /<dialog[^>]*id="recherche"[^>]*aria-labelledby="recherche-titre"/, page);
     assert.match(html, /<form role="search"/, page);
@@ -200,7 +201,7 @@ test('les anciennes URL redirigées n’entrent pas dans le sitemap', async () =
 });
 
 test('une seule forme d’URL, sans barre finale : canoniques et sitemap comme les liens internes', async () => {
-  for (const page of ['lore/index.html', 'lore/venti/index.html', 'lore/tags/regions/index.html', 'a-propos/index.html']) {
+  for (const page of ['lore/index.html', EXEMPLE, 'lore/tags/regions/index.html', 'a-propos/index.html']) {
     assert.match(await lire(page), /<link rel="canonical" href="https:\/\/[^"]+[^/]"/, page);
   }
   const avecBarre = [...(await lire('sitemap-0.xml')).matchAll(/<loc>(https?:\/\/[^/]+\/[^<]*\/)<\/loc>/g)].map(m => m[1]);
@@ -241,7 +242,7 @@ test('page Crédits et licences : texte, licence déclarée, lien dans le pied d
   const html = await lire('credits/index.html');
   for (const titre of ['Contenus provenant du Genshin Impact Wiki', 'Contenus originaux', 'Propriété intellectuelle de Genshin Impact']) assert.ok(html.includes(titre), titre);
   assert.match(html, /<a href="https:\/\/creativecommons\.org\/licenses\/by-sa\/3\.0\/deed\.fr" rel="license">/);
-  for (const page of ['index.html', 'lore/venti/index.html', '404.html']) assert.match(await lire(page), /<a href="\/credits"[^>]*>Crédits et licences<\/a>/, page);
+  for (const page of ['index.html', EXEMPLE, '404.html']) assert.match(await lire(page), /<a href="\/credits"[^>]*>Crédits et licences<\/a>/, page);
   assert.match(await lire('sitemap-0.xml'), /\/credits<\/loc>/);
   const originaux = html.split('Contenus originaux</h2>')[1].split('<h2')[0];
   assert.match(originaux, /CC BY-SA 3\.0/, 'les contenus originaux sont sous CC BY-SA 3.0 (D18)');
@@ -306,7 +307,7 @@ test('mentions légales : éditeur anonyme, contact par les tickets, hébergeur 
   const html = await lire('mentions-legales/index.html');
   for (const attendu of ['Éditeur', 'Hébergeur', HEBERGEUR.nom, HEBERGEUR.adresse, 'à titre non professionnel']) assert.ok(html.includes(attendu), attendu);
   assert.ok(html.includes(`href="${TICKETS}"`), 'contact par les tickets du dépôt');
-  for (const page of ['index.html', 'lore/venti/index.html']) {
+  for (const page of ['index.html', EXEMPLE]) {
     const pied = (await lire(page)).split('<footer')[1];
     assert.match(pied, /href="\/mentions-legales"/, page);
     assert.ok(pied.includes(`href="${DEPOT}"`), `${page} : lien vers le code source`);
@@ -352,4 +353,27 @@ test('en-tête d’un thème : l’emblème est à gauche du titre ; un tag simp
     assert.equal(/flex items-center/.test(ligne[0]) && /<svg/.test(ligne[1].split('<h1')[0]), theme, `${id} : emblème à gauche du titre seulement pour un thème`);
     assert.ok(entete.indexOf('sur-titre') < entete.indexOf('<h1'), `${id} : sur-titre au-dessus`);
   }
+});
+
+test('licences des logiciels : texte complet publié et lié depuis les crédits (MIT : notice ; Apache : copie) (D30)', async () => {
+  const { TIERS, cheminLicence } = await import('../src/lib/tiers.mjs');
+  const credits = await lire('credits/index.html');
+  for (const t of TIERS) {
+    const texte = await lire(cheminLicence(t).slice(1));
+    assert.ok(credits.includes(`href="${cheminLicence(t)}"`), `${t.nom} : lien depuis les crédits`);
+    if (t.licence === 'MIT') {
+      assert.ok(texte.includes(t.titulaire) && /Copyright/.test(texte), `${t.nom} : notice de copyright`);
+      assert.match(texte, /Permission is hereby granted[\s\S]*The above copyright notice and this permission notice shall be included/, `${t.nom} : notice d’autorisation`);
+    } else assert.match(texte, /Apache License\s+Version 2\.0[\s\S]*TERMS AND CONDITIONS[\s\S]*END OF TERMS AND CONDITIONS/, `${t.nom} : copie complète de la licence Apache`);
+  }
+});
+
+test('confidentialité : ni publicité ni mesure d’audience, mais les traitements de l’hébergement sont décrits (D30)', async () => {
+  const { HEBERGEUR } = await import('../src/lib/projet.mjs');
+  const confidentialite = await lire('confidentialite/index.html');
+  for (const attendu of ['Ce que le site ne fait pas', 'Ce que l’hébergement traite', 'adresse IP', 'sous-traitant', 'responsable de ce traitement', 'CNIL']) assert.ok(confidentialite.includes(attendu), attendu);
+  assert.ok(confidentialite.includes(`href="${HEBERGEUR.confidentialite}"`), 'lien vers la politique de l’hébergeur');
+  const mentions = await lire('mentions-legales/index.html');
+  assert.doesNotMatch(mentions, /aucune donnée personnelle/, 'plus de promesse « aucune donnée personnelle »');
+  assert.match(mentions, /article 1-1, II de la loi n° 2004-575/, 'base légale de l’anonymat citée');
 });

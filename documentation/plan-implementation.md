@@ -145,7 +145,8 @@ Chaque étape se termine seulement quand :
 - [x] Page `/mentions-legales` (éditeur anonyme non professionnel, hébergeur Vercel).
 - [x] Liens vers le dépôt (pied de page, crédits, README, LICENCES.md).
 - [x] Tickets ouverts à tous : le dépôt a déménagé sur GitHub, où ils le sont (D26).
-- [ ] Nettoyer l'adresse e-mail de l'historique git avant le premier envoi (Deltouille).
+- [x] Historique git nettoyé avant le premier envoi sur GitHub (D27).
+- [ ] Vérifier que les éléments d'identification personnelle ont bien été communiqués à Vercel (condition de l'anonymat, LCEN art. 1-1, II ; D30) — Deltouille.
 - **Décision** : D22.
 
 ## Étape 14 — Crédits des logiciels, nouveau nom ✅ (ajoutée à la demande)

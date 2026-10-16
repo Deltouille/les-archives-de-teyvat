@@ -4,7 +4,7 @@ import EnTetePage from '../components/EnTetePage.astro';
 import { bibliotheque, cheminArticle, type Article } from '../lib/contenu';
 import { presenterCredit, LICENCE_WIKI } from '../lib/credits.mjs';
 import { DEPOT, NOM, PLATEFORME } from '../lib/projet.mjs';
-import { TIERS, TEXTES_LICENCES } from '../lib/tiers.mjs';
+import { TIERS, TEXTES_LICENCES, cheminLicence } from '../lib/tiers.mjs';
 
 // Le texte vient de Deltouille (contenus originaux sous CC BY-SA 3.0 : decisions.md, D18 ; code sous GPL : D19) ; les deux listes du bas sont générées depuis le frontmatter des articles (champ credits).
 const { articles } = await bibliotheque();
@@ -31,13 +31,13 @@ const theories = credites.flatMap(({ article, credit }) => (credit.type === 'com
     <p>Le code et les textes sont publiés sur le <a href={DEPOT}>dépôt {PLATEFORME} du projet</a>.</p>
 
     <h2 id="logiciels">Logiciels libres utilisés</h2>
-    <p>Ces projets sont distribués avec le site (leur code ou leurs ressources sont envoyés à votre navigateur) :</p>
+    <p>Ces projets sont distribués avec le site (leur code ou leurs ressources sont envoyés à votre navigateur) ; le texte complet de chaque licence est joint au site :</p>
     <ul data-liste="distribues">
-      {TIERS.filter(t => t.distribue).map(t => <li><a href={t.url}>{t.nom}</a> ({t.role}) — © {t.titulaire}, licence <a href={TEXTES_LICENCES[t.licence]}>{t.licence}</a>.</li>)}
+      {TIERS.filter(t => t.distribue).map(t => <li><a href={t.url}>{t.nom}</a> ({t.role}) — © {t.titulaire}, licence {t.licence} (<a href={cheminLicence(t)}>texte complet</a>, <a href={TEXTES_LICENCES[t.licence]}>présentation</a>).</li>)}
     </ul>
     <p>Le site est aussi construit avec :</p>
     <ul data-liste="construction">
-      {TIERS.filter(t => !t.distribue).map(t => <li><a href={t.url}>{t.nom}</a> ({t.role}) — © {t.titulaire}, licence <a href={TEXTES_LICENCES[t.licence]}>{t.licence}</a>.</li>)}
+      {TIERS.filter(t => !t.distribue).map(t => <li><a href={t.url}>{t.nom}</a> ({t.role}) — © {t.titulaire}, licence {t.licence} (<a href={cheminLicence(t)}>texte complet</a>, <a href={TEXTES_LICENCES[t.licence]}>présentation</a>).</li>)}
     </ul>
     <p>La mise en page des bannières s’inspire du thème Astro <a href="https://github.com/LyraVoid/Mizuki">Mizuki</a>.</p>
 

@@ -5,11 +5,11 @@ import assert from 'node:assert/strict';
 import { readdir, readFile, stat } from 'node:fs/promises';
 import { gzipSync } from 'node:zlib';
 import path from 'node:path';
-import { lireArticlesPublies } from './sources.mjs';
+import { lireArticlesPublies, articleExemple } from './sources.mjs';
 
 const racine = path.resolve('dist');
 const Ko = octets => `${(octets / 1024).toFixed(1)} Ko`;
-const PAGES = ['index.html', 'lore/index.html', 'lore/venti/index.html', 'lore/tags/index.html', 'lore/tags/regions/index.html'];
+const PAGES = ['index.html', 'lore/index.html', `lore/${(await articleExemple()).id}/index.html`, 'lore/tags/index.html', 'lore/tags/regions/index.html'];
 
 const BUDGETS = {
   html: 25 * 1024, // par page, compressé

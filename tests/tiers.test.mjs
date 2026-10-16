@@ -31,6 +31,8 @@ for (const tiers of TIERS) {
     assert.equal(tiers.licence, declare, `licence de ${tiers.paquet}`);
     assert.ok(tiers.licence in TEXTES_LICENCES, `lien vers le texte de ${tiers.licence}`);
     assert.ok(textesDu(tiers.paquet).includes(tiers.titulaire), `« ${tiers.titulaire} » introuvable dans la licence, le README ou les sources de ${tiers.paquet}`);
+    const licence = readFileSync(path.join('node_modules', tiers.paquet, tiers.fichier), 'utf8');
+    assert.match(licence, tiers.licence === 'MIT' ? /Permission is hereby granted/ : /Apache License\s+Version 2\.0/, `texte complet de la licence de ${tiers.paquet}`);
   });
 }
 

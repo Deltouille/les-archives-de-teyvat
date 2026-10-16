@@ -2,14 +2,14 @@
 import Site from '../layouts/Site.astro';
 import EnTetePage from '../components/EnTetePage.astro';
 import { DEPOT, TICKETS, HEBERGEUR, NOM, PLATEFORME } from '../lib/projet.mjs';
-// Éditeur particulier, à titre non professionnel, anonyme : la LCEN l'autorise s'il identifie l'hébergeur et lui a
-// communiqué ses coordonnées (decisions.md, D22).
+// Éditeur particulier, à titre non professionnel, anonyme : LCEN art. 1-1, II, à condition d'avoir communiqué à
+// l'hébergeur ses éléments d'identification personnelle (decisions.md, D22 et D30). Condition à vérifier par Deltouille.
 ---
 <Site titre="Mentions légales" description="Éditeur, hébergeur et contact du site.">
   <EnTetePage surTitre="Informations légales">Mentions légales</EnTetePage>
   <article class="prose max-w-3xl rounded-carte bg-surface p-6 sm:p-10">
     <h2>Éditeur</h2>
-    <p>{NOM} est un site personnel, édité par un particulier à titre non professionnel. Comme le permet la loi pour la confiance dans l’économie numérique (LCEN), l’éditeur a choisi de ne pas publier son identité ; ses coordonnées ont été communiquées à l’hébergeur.</p>
+    <p>{NOM} est un site personnel, édité par un particulier à titre non professionnel. Comme le permet l’article 1-1, II de la loi n° 2004-575 du 21 juin 2004 pour la confiance dans l’économie numérique (LCEN), l’éditeur a choisi de ne pas publier son identité ; ses éléments d’identification personnelle ont été communiqués à l’hébergeur.</p>
     <p>Ce projet de fans est indépendant : il n’est ni affilié ni approuvé par HoYoverse ou Fandom.</p>
 
     <h2>Contact</h2>
@@ -22,6 +22,6 @@ import { DEPOT, TICKETS, HEBERGEUR, NOM, PLATEFORME } from '../lib/projet.mjs';
     <p>Le code du site est publié sur <a href={DEPOT}>{PLATEFORME}</a>. Licences des textes, du code et des éléments de Genshin Impact : voir <a href="/credits">Crédits et licences</a>.</p>
 
     <h2>Données personnelles</h2>
-    <p>Le site ne collecte aucune donnée personnelle : voir la page <a href="/confidentialite">Confidentialité</a>.</p>
+    <p>Le site ne fait ni publicité ni mesure d’audience et ne dépose aucun cookie. L’hébergeur traite en revanche les données techniques nécessaires pour servir les pages (adresse IP notamment) : détail, finalités et droits dans la page <a href="/confidentialite">Confidentialité</a>.</p>
   </article>
 </Site>

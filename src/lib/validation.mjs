@@ -4,7 +4,7 @@
 
 // /lore/tags est l'index des tags, et plusieurs /lore/<nom> sont des redirections figées : aucun article ne peut
 // prendre ces noms (src/lib/redirections.mjs).
-import { NOMS_RESERVES as RESERVES } from './redirections.mjs';
+import { NOMS_RESERVES as RESERVES, TAGS_SUPPRIMES } from './redirections.mjs';
 import { verifierCredit } from './credits.mjs';
 
 /**
@@ -14,6 +14,7 @@ import { verifierCredit } from './credits.mjs';
  */
 export function validerContenus(articles, tags, images) {
   for (const tag of tags) {
+    if (TAGS_SUPPRIMES.includes(tag.id)) throw new Error(`Tag « ${tag.id} » redéclaré dans src/content/tags.yaml alors que son adresse redirige : retirez-le de TAGS_SUPPRIMES (src/lib/redirections.mjs)`);
     if (tag.data.theme && (!tag.data.singulier || !tag.data.icone)) {
       throw new Error(`Thème « ${tag.id} » incomplet dans src/content/tags.yaml : il lui faut « singulier » et « icone »`);
     }

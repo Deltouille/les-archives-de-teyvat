@@ -6,7 +6,7 @@
   "redirects": [
     {
       "source": "/lore/regions/mondstadt",
-      "destination": "/lore/mondstadt",
+      "destination": "/lore/tags/mondstadt",
       "statusCode": 301
     },
     {
@@ -16,22 +16,22 @@
     },
     {
       "source": "/lore/personnages/venti",
-      "destination": "/lore/venti",
+      "destination": "/lore/tags/personnages",
       "statusCode": 301
     },
     {
       "source": "/lore/factions/archons",
-      "destination": "/lore/archons",
+      "destination": "/lore/tags/concepts",
       "statusCode": 301
     },
     {
       "source": "/lore/factions/ordre-abysse",
-      "destination": "/lore/ordre-abysse",
+      "destination": "/lore/tags/factions",
       "statusCode": 301
     },
     {
       "source": "/lore/evenements/cataclysme",
-      "destination": "/lore/cataclysme",
+      "destination": "/lore/tags/evenements",
       "statusCode": 301
     },
     {
@@ -66,27 +66,27 @@
     },
     {
       "source": "/tags/abysse",
-      "destination": "/lore/tags/abysse",
+      "destination": "/lore/tags",
       "statusCode": 301
     },
     {
       "source": "/tags/anemo",
-      "destination": "/lore/tags/anemo",
+      "destination": "/lore/tags",
       "statusCode": 301
     },
     {
       "source": "/tags/archontes",
-      "destination": "/lore/tags/archontes",
+      "destination": "/lore/tags",
       "statusCode": 301
     },
     {
       "source": "/tags/barbatos",
-      "destination": "/lore/tags/barbatos",
+      "destination": "/lore/tags",
       "statusCode": 301
     },
     {
       "source": "/tags/dvalin",
-      "destination": "/lore/tags/dvalin",
+      "destination": "/lore/tags",
       "statusCode": 301
     },
     {
@@ -101,12 +101,12 @@
     },
     {
       "source": "/tags/khaenri-ah",
-      "destination": "/lore/tags/khaenri-ah",
+      "destination": "/lore/tags",
       "statusCode": 301
     },
     {
       "source": "/tags/liberte",
-      "destination": "/lore/tags/liberte",
+      "destination": "/lore/tags",
       "statusCode": 301
     },
     {
@@ -126,7 +126,7 @@
     },
     {
       "source": "/tags/voyageur",
-      "destination": "/lore/tags/voyageur",
+      "destination": "/lore/tags",
       "statusCode": 301
     },
     {
@@ -146,7 +146,7 @@
     },
     {
       "source": "/lore/teyvat/mondstadt",
-      "destination": "/lore/mondstadt",
+      "destination": "/lore/tags/mondstadt",
       "statusCode": 301
     },
     {
@@ -172,6 +172,71 @@
     {
       "source": "/categories/evenements",
       "destination": "/lore/tags/evenements",
+      "statusCode": 301
+    },
+    {
+      "source": "/lore/archons",
+      "destination": "/lore/tags/concepts",
+      "statusCode": 301
+    },
+    {
+      "source": "/lore/cataclysme",
+      "destination": "/lore/tags/evenements",
+      "statusCode": 301
+    },
+    {
+      "source": "/lore/mondstadt",
+      "destination": "/lore/tags/mondstadt",
+      "statusCode": 301
+    },
+    {
+      "source": "/lore/ordre-abysse",
+      "destination": "/lore/tags/factions",
+      "statusCode": 301
+    },
+    {
+      "source": "/lore/venti",
+      "destination": "/lore/tags/personnages",
+      "statusCode": 301
+    },
+    {
+      "source": "/lore/tags/abysse",
+      "destination": "/lore/tags",
+      "statusCode": 301
+    },
+    {
+      "source": "/lore/tags/anemo",
+      "destination": "/lore/tags",
+      "statusCode": 301
+    },
+    {
+      "source": "/lore/tags/archontes",
+      "destination": "/lore/tags",
+      "statusCode": 301
+    },
+    {
+      "source": "/lore/tags/barbatos",
+      "destination": "/lore/tags",
+      "statusCode": 301
+    },
+    {
+      "source": "/lore/tags/dvalin",
+      "destination": "/lore/tags",
+      "statusCode": 301
+    },
+    {
+      "source": "/lore/tags/khaenri-ah",
+      "destination": "/lore/tags",
+      "statusCode": 301
+    },
+    {
+      "source": "/lore/tags/liberte",
+      "destination": "/lore/tags",
+      "statusCode": 301
+    },
+    {
+      "source": "/lore/tags/voyageur",
+      "destination": "/lore/tags",
       "statusCode": 301
     }
   ],

@@ -17,6 +17,7 @@ import { mkdir, mkdtemp, readFile, rm, writeFile, copyFile } from 'node:fs/promi
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { createRequire } from 'node:module';
+import { articleExemple } from '../tests/sources.mjs';
 
 const args = process.argv.slice(2);
 const option = nom => { const i = args.indexOf(`--${nom}`); return i === -1 ? undefined : (args[i + 1] ?? true); };
@@ -27,6 +28,11 @@ const SORTIE = path.resolve('captures/actuel');
 const DOSSIER_REFERENCE = path.resolve('captures/reference');
 const LARGEURS = [1440, 1024, 390];
 const THEMES = ['clair', 'sombre'];
+// Article d'exemple (le publié qui a le plus de sections) et mot à y chercher (le plus long mot de son titre) :
+// aucune scène ne dépend d'un article précis (D30).
+const EXEMPLE = await articleExemple();
+const ARTICLE = `/lore/${EXEMPLE.id}`;
+const MOT = EXEMPLE.titre.split(/[^\p{L}]+/u).sort((a, b) => b.length - a.length)[0];
 
 // Une scène : une page, des actions éventuelles, puis une capture (pleine page ou fenêtre) et des vérifications.
 // `clavier` : vraies frappes envoyées après les actions, par le protocole DevTools — { touche, ctrl? }, { texte } ou
@@ -93,13 +99,13 @@ const SCENES = [
     url: '/lore',
     largeurs: [1440, 1024],
     fenetre: true,
-    clavier: [{ touche: 'k', ctrl: true }, { texte: 'Venti' }, { attendre: 1200 }],
+    clavier: [{ touche: 'k', ctrl: true }, { texte: MOT }, { attendre: 1200 }],
     verifier: `(() => {
       const p = [];
       const dialogue = document.getElementById('recherche');
       if (!dialogue.open) return ['Ctrl K devrait ouvrir la recherche'];
       if (document.activeElement?.id !== 'recherche-champ') p.push('le focus devrait être dans le champ');
-      if (!dialogue.querySelector('[data-resultats] a[href^="/lore/venti"]')) p.push('« Venti » devrait trouver l’article Venti (état : ' + dialogue.querySelector('[data-etat]').textContent + ')');
+      if (!dialogue.querySelector('[data-resultats] a[href^="' + ${JSON.stringify(ARTICLE)} + '"]')) p.push('« ' + ${JSON.stringify(MOT)} + ' » devrait trouver ' + ${JSON.stringify(ARTICLE)} + ' (état : ' + dialogue.querySelector('[data-etat]').textContent + ')');
       if (!/résultat/.test(dialogue.querySelector('[data-etat]').textContent)) p.push('le nombre de résultats devrait être annoncé');
       if (getComputedStyle(document.body).overflow !== 'hidden') p.push('la page derrière devrait être bloquée');
       return p;
@@ -147,10 +153,10 @@ const SCENES = [
     largeurs: [1440, 390],
     fenetre: true,
     mouvement: true,
-    navigation: '[data-grille-articles] a[href="/lore/venti"]',
+    navigation: `[data-grille-articles] a[href="${ARTICLE}"]`,
     verifier: `(() => {
       const p = [];
-      if (location.pathname !== '/lore/venti') p.push('le clic sur la carte devrait mener à l’article (' + location.pathname + ')');
+      if (location.pathname !== ${JSON.stringify(ARTICLE)}) p.push('le clic sur la carte devrait mener à l’article (' + location.pathname + ')');
       if (window.__transition !== true) p.push('l’article devrait être révélé par une View Transition (' + window.__transition + ')');
       return p;
     })()`,
@@ -160,20 +166,20 @@ const SCENES = [
     url: '/lore',
     largeurs: [1440],
     fenetre: true,
-    navigation: '[data-grille-articles] a[href="/lore/venti"]',
+    navigation: `[data-grille-articles] a[href="${ARTICLE}"]`,
     verifier: `(() => window.__transition === false ? [] : ['en mouvement réduit, pas de View Transition (' + window.__transition + ')'])()`,
   },
   { nom: 'bibliotheque', url: '/lore' },
-  { nom: 'article', url: '/lore/venti' },
+  { nom: 'article', url: ARTICLE },
   {
     nom: 'article-haut',
-    url: '/lore/venti',
+    url: ARTICLE,
     fenetre: true,
     verifier: `(() => document.querySelector('[data-navbar]').hasAttribute('data-sur-image') ? [] : ['la barre devrait être transparente sur la bannière de l’article'])()`,
   },
   {
     nom: 'progression-lecture',
-    url: '/lore/venti',
+    url: ARTICLE,
     largeurs: [1440, 390],
     fenetre: true,
     actions: `
@@ -197,7 +203,7 @@ const SCENES = [
   },
   {
     nom: 'sommaire-section-active',
-    url: '/lore/venti',
+    url: ARTICLE,
     largeurs: [1440],
     fenetre: true,
     actions: `
@@ -211,7 +217,7 @@ const SCENES = [
   },
   {
     nom: 'sommaire-clic',
-    url: '/lore/venti',
+    url: ARTICLE,
     largeurs: [1440, 390],
     fenetre: true,
     actions: `

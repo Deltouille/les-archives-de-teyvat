@@ -44,3 +44,12 @@ export async function lireTags() {
   const blocs = texte.split(/^(?=[a-z][a-z-]*:\s*$)/m).filter(b => /^[a-z]/.test(b));
   return blocs.map(bloc => ({ id: bloc.match(/^([a-z-]+):/)[1], theme: /^\s+theme:\s*true\s*$/m.test(bloc) }));
 }
+
+/** Article de référence pour les tests et les captures : l'acte I du prologue de Mondstadt, choisi par Deltouille comme
+ *  contenu qui ne changera pas. S'il disparaissait, on prend le publié qui a le plus de sections (D30, D31). */
+export const ARTICLE_DE_REFERENCE = 'mondstadt-act-i';
+export async function articleExemple() {
+  const articles = await lireArticlesPublies();
+  if (!articles.length) throw new Error('Aucun article publié : impossible de choisir un article d’exemple');
+  return articles.find(a => a.id === ARTICLE_DE_REFERENCE) ?? [...articles].sort((a, b) => b.titres.length - a.titres.length || a.id.localeCompare(b.id))[0];
+}
