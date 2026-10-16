@@ -394,3 +394,12 @@ Le déploiement lui-même est fait par Deltouille ; tout le reste de l'étape 8 
 - **Sources** : politique Vercel <https://vercel.com/legal/privacy-notice>, DPA <https://vercel.com/legal/dpa>, Runtime Logs <https://vercel.com/docs/logs/runtime>, RGPD articles 12–13 <https://www.cnil.fr/fr/reglement-europeen-protection-donnees/chapitre3>.
 - **Écarté** : présenter le texte comme une conformité juridique acquise ; déduire la qualification de Vercel de son offre commerciale ; ajouter de nouvelles données personnelles. L'identification du responsable de traitement et la confirmation du rôle de Vercel restent des questions externes ouvertes (D34).
 - **Vérifié** : `npm run verify` vert (15 fichiers de tests) ; références et informations ajoutées contrôlées dans le HTML publié ; quatre captures `confidentialite` en clair/sombre, bureau/mobile sur preview, vérifications et axe-core sans violation.
+
+## D36 — Notice courte pour un blog de lecture (16 oct. 2026)
+
+- **Contexte** : Deltouille valide une notice en cinq parties, plus courte et adaptée au blog, après comparaison avec un modèle proposé par Gemini.
+- **Choix** : navigation, hébergement, préférences et recherche, contact privé, droits. Suppression des répétitions et du débat sur le DPA dans la page publique ; les questions de rôles en Hobby et d'identification du responsable restent ouvertes dans D34, sans être réputées résolues.
+- **Conservé** : traitements techniques et transferts de Vercel avec lien vers sa politique ; fenêtre Runtime Logs distincte de sa conservation globale ; bases juridiques de l'éditeur ; Proton et suppression des messages ; stockage local du thème ; contact et recours CNIL. Aucune garantie de non-profilage ni durée générale de conservation n'est inventée.
+- **Écarté** : copier le modèle externe tel quel (« aucun traitement direct », « courtes durées ») ou supprimer les informations pertinentes pour raccourcir davantage.
+- **Tests** : cinq sections, informations essentielles, liens et absence de qualifications non établies ; vérification complète et captures de la scène existante.
+- **Vérifié** : `npm run verify` vert (15 fichiers de tests), quatre captures bureau/mobile et clair/sombre avec axe-core sans violation. Le comptage des cinq sections porte sur l’article, pas sur le titre du dialogue de recherche du layout.
