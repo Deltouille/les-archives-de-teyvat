@@ -50,6 +50,7 @@ Pas de linter. `tests/site.test.mjs`, `pages.test.mjs` et `poids.test.mjs` lisen
 - **Lecture d'un article** : barre de progression (`ProgressionLecture.astro`, mesure `[data-lecture]`) et sommaire suivi (`aria-current="true"` posé par le script de `Sommaire.astro`). Les classes `scale-*` de Tailwind v4 utilisent la propriété `scale`, pas `transform` : ne pas mélanger les deux. `scroll-padding-top` garde les ancres hors de la barre fixe.
 - **États** : survol = couche d'état M3 via l'opacité (`hover:bg-texte/8`) ; élément actif = `bg-tonal text-sur-tonal`. Variante `sur-image:` = barre transparente posée sur une bannière (`data-sur-image`, géré par `Navbar.astro`). Les couleurs Tailwind par défaut sont supprimées (restent `white`/`black` pour le verre sur image).
 - **Icônes** : Material Symbols arrondies, déclarées dans `src/lib/icones.ts` (nom français → fichier du paquet `@material-symbols/svg-400`), rendues par `<Icon nom="…" />` ; le tracé est inséré au build. Le logo est `<Marque />`.
+- **Pas de petit texte au-dessus des titres** (sur-titre, D35) ; l'utilitaire `sur-titre` ne sert qu'aux titres de bloc (sommaire, encadré résumé, menu mobile).
 - Écrire les classes Tailwind en entier : `` `text-${taille}` `` n'est pas détecté.
 - La machine de dev n'a aucune police serif : les titres y apparaissent sans empattement sur les captures, c'est attendu.
 

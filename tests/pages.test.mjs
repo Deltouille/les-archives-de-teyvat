@@ -352,10 +352,13 @@ test('le dépôt est sur GitHub : plus aucune mention de l’ancienne plateforme
 test('en-tête d’un thème : l’emblème est à gauche du titre ; un tag simple n’a pas d’emblème', async () => {
   for (const { id, theme } of tags) {
     const entete = (await lire(`lore/tags/${id}/index.html`)).match(/<header class="mt-4 mb-8[\s\S]*?<\/header>/)[0];
-    const ligne = entete.match(/<div class="mt-3 mb-4[^"]*">([\s\S]*?)<\/h1>/);
+    const ligne = entete.match(/<div class="mb-4[^"]*">([\s\S]*?)<\/h1>/);
     assert.ok(ligne, `${id} : ligne du titre`);
     assert.equal(/flex items-center/.test(ligne[0]) && /<svg/.test(ligne[1].split('<h1')[0]), theme, `${id} : emblème à gauche du titre seulement pour un thème`);
-    assert.ok(entete.indexOf('sur-titre') < entete.indexOf('<h1'), `${id} : sur-titre au-dessus`);
+    assert.ok(!entete.includes('sur-titre'), `${id} : pas de petit texte au-dessus du titre (D35)`);
+    const nombre = articles.filter(a => a.tags.includes(id)).length;
+    if (nombre) assert.match(entete, new RegExp(`data-nombre-lectures>${nombre} lectures?<`), `${id} : nombre de lectures sous la description`);
+    else assert.ok(!entete.includes('data-nombre-lectures'), `${id} : pas de « 0 lecture » (la page dit déjà qu’il n’y en a aucune)`);
   }
 });
 
@@ -388,4 +391,18 @@ test('confidentialité : ni publicité ni mesure d’audience, mais les traiteme
   const mentions = await lire('mentions-legales/index.html');
   assert.doesNotMatch(mentions, /aucune donnée personnelle/, 'plus de promesse « aucune donnée personnelle »');
   assert.match(mentions, /article 1-1, II de la loi n° 2004-575/, 'base légale de l’anonymat citée');
+});
+
+test('aucun petit texte au-dessus des titres (sur-titre), sauf les titres de bloc eux-mêmes (D35)', async () => {
+  // Restent permis : « Dans cet article » (sommaire), « L’essentiel en quelques mots » (encadré), « Au fil des
+  // histoires » (menu mobile) : ce sont les titres de leur bloc, pas des textes posés au-dessus d’un titre.
+  const permis = /(Dans cet article|L’essentiel en quelques mots|Au fil des histoires)/;
+  const erreurs = [];
+  for (const fichier of pages) {
+    const html = await readFile(fichier, 'utf8');
+    for (const [element] of html.matchAll(/<[^>]*class="[^"]*\bsur-titre\b[^"]*"[^>]*>[\s\S]*?<\/(p|h2|span)>/g)) {
+      if (!permis.test(element)) erreurs.push(`${path.relative(racine, fichier)} : ${element.replace(/<[^>]+>/g, '').trim().slice(0, 40)}`);
+    }
+  }
+  assert.deepEqual([...new Set(erreurs)], []);
 });

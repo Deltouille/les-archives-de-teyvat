@@ -403,3 +403,10 @@ Le déploiement lui-même est fait par Deltouille ; tout le reste de l'étape 8 
 - **Écarté** : copier le modèle externe tel quel (« aucun traitement direct », « courtes durées ») ou supprimer les informations pertinentes pour raccourcir davantage.
 - **Tests** : cinq sections, informations essentielles, liens et absence de qualifications non établies ; vérification complète et captures de la scène existante.
 - **Vérifié** : `npm run verify` vert (15 fichiers de tests), quatre captures bureau/mobile et clair/sombre avec axe-core sans violation. Le comptage des cinq sections porte sur l’article, pas sur le titre du dialogue de recherche du layout.
+
+## D35 — Plus de petits textes au-dessus des titres (16 oct. 2026)
+
+- **Contexte** : Deltouille ne veut plus des « sur-titres » (« À la une », « Suivez votre curiosité »…), hérités du prototype.
+- **Choix** : retirés partout où ils précédaient un titre : en-têtes de page (`EnTetePage`) et de section (`EnTeteSection`, prop `surTitre` supprimée), Hero (« Bienvenue, voyageur »), carte « À la une » (thème), carte « premiers pas », bandeau des tags, fenêtre de recherche, page 404, cartes d'articles (nation). **Gardés**, parce qu'ils sont eux-mêmes le titre de leur bloc : « Dans cet article » (sommaire), « L'essentiel en quelques mots » (encadré), « Au fil des histoires » (menu mobile).
+- **Informations déplacées plutôt que perdues** : nombre de lectures des pages de tag sous la description (masqué à zéro, la page disant déjà « Aucune lecture ») ; temps de lecture des cartes dans le bas de carte, lisible par les lecteurs d'écran (seul « Découvrir » reste décoratif) ; « erreur 404 » dans la phrase de la page introuvable.
+- **Test** : aucun élément `sur-titre` dans les pages publiées, hors des trois titres de bloc permis ; nombre de lectures présent si et seulement si le tag en a.

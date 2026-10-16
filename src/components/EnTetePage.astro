@@ -1,15 +1,12 @@
 ---
-// En-tête des pages sans bannière (listes, tags, pages éditoriales) : sur-titre, puis titre (précédé à gauche d'un
-// emblème facultatif), puis chapeau.
-interface Props { surTitre: string; }
-const { surTitre } = Astro.props;
+// En-tête des pages sans bannière (listes, tags, pages éditoriales) : titre (précédé à gauche d'un emblème facultatif),
+// puis chapeau. Pas de petit texte au-dessus du titre (D35).
 // On juge l'emblème sur son rendu : un slot conditionnel ({cond && <X slot="embleme" />}) compte comme présent pour
 // Astro.slots.has() même quand la condition est fausse (pages de tag simples).
 const embleme = Astro.slots.has('embleme') ? (await Astro.slots.render('embleme')).trim() : '';
 ---
 <header class="mt-4 mb-8 max-w-4xl">
-  <p class="sur-titre">{surTitre}</p>
-  <div class:list={['mt-3 mb-4', embleme && 'flex items-center gap-4']}>
+  <div class:list={['mb-4', embleme && 'flex items-center gap-4']}>
     {embleme && <Fragment set:html={embleme} />}
     <h1 class="min-w-0"><slot /></h1>
   </div>

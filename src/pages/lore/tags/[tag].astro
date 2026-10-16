@@ -21,10 +21,10 @@ const nombre = `${lectures.length} lecture${lectures.length > 1 ? 's' : ''}`;
 <Site titre={data.libelle} description={data.description}>
   <FilAriane etapes={[{ libelle: 'Accueil', href: '/' }, data.theme ? { libelle: 'Explorer', href: '/lore' } : { libelle: 'Tags', href: '/lore/tags' }, { libelle: data.libelle }]} class="mb-6" />
   {/* Un thème garde son emblème et les filtres de thème ; un tag simple s'affiche « #Libellé ». */}
-  <EnTetePage surTitre={data.theme ? `Explorer le lore · ${nombre}` : `Tag · ${nombre}`}>
+  <EnTetePage>
     {data.theme && data.icone && <span slot="embleme" class="grid size-14 shrink-0 place-items-center rounded-tres-grand bg-tonal text-sur-tonal sm:size-16" aria-hidden="true"><Icon nom={data.icone} taille={30} /></span>}
     {data.theme ? data.libelle : <><span class="text-primaire opacity-70">#</span>{data.libelle}</>}
-    <Fragment slot="chapeau">{data.description}</Fragment>
+    <Fragment slot="chapeau">{data.description}{lectures.length > 0 && <span class="text-etiquette-g mt-2 block" data-nombre-lectures>{nombre}</span>}</Fragment>
   </EnTetePage>
   {data.theme && <Puces puces={[{ href: '/lore', libelle: 'Tout explorer' }, ...themes.map(t => ({ href: cheminTag(t.id), libelle: t.data.libelle, icone: t.data.icone, actif: t.id === tag.id }))]} libelle="Changer de thème" />}
   {lectures.length > 0

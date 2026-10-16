@@ -6,7 +6,6 @@ interface Props { lectures: number; }
 const { lectures } = Astro.props;
 ---
 <a href={cheminTag('premiers-pas')} class="group flex flex-col justify-between gap-6 rounded-carte bg-conteneur-primaire p-6 text-sur-conteneur-primaire sm:p-8">
-  <p class="sur-titre text-sur-conteneur-primaire">Votre première escale</p>
   {/* Emblème décoratif : l'étoile du site dans deux orbites. */}
   <div class="relative grid h-28 place-items-center" aria-hidden="true">
     <span class="absolute h-18 w-28 -rotate-30 rounded-full border border-current opacity-25"></span>

@@ -1,12 +1,10 @@
 ---
-// Titre de section dans une page : sur-titre et h2, avec un emplacement à droite (lien « tout voir »…).
-interface Props { surTitre: string; titre: string; id?: string; class?: string; }
-const { surTitre, titre, id, class: classe } = Astro.props;
+// Titre de section dans une page : un h2, avec un emplacement à droite (lien « tout voir »…). Pas de petit texte
+// au-dessus du titre (D35).
+interface Props { titre: string; id?: string; class?: string; }
+const { titre, id, class: classe } = Astro.props;
 ---
 <div class:list={['mt-12 mb-6 flex items-end justify-between gap-4', classe]}>
-  <div>
-    <p class="sur-titre">{surTitre}</p>
-    <h2 class="mt-2" id={id}>{titre}</h2>
-  </div>
+  <h2 id={id}>{titre}</h2>
   <slot />
 </div>
