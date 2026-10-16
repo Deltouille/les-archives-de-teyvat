@@ -298,3 +298,15 @@ Le déploiement lui-même est fait par Deltouille ; tout le reste de l'étape 8 
 - **Choix** : `src/lib/projet.mjs` porte désormais aussi le **nom de la plateforme** (`PLATEFORME = 'GitHub'`) ; les pages (« À propos », Confidentialité, Crédits, Mentions légales) le reprennent au lieu d'écrire la plateforme en dur. Changer de plateforme = `PLATEFORME`, `DEPOT`, `TICKETS`. Contact : `…/issues`. README, `LICENCES.md` et CLAUDE.md mis à jour.
 - **Test** : `PLATEFORME`, `DEPOT` et `TICKETS` cohérents, et plus aucune mention de « GitLab » dans les pages publiées.
 - **Non fait** : la télécommande git `origin` pointe encore vers GitLab ; à changer par Deltouille (`git remote set-url origin …`). L'historique contient toujours son adresse e-mail : à nettoyer **avant** tout envoi sur GitHub (adresse « noreply » GitHub, de la forme `ID+pseudo@users.noreply.github.com`).
+
+## D27 — Historique git nettoyé des informations personnelles (16 oct. 2026)
+
+- **Contexte** : l'adresse e-mail personnelle de Deltouille figurait comme auteur et committer de tous les commits, et dans le contenu de l'ancienne page « À propos » (commits de l'étape 4 à la publication sur GitLab) ; son prénom apparaissait dans la documentation, un commentaire de `credits.astro`, la ligne de copyright de `LICENCES.md` et un message de commit. La branche avait été poussée sur GitLab ; GitHub était encore vide.
+- **Choix** (validé par Deltouille) : **réécrire l'historique en gardant tous les commits** (`git filter-branch`, 21 commits) :
+  - auteur et committer → `Deltouille <34238909+Deltouille@users.noreply.github.com>` (adresse « noreply » GitHub) ; le commit initial d'Astro garde son auteur (houston[bot]) ;
+  - dans le contenu de chaque commit et dans les messages : adresse → lien vers les tickets GitHub, prénom → « Deltouille » ;
+  - `user.name` et `user.email` réglés **pour ce dépôt seulement** (`.git/config`), pour les commits suivants.
+- **Écarté** : regrouper tout le projet en un seul commit (on perdait l'historique étape par étape).
+- **Piège rencontré** : `CLAUDE.md` est un lien symbolique vers `AGENTS.md` ; la première passe l'avait lu à travers le lien puis réécrit comme fichier ordinaire, dans tous les commits. Repéré au contrôle (différence déséquilibrée), `main` remise sur la sauvegarde, script corrigé (liens ignorés), réécriture relancée : lien conservé dans les 21 commits.
+- **Vérifié** : plus aucune occurrence de l'adresse ni du prénom dans les métadonnées, le contenu des 21 commits et les messages ; même nombre de commits ; `npm run verify` vert.
+- **Reste** : l'ancien historique est **publié sur GitLab** (projet à supprimer) ; une sauvegarde locale (`refs/sauvegarde/main`, `refs/original/…`) reste sur la machine jusqu'à validation, à supprimer ensuite.
