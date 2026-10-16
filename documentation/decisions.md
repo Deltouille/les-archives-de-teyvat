@@ -323,3 +323,9 @@ Le déploiement lui-même est fait par Deltouille ; tout le reste de l'étape 8 
 - **Tests** : unitaires (`tests/accueil.test.mjs` : sujet, choix « à la une », mélange reproductible) ; sur `dist/` : un sujet par article, premier sujet dans le HTML, phrase stable pour les lecteurs d'écran, carte « à la une » conforme à la règle. Capture en mouvement réduit : le texte affiché est le premier sujet de la liste (plus de sujet en dur).
 - **Vérifié dans une copie du projet** : sans les articles de la racine, le build passe (sujets = les trois actes, carte = l'acte le plus récent) ; sans **aucun** article, le build passe aussi (phrase fixe, pas de carte).
 - **À savoir** : supprimer un article **publié** reste encadré par les tests de surface d'URL (D14) : il faudra une redirection, ou retirer l'URL de `tests/donnees/urls-publiees.txt` en connaissance de cause.
+
+## D29 — Emblème des pages de thème à gauche du titre (16 oct. 2026)
+
+- **Contexte** : sur une page de thème (`/lore/tags/regions`…), l'emblème flottait au-dessus du sur-titre ; Deltouille le préfère à gauche du titre.
+- **Choix** : `EnTetePage` place l'emblème facultatif sur la même ligne que le `h1`, centré verticalement, le sur-titre au-dessus des deux. Emblème de 56 px en mobile, 64 px au-delà de 600 px, décoratif (`aria-hidden`). La présence de l'emblème est jugée sur son **rendu** (piège connu : `Astro.slots.has()` est vrai pour un slot conditionnel vide, cas des tags simples).
+- **Test** : sur chaque page de tag, emblème à gauche du titre si et seulement si c'est un thème, sur-titre au-dessus.

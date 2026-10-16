@@ -343,3 +343,13 @@ test('le dépôt est sur GitHub : plus aucune mention de l’ancienne plateforme
   assert.ok(DEPOT.startsWith('https://github.com/') && TICKETS === `${DEPOT}/issues`);
   for (const fichier of pages) assert.doesNotMatch(await readFile(fichier, 'utf8'), /gitlab/i, path.relative(racine, fichier));
 });
+
+test('en-tête d’un thème : l’emblème est à gauche du titre ; un tag simple n’a pas d’emblème', async () => {
+  for (const { id, theme } of tags) {
+    const entete = (await lire(`lore/tags/${id}/index.html`)).match(/<header class="mt-4 mb-8[\s\S]*?<\/header>/)[0];
+    const ligne = entete.match(/<div class="mt-3 mb-4[^"]*">([\s\S]*?)<\/h1>/);
+    assert.ok(ligne, `${id} : ligne du titre`);
+    assert.equal(/flex items-center/.test(ligne[0]) && /<svg/.test(ligne[1].split('<h1')[0]), theme, `${id} : emblème à gauche du titre seulement pour un thème`);
+    assert.ok(entete.indexOf('sur-titre') < entete.indexOf('<h1'), `${id} : sur-titre au-dessus`);
+  }
+});
