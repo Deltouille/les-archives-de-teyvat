@@ -4,7 +4,7 @@ description: "Résumé de la première quête d'Archon."
 image: mondstadt
 imageAlt: "Les paysages verdoyants de Teyvat au début du voyage"
 publieLe: 2026-10-13
-tags: [quetes, mondstadt, quete-d-archons, dvalin, voyageur, premiers-pas]
+tags: [quete-d-archons, quetes, mondstadt, premiers-pas]
 spoilers: "Intégralité du prologue des quêtes d’Archons, actes I à III."
 resume:
   - "Le Voyageur cherche son jumeau et arrive à Mondstadt avec Paimon."

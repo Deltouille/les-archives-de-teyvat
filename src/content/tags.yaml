@@ -41,43 +41,19 @@ evenements:
 
 premiers-pas:
   libelle: Premiers pas
-  description: Quelques lectures pour entrer dans l’histoire de Teyvat, en commençant par Mondstadt.
+  description: Quelques lectures pour entrer dans l’histoire de Teyvat.
 teyvat:
   libelle: Teyvat
   description: Le monde de Genshin Impact et ses sept nations.
 mondstadt:
   libelle: Mondstadt
-  description: La cité de la liberté, nation de l’Anémo protégée par Barbatos.
-archontes:
-  libelle: Archontes
-  description: Les sept dieux qui gouvernent les nations de Teyvat.
-barbatos:
-  libelle: Barbatos
-  description: L’Archonte Anémo, qui voyage sous les traits du barde Venti.
-anemo:
-  libelle: Anémo
-  description: L’élément du vent, celui de Mondstadt et de son Archonte.
+  description: La cité de la liberté.
 elements:
   libelle: Éléments
   description: Les sept éléments qui structurent Teyvat et ses nations.
-liberte:
-  libelle: Liberté
-  description: L’idéal de Mondstadt, et la question qui traverse toute son histoire.
-dvalin:
-  libelle: Dvalin
-  description: Le dragon du vent, protecteur de Mondstadt tombé sous l’influence de l’Abysse.
 quete-d-archons:
   libelle: Quête d’Archons
   description: La quête principale du Voyageur, nation après nation.
-voyageur:
-  libelle: Voyageur
-  description: Le héros de l’aventure, à la recherche de son jumeau disparu.
-abysse:
-  libelle: Abysse
-  description: L’Ordre de l’Abysse et les forces qui menacent Teyvat.
-khaenri-ah:
-  libelle: Khaenri’ah
-  description: La nation sans dieu, engloutie lors du Cataclysme.
 histoire:
   libelle: Histoire
   description: Les grands événements du passé de Teyvat.

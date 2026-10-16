@@ -4,7 +4,7 @@ description: "Résumé de la première quête d'Archon."
 image: mondstadt
 imageAlt: "Les paysages verdoyants de Teyvat au début du voyage"
 publieLe: 2026-10-13
-tags: [quetes, mondstadt, quete-d-archons, dvalin, voyageur, premiers-pas]
+tags: [quetes, mondstadt, quete-d-archons, premiers-pas]
 spoilers: "Résumé du prologue des quêtes d’Archons, acte II"
 resume:
   - "Le Voyageur et ses alliés affrontent Dvalin dans son antre et parviennent à le libérer de l'influence de l'Ordre de l'Abîme."
