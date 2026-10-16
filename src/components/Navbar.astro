@@ -5,6 +5,7 @@ import BoutonTheme from './BoutonTheme.astro';
 import MenuMobile from './MenuMobile.astro';
 import { registreDesTags, cheminTag } from '../lib/contenu';
 import { lienActif, CHEMIN_QUETES } from '../lib/navigation.mjs';
+import { NOM } from '../lib/projet.mjs';
 
 interface Props { surHero?: boolean; }
 const { surHero = false } = Astro.props;
@@ -36,9 +37,10 @@ const boutonIcone = 'grid size-10 place-items-center rounded-full text-discret t
   data-pagefind-ignore
 >
   <div class="mx-auto flex h-16 max-w-site items-center gap-4 px-4 sm:px-6 lg:gap-6 lg:px-10">
-    <a href="/" class="text-titre-m flex items-center gap-2 font-normal whitespace-nowrap" aria-label="L’Histoire de Genshin, accueil">
+    <a href="/" class="text-titre-m flex items-center gap-2 font-normal whitespace-nowrap" aria-label={`${NOM}, accueil`}>
       <Marque class="rotate-12 text-primaire sur-image:text-ciel" />
-      <span>L’Histoire <strong class="font-bold">de Genshin</strong></span>
+      {/* Le nom (NOM, src/lib/projet.mjs) en deux graisses : à mettre à jour avec lui. */}
+      <span>Les Archives <strong class="font-bold">de Teyvat</strong></span>
     </a>
 
     <nav class="mx-auto hidden items-center gap-1 md:flex" aria-label="Navigation principale">

@@ -1,16 +1,19 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
-import { readFile } from 'node:fs/promises';
+import { readFile, readdir } from 'node:fs/promises';
 import path from 'node:path';
 import sitemap from '@astrojs/sitemap';
 import tailwindcss from '@tailwindcss/vite';
 import { REDIRECTIONS } from './src/lib/redirections.mjs';
+import { homonymes } from './src/lib/identifiant.mjs';
 
 const TYPES = { '.js': 'text/javascript', '.json': 'application/json', '.css': 'text/css' };
 
 /**
  * Outillage du serveur de dev, jamais dans dist/ (cf. documentation/decisions.md, D7 et D13) :
  * - les pages /demo* ;
+ * - articles déplacés : l'identifiant venant du seul nom de fichier, le départ de l'ancien chemin effaçait l'article
+ *   relu au nouveau ; on relit ses homonymes après chaque suppression (D25) ;
  * - l'index de recherche du dernier build (dist/pagefind), servi sous /pagefind : Pagefind ne s'exécute qu'après
  *   `astro build`, sans cela la recherche serait inutilisable en dev. Index absent → 404, la recherche le signale.
  */
@@ -25,6 +28,15 @@ const outillageDeDev = () => ({
     },
     /** @param {{ server: import('vite').ViteDevServer }} options */
     'astro:server:setup': ({ server }) => {
+      const articles = path.resolve('src/content/articles');
+      server.watcher.on('unlink', supprime => {
+        if (!supprime.startsWith(articles + path.sep) || !supprime.endsWith('.md')) return;
+        // Après le traitement de la suppression par le chargeur de contenu.
+        setTimeout(async () => {
+          const fichiers = (await readdir(articles, { recursive: true })).filter(f => f.endsWith('.md'));
+          for (const fichier of homonymes(fichiers, path.relative(articles, supprime))) server.watcher.emit('change', path.join(articles, fichier));
+        }, 300);
+      });
       const racine = path.resolve('dist/pagefind');
       server.middlewares.use('/pagefind', async (requete, reponse, suite) => {
         const fichier = path.join(racine, decodeURIComponent((requete.url ?? '/').split('?')[0]));

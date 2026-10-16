@@ -267,3 +267,27 @@ Le déploiement lui-même est fait par Deltouille ; tout le reste de l'étape 8 
   - s'assurer d'avoir fourni son identité à Vercel (compte) : c'est ce qui rend l'anonymat légal ;
   - l'adresse reste dans l'**historique git** (auteur des commits, et contenu du commit de l'étape 4) : la nettoyer **avant** le premier envoi sur GitLab.
 - **En passant** : le test du sommaire comparait les titres caractère pour caractère ; Astro rend les apostrophes droites en typographiques (« L'attaque » → « L’attaque »). Comparaison normalisée.
+
+## D23 — Crédits des logiciels libres utilisés (16 oct. 2026)
+
+- **Contexte** : Deltouille : « Ne faut-il pas mentionner tous les projets utilisés dans les crédits ? » (comme dans les jeux).
+- **Constat** : les licences MIT et Apache-2.0 exigent de joindre mention de copyright et licence **aux copies distribuées**. Un jeu embarque ses bibliothèques dans le binaire, d'où ses longues listes. Ici, seul part chez le visiteur : le CSS généré par **Tailwind** (sa mention MIT est déjà conservée en tête du CSS), les scripts et l'index de **Pagefind** (MIT, **aucune** mention dans les fichiers publiés) et les tracés d'icônes **Material Symbols** (Apache-2.0, aucune mention sur le site). Les outils de construction (Astro, TypeScript, Material Color Utilities, axe-core…) ne sont pas distribués : aucune obligation.
+- **Choix** : section **« Logiciels libres utilisés »** sur `/credits`, en deux listes — distribués avec le site (obligatoire : Pagefind, Material Symbols, Tailwind CSS) et utilisés pour le construire (courtoisie : Astro, Material Color Utilities) — avec titulaire, licence et lien vers son texte ; Mizuki cité comme inspiration.
+  - Registre unique `src/lib/tiers.mjs`. Titulaires **relevés dans les fichiers de licence**, pas de mémoire : « Pagefind », « Tailwind Labs, Inc. », « Fred K. Schott », Google / Google LLC.
+- **Garde-fou** : `tests/tiers.test.mjs` vérifie pour chaque entrée que le paquet est dans `package.json`, que la licence affichée est celle qu'il déclare, et que le titulaire figure dans sa licence, son README ou ses sources (vu en échec avec un titulaire et une licence faux) ; Pagefind, Material Symbols et Tailwind doivent être marqués « distribués ». Test de la page : chaque entrée apparaît dans la bonne liste.
+- **Fausse alerte en route** : chez Pagefind, `LICENSE` est un dossier ; une commande mal écrite avait lu le `LICENSE` (GPL) du projet et fait croire à une licence GPL.
+
+## D24 — Nouveau nom : « Les Archives de Teyvat » (16 oct. 2026)
+
+- **Contexte** : demande de Deltouille ; c'est le nom du dépôt GitLab (`les-archives-de-teyvat`).
+- **Choix** : le nom est écrit **une seule fois**, `NOM` dans `src/lib/projet.mjs` ; titre des pages, Open Graph, pied de page, « À propos », mentions légales, crédits le reprennent. Exception : la marque de la barre de navigation, en deux graisses (« Les Archives **de Teyvat** »), à mettre à jour à la main avec `NOM`. `package.json` et `package-lock.json` : `les-archives-de-teyvat`. README et CLAUDE.md renommés.
+- **Test** : sur chaque page, titre et `og:site_name` portent le nouveau nom ; l'ancien n'apparaît plus nulle part.
+- **Non changé** : l'URL de production par défaut (`l-histoire-de-genshin-expliquee.vercel.app`, `astro.config.mjs`). Si le projet Vercel est renommé, mettre à jour cette valeur ou définir `SITE_URL`.
+
+## D25 — Articles déplacés invisibles en dev (16 oct. 2026)
+
+- **Contexte** : Deltouille a rangé les trois actes dans `mondstadt/quest/` : ils ont disparu de son `npm run dev` (le build, lui, les produisait).
+- **Cause** (reproduite dans une copie du projet, puis lue dans `astro/dist/content/loaders/glob.js`) : un déplacement envoie au chargeur `glob()` l'arrivée du nouveau chemin **et** le départ de l'ancien. Depuis D21, les deux donnent le **même identifiant** (nom de fichier seul) : quand le départ est traité après l'arrivée, le chargeur supprime cet identifiant, donc l'article tout juste relu. Avec les identifiants par défaut d'Astro (chemin complet), ce conflit n'existait pas. Premier contournement essayé (réémettre les fichiers d'un nouveau dossier, `addDir`) : sans effet.
+- **Choix** : dans l'intégration `outillageDeDev`, après chaque suppression d'un fichier d'article (300 ms, le temps que le chargeur la traite), les fichiers **homonymes** encore présents sont relus (`homonymes()` dans `src/lib/identifiant.mjs`, testée).
+- **Vérifié dans la copie du projet** : déplacement dans un nouveau sous-dossier → articles toujours servis (avant : 404) ; retour à la racine → servis ; vraie suppression → l'article disparaît, les autres restent.
+- Le build n'a jamais été concerné.

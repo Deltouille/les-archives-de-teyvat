@@ -5,6 +5,7 @@ import PiedDePage from '../components/PiedDePage.astro';
 import Recherche from '../components/Recherche.astro';
 import { genererPalette } from '../../scripts/palette.mjs';
 import { LICENCE_WIKI } from '../lib/credits.mjs';
+import { NOM } from '../lib/projet.mjs';
 
 interface Props {
   titre: string;
@@ -22,7 +23,7 @@ const {
   noindex = false,
 } = Astro.props;
 
-const NOM_DU_SITE = 'L’Histoire de Genshin';
+const NOM_DU_SITE = NOM;
 const titreComplet = `${titre} · ${NOM_DU_SITE}`;
 const canonique = new URL(Astro.url.pathname, Astro.site);
 const { clair, sombre } = genererPalette();

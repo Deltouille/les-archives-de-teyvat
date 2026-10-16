@@ -24,3 +24,12 @@ export function doublonsDIdentifiants(chemins) {
   }
   return [...parIdentifiant].filter(([, liste]) => liste.length > 1).map(([identifiant, liste]) => ({ identifiant, chemins: liste }));
 }
+
+/**
+ * Fichiers qui portent le même identifiant que `chemin` (lui excepté). En dev, déplacer un article fait arriver le
+ * nouveau chemin puis partir l'ancien : même identifiant, et le départ efface l'article tout juste relu
+ * (decisions.md, D25). On relit donc ses homonymes après chaque suppression.
+ * @param {string[]} chemins
+ * @param {string} chemin
+ */
+export const homonymes = (chemins, chemin) => chemins.filter(c => c !== chemin && identifiantDe(c) === identifiantDe(chemin));

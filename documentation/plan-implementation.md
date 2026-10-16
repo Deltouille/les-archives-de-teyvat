@@ -2,7 +2,7 @@
 
 > Réécriture propre du prototype `old/`, d'après son cahier des charges
 > `old/documentation/refonte-astro.md` (cité « CDC §n » ci-dessous).
-> Commencé le 13 octobre 2026. **État : étapes 0 à 13 réalisées ; reste le déploiement (Deltouille).** Les décisions prises en route vont dans
+> Commencé le 13 octobre 2026. **État : étapes 0 à 14 réalisées ; reste le déploiement (Deltouille).** Les décisions prises en route vont dans
 > [`decisions.md`](decisions.md) ; ce fichier dit **quoi faire et dans quel ordre**.
 
 ## Règles du jeu
@@ -146,6 +146,13 @@ Chaque étape se termine seulement quand :
 - [x] Liens vers le dépôt (pied de page, crédits, README, LICENCES.md).
 - [ ] Ouvrir les tickets GitLab à tous ; nettoyer l'adresse de l'historique git avant le premier envoi (Deltouille).
 - **Décision** : D22.
+
+## Étape 14 — Crédits des logiciels, nouveau nom ✅ (ajoutée à la demande)
+
+- [x] Section « Logiciels libres utilisés » sur `/credits`, registre `src/lib/tiers.mjs` vérifié par les tests (D23).
+- [x] Le site s'appelle « Les Archives de Teyvat », nom écrit une seule fois (D24).
+- [x] Correctif : articles déplacés en sous-dossier invisibles en dev (D25).
+- **Décisions** : D23, D24, D25.
 
 ---
 

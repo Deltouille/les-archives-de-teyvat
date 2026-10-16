@@ -1,4 +1,4 @@
-# L'Histoire de Genshin
+# Les Archives de Teyvat
 
 Blog statique qui raconte le lore de Genshin Impact, en français. Projet de fans indépendant, non affilié à HoYoverse.
 

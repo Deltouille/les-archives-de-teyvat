@@ -307,3 +307,24 @@ test('mentions légales : éditeur anonyme, contact GitLab, hébergeur identifi�
   assert.ok((await lire('credits/index.html')).includes(`href="${DEPOT}"`), 'Crédits : lien vers le dépôt');
   assert.match(await lire('sitemap-0.xml'), /\/mentions-legales<\/loc>/);
 });
+
+test('page Crédits : chaque logiciel libre du registre est crédité, avec titulaire et licence (D23)', async () => {
+  const { TIERS, TEXTES_LICENCES } = await import('../src/lib/tiers.mjs');
+  const html = await lire('credits/index.html');
+  for (const t of TIERS) {
+    const liste = html.split(`data-liste="${t.distribue ? 'distribues' : 'construction'}"`)[1].split('</ul>')[0];
+    assert.ok(liste.includes(`href="${t.url}"`) && liste.includes(t.titulaire) && liste.includes(`href="${TEXTES_LICENCES[t.licence]}"`), t.nom);
+  }
+});
+
+test('le site s’appelle « Les Archives de Teyvat » partout, et plus jamais par son ancien nom (D24)', async () => {
+  const { NOM } = await import('../src/lib/projet.mjs');
+  assert.equal(NOM, 'Les Archives de Teyvat');
+  for (const fichier of pages) {
+    const html = await readFile(fichier, 'utf8');
+    if (html.includes('http-equiv="refresh"')) continue;
+    assert.doesNotMatch(html, /Histoire de Genshin/, path.relative(racine, fichier));
+    assert.match(html, new RegExp(`<title>[^<]* · ${NOM}</title>`), path.relative(racine, fichier));
+    assert.match(html, new RegExp(`property="og:site_name" content="${NOM}"`), path.relative(racine, fichier));
+  }
+});

@@ -1,12 +1,12 @@
 ---
 import Site from '../layouts/Site.astro';
 import EnTetePage from '../components/EnTetePage.astro';
-import { DEPOT, TICKETS } from '../lib/projet.mjs';
+import { DEPOT, TICKETS, NOM } from '../lib/projet.mjs';
 ---
 <Site titre="À propos du projet" description="Pourquoi ce site, comment il est fait, et comment nous écrire.">
   <EnTetePage surTitre="Pour les curieux de Teyvat">Prendre le temps de <em>comprendre.</em></EnTetePage>
   <article class="prose max-w-3xl rounded-carte bg-surface p-6 sm:p-10">
-    <p>L’Histoire de Genshin est un projet personnel consacré à l’univers de Genshin Impact. Son ambition : rendre les quêtes, les personnages et les grands mystères de Teyvat plus faciles à comprendre, en français.</p>
+    <p>{NOM} est un projet personnel consacré à l’univers de Genshin Impact. Son ambition : rendre les quêtes, les personnages et les grands mystères de Teyvat plus faciles à comprendre, en français.</p>
     <h2>Des histoires qui se répondent</h2>
     <p>Chaque article propose des repères, un résumé et des lectures complémentaires. Les sources indiquent où retrouver les événements dans le jeu. Le périmètre des révélations est précisé au début des articles.</p>
     <h2>Un projet vivant</h2>

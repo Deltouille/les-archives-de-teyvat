@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Le projet
 
-Blog statique « L'Histoire de Genshin » : raconter le lore de Genshin Impact à la communauté française. Astro (sortie statique) + Tailwind CSS v4 (via `@tailwindcss/vite`, pas d'intégration `@astrojs/tailwind`), look Material 3. Tout le contenu, l'interface **et le code** (noms de variables, composants, champs de frontmatter, jetons de couleur) sont en français.
+Blog statique « Les Archives de Teyvat » : raconter le lore de Genshin Impact à la communauté française. Astro (sortie statique) + Tailwind CSS v4 (via `@tailwindcss/vite`, pas d'intégration `@astrojs/tailwind`), look Material 3. Tout le contenu, l'interface **et le code** (noms de variables, composants, champs de frontmatter, jetons de couleur) sont en français.
 
 Ce dépôt est la **réécriture propre** d'un prototype (MVC) rangé dans `old/` (non versionné).
 
@@ -55,7 +55,7 @@ Pas de linter. `tests/site.test.mjs`, `pages.test.mjs` et `poids.test.mjs` lisen
 
 ## Modèle de contenu : tout en tags
 
-- **Un article = un fichier**, rangé **où l'on veut** sous `src/content/articles/` (sous-dossiers libres). URL `/lore/<nom-du-fichier>` : l'identifiant vient du **nom du fichier seul** (`src/lib/identifiant.mjs` : minuscules, sans accents, tirets), jamais du dossier ni des tags. Déplacer un fichier ne change pas son URL ; deux fichiers de même nom font échouer le build. **Renommer** un fichier change l'URL : ajouter sa redirection dans `ARTICLES_RENOMMES` (`src/lib/redirections.mjs`) puis `npm run vercel`.
+- **Un article = un fichier**, rangé **où l'on veut** sous `src/content/articles/` (sous-dossiers libres). URL `/lore/<nom-du-fichier>` : l'identifiant vient du **nom du fichier seul** (`src/lib/identifiant.mjs` : minuscules, sans accents, tirets), jamais du dossier ni des tags. Déplacer un fichier ne change pas son URL ; deux fichiers de même nom font échouer le build. (En dev, un déplacement faisait disparaître l'article : contourné dans `outillageDeDev`, D25.) **Renommer** un fichier change l'URL : ajouter sa redirection dans `ARTICLES_RENOMMES` (`src/lib/redirections.mjs`) puis `npm run vercel`.
 - Frontmatter : `titre`, `description`, `image` (nom, sans extension, d'un fichier **à plat** `src/assets/images/<nom>.webp`), `publieLe`, `tags`. Facultatifs : `imageAlt`, `modifieLe`, `brouillon`, les encadrés `resume`, `spoilers`, `sources` (repères dans le jeu), et `credits` (contenus repris : `type: wiki` avec `titre`, `url`, `modifications` obligatoires ; `type: communaute` avec `auteur`, `plateforme`, `url`, `titre?` — règles dans `src/lib/credits.mjs`). Encadrés affichés seulement s'ils sont remplis.
 - **Licences** (`LICENCES.md`) : le **code** est sous GPL-3.0-or-later (`LICENSE`) ; toute nouvelle dépendance doit être compatible GPL v3 (`tests/licences.test.mjs` échoue sinon : examiner avant d'élargir la liste). Tous les textes du site sont sous CC BY-SA 3.0 (`<link rel="license">` dans `Site.astro`, page `/credits`) ; les éléments de HoYoverse en sont exclus. Un article adapté d'une page du wiki doit déclarer son crédit `wiki` (le build vérifie lien et modifications).
 - **Registre unique `src/content/tags.yaml`** (loader `file()`) : libellé + description par tag. Les tags `theme: true` remplacent les catégories : ils ont `singulier` et `icone`, alimentent le menu, et le **premier tag-thème** d'un article donne son badge, son fil d'Ariane et le filtre Pagefind.
@@ -66,7 +66,7 @@ Pas de linter. `tests/site.test.mjs`, `pages.test.mjs` et `poids.test.mjs` lisen
 - **Cartes et listes cliquables** : un seul lien par carte (le titre, étendu par `after:absolute after:inset-0`), contour de focus porté par la carte (`has-[a:focus-visible]:outline-3 …`). Composants de page dans `src/components/` (bannière, en-têtes, fil d'Ariane, puces, encadrés, sommaire).
 - `premiers-pas` est un tag ordinaire, cible des boutons « Commencer le voyage ».
 - Pages : `/`, `/lore`, `/lore/<article>`, `/lore/tags`, `/lore/tags/<tag>` (pas `/lore/<tag>` : collision avec les articles), `/a-propos`, `/confidentialite`, `/credits`, `/mentions-legales`, `/404`.
-- **Aucune information personnelle de Deltouille** sur le site ni dans le dépôt (ni e-mail ni identité ; un test refuse toute adresse e-mail dans `dist/`). Contact : tickets GitLab. Adresses du dépôt et de l'hébergeur : `src/lib/projet.mjs`.
+- **Aucune information personnelle de Deltouille** sur le site ni dans le dépôt (ni e-mail ni identité ; un test refuse toute adresse e-mail dans `dist/`). Contact : tickets GitLab. **Nom du site** (`NOM`, aussi en dur dans la marque de `Navbar.astro`), adresses du dépôt et de l'hébergeur : `src/lib/projet.mjs`. Logiciels tiers crédités sur `/credits` : registre `src/lib/tiers.mjs` (une dépendance dont du code part dans `dist/` doit y figurer avec `distribue: true`).
 - **Redirections figées** dans `src/lib/redirections.mjs` (lu par `astro.config.mjs` et par la validation, qui en dérive les noms d'articles réservés) : elles décrivent des URL ayant existé, **ne jamais les dériver du contenu**. Aucune URL publiée ne doit disparaître : `tests/donnees/urls-publiees.txt` liste celles qui doivent répondre ; renommer un article = ajouter sa redirection **et** son ancienne URL à cette liste.
 
 ## Pièges connus (refonte-astro.md §8)

@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { identifiantDe, doublonsDIdentifiants } from '../src/lib/identifiant.mjs';
+import { identifiantDe, doublonsDIdentifiants, homonymes } from '../src/lib/identifiant.mjs';
 
 test('l’identifiant (donc l’URL) vient du nom du fichier seul, pas du dossier', () => {
   assert.equal(identifiantDe('venti.md'), 'venti');
@@ -19,4 +19,11 @@ test('deux fichiers qui donneraient la même URL sont signalés, avec leurs chem
   assert.deepEqual(doublonsDIdentifiants(['a/venti.md', 'b/venti.md', 'mondstadt.md']), [{ identifiant: 'venti', chemins: ['a/venti.md', 'b/venti.md'] }]);
   assert.deepEqual(doublonsDIdentifiants(['Venti.md', 'personnages/venti.md']).map(d => d.identifiant), ['venti']);
   assert.deepEqual(doublonsDIdentifiants(['venti.md', 'mondstadt.md']), []);
+});
+
+test('homonymes : les autres fichiers du même identifiant (article déplacé en dev)', () => {
+  const fichiers = ['mondstadt/quest/mondstadt-act-I.md', 'venti.md', 'mondstadt/quest/mondstadt-act-II.md'];
+  assert.deepEqual(homonymes(fichiers, 'mondstadt/mondstadt-act-I.md'), ['mondstadt/quest/mondstadt-act-I.md']);
+  assert.deepEqual(homonymes(fichiers, 'venti.md'), []);
+  assert.deepEqual(homonymes(fichiers, 'supprime.md'), []);
 });

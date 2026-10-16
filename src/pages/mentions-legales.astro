@@ -1,7 +1,7 @@
 ---
 import Site from '../layouts/Site.astro';
 import EnTetePage from '../components/EnTetePage.astro';
-import { DEPOT, TICKETS, HEBERGEUR } from '../lib/projet.mjs';
+import { DEPOT, TICKETS, HEBERGEUR, NOM } from '../lib/projet.mjs';
 // Éditeur particulier, à titre non professionnel, anonyme : la LCEN l'autorise s'il identifie l'hébergeur et lui a
 // communiqué ses coordonnées (decisions.md, D22).
 ---
@@ -9,7 +9,7 @@ import { DEPOT, TICKETS, HEBERGEUR } from '../lib/projet.mjs';
   <EnTetePage surTitre="Informations légales">Mentions légales</EnTetePage>
   <article class="prose max-w-3xl rounded-carte bg-surface p-6 sm:p-10">
     <h2>Éditeur</h2>
-    <p>L’Histoire de Genshin est un site personnel, édité par un particulier à titre non professionnel. Comme le permet la loi pour la confiance dans l’économie numérique (LCEN), l’éditeur a choisi de ne pas publier son identité ; ses coordonnées ont été communiquées à l’hébergeur.</p>
+    <p>{NOM} est un site personnel, édité par un particulier à titre non professionnel. Comme le permet la loi pour la confiance dans l’économie numérique (LCEN), l’éditeur a choisi de ne pas publier son identité ; ses coordonnées ont été communiquées à l’hébergeur.</p>
     <p>Ce projet de fans est indépendant : il n’est ni affilié ni approuvé par HoYoverse ou Fandom.</p>
 
     <h2>Contact</h2>

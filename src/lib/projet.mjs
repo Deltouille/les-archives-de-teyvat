@@ -1,4 +1,5 @@
-// Adresses du projet, écrites une seule fois (decisions.md, D22).
+// Nom et adresses du projet, écrits une seule fois (decisions.md, D22 et D24).
+export const NOM = 'Les Archives de Teyvat';
 export const DEPOT = 'https://gitlab.com/Choumo/les-archives-de-teyvat';
 /** Contact : les tickets du dépôt (l'éditeur, particulier, ne publie pas d'adresse e-mail). */
 export const TICKETS = `${DEPOT}/-/issues`;
