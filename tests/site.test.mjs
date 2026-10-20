@@ -16,6 +16,23 @@ test('les pages sont en français', async () => {
   assert.match(await lire('index.html'), /<html[^>]*\blang="fr"/);
 });
 
+test('le favicon ICO reprend l’étoile SVG, sans ancien logo de secours', async () => {
+  const { default: sharp } = await import('sharp');
+  const ico = await readFile(path.join(racine, 'favicon.ico'));
+  assert.equal(ico.readUInt16LE(2), 1, 'conteneur ICO');
+  assert.equal(ico.readUInt16LE(4), 1, 'une image');
+  assert.equal(ico[6], 32);
+  assert.equal(ico[7], 32);
+  const debut = ico.readUInt32LE(18);
+  const taille = ico.readUInt32LE(14);
+  const pixels = await sharp(ico.subarray(debut, debut + taille)).ensureAlpha().raw().toBuffer();
+  const etoile = await sharp(path.join(racine, 'favicon.svg')).resize(32, 32).ensureAlpha().raw().toBuffer();
+  assert.deepEqual(pixels, etoile);
+  const html = await lire('index.html');
+  assert.match(html, /href="\/favicon\.ico\?v=2"/);
+  assert.match(html, /href="\/favicon\.svg\?v=2" sizes="any"/);
+});
+
 test('le sitemap et l’index de recherche sont générés', async () => {
   for (const fichier of ['sitemap-index.xml', 'pagefind/pagefind.js']) assert.ok(await existe(path.join(racine, fichier)), fichier);
 });
@@ -71,4 +88,3 @@ test('les icônes sont des tracés SVG insérés dans le HTML (aucune webfont)',
   assert.match(html, /<svg[^>]*viewBox="0 -960 960 960"[^>]*fill="currentColor"/);
   assert.doesNotMatch(html, /fonts\.(googleapis|gstatic)\.com/);
 });
-

@@ -116,6 +116,16 @@ test('accueil : les chiffres suivent le contenu', async () => {
   assert.deepEqual(nombres, [articles.length, tags.filter(t => t.theme).length, 7]);
 });
 
+test('accueil : les statistiques sont dans une carte après le hero', async () => {
+  const html = await lire('index.html');
+  const hero = html.split('data-hero')[1].split('</section>')[0];
+  assert.doesNotMatch(hero, /data-chiffres|data-statistiques/);
+  const contenu = html.split('<main')[1];
+  assert.match(contenu, /data-statistiques/);
+  assert.ok(contenu.indexOf('data-statistiques') < contenu.indexOf('data-a-la-une'));
+  assert.match(contenu, /aria-labelledby="statistiques-titre"/);
+});
+
 test('accueil : à la une, entrées par thème, lectures récentes', async () => {
   const html = await lire('index.html');
   const aLaUne = html.split('data-a-la-une')[1].split('</section>')[0];

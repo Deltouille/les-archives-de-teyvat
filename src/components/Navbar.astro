@@ -36,11 +36,11 @@ const boutonIcone = 'grid size-10 place-items-center rounded-full text-discret t
   data-sur-image={surHero ? '' : undefined}
   data-pagefind-ignore
 >
-  <div class="mx-auto flex h-16 max-w-site items-center gap-4 px-4 sm:px-6 lg:gap-6 lg:px-10">
-    <a href="/" class="text-titre-m flex items-center gap-2 font-normal whitespace-nowrap" aria-label={`${NOM}, accueil`}>
+  <div class="mx-auto flex min-h-16 max-w-site flex-wrap items-center gap-x-4 gap-y-2 px-4 py-3 sm:px-6 lg:gap-x-6 lg:px-10">
+    <a href="/" class="text-titre-m flex min-w-0 flex-1 items-center gap-2 font-normal whitespace-nowrap md:flex-none" aria-label={`${NOM}, accueil`}>
       <Marque class="rotate-12 text-primaire sur-image:text-ciel" />
       {/* Le nom (NOM, src/lib/projet.mjs) en deux graisses : à mettre à jour avec lui. */}
-      <span>Les Archives <strong class="font-bold">de Teyvat</strong></span>
+      <span class="truncate">Les Archives <strong class="font-bold">de Teyvat</strong></span>
     </a>
 
     <nav class="mx-auto hidden items-center gap-1 md:flex" aria-label="Navigation principale">
@@ -69,7 +69,7 @@ const boutonIcone = 'grid size-10 place-items-center rounded-full text-discret t
       <a href="/a-propos" class:list={[lien, 'hidden lg:flex']} aria-current={courant('/a-propos')}>À propos</a>
     </nav>
 
-    <div class="ml-auto flex items-center gap-2 md:ml-0">
+    <div class="ml-auto flex shrink-0 items-center gap-1 sm:gap-2 md:ml-0">
       {/* Recherche : pastille avec raccourci en largeur étendue, bouton icône en dessous (cf. Recherche.astro). */}
       <button type="button" class="text-etiquette-g hidden h-10 items-center gap-2 rounded-full border border-contour pr-2 pl-3 text-discret transition-colors duration-200 ease-standard hover:bg-texte/8 md:flex sur-image:border-white/20 sur-image:bg-white/8 sur-image:text-white sur-image:backdrop-blur-md sur-image:hover:bg-white/16" data-recherche>
         <Icon nom="recherche" taille={20} />Rechercher<kbd class="ml-1 hidden lg:inline sur-image:border-white/25 sur-image:bg-white/10 sur-image:text-white" data-raccourci>Ctrl K</kbd>

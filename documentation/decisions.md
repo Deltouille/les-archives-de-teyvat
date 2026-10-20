@@ -411,6 +411,23 @@ Le déploiement lui-même est fait par Deltouille ; tout le reste de l'étape 8 
 - **Informations déplacées plutôt que perdues** : nombre de lectures des pages de tag sous la description (masqué à zéro, la page disant déjà « Aucune lecture ») ; temps de lecture des cartes dans le bas de carte, lisible par les lecteurs d'écran (seul « Découvrir » reste décoratif) ; « erreur 404 » dans la phrase de la page introuvable.
 - **Test** : aucun élément `sur-titre` dans les pages publiées, hors des trois titres de bloc permis ; nombre de lectures présent si et seulement si le tag en a.
 
+## D39 — Favicon de secours harmonisé (20 oct. 2026)
+
+- **Contexte** : le navigateur affiche un ancien symbole au lieu de l'étoile. Le SVG était correct, mais `favicon.ico` contenait encore le logo Astro (un PNG simplement nommé `.ico`), déclaré après le SVG.
+- **Choix** : vrai conteneur ICO 32 × 32 généré depuis le SVG existant ; SVG déclaré en dernier avec `sizes="any"`. Les deux liens portent `?v=2` pour renouveler leur cache. Le chemin `/favicon.ico` reste disponible pour les navigateurs qui le demandent automatiquement.
+- **Écarté** : supprimer seulement le lien ICO laisserait l'ancien fichier accessible ; demander seulement de vider le cache ne corrigerait pas l'incohérence.
+- **Test** : conteneur ICO valide, pixels identiques au SVG rendu en 32 × 32 et liens versionnés dans le HTML.
+
+## D38 — Hero d'accueil : composition et adaptation aux écrans (20 oct. 2026)
+
+- **Contexte** : Deltouille souhaite renforcer le hero, avec une attention particulière au responsive.
+- **Choix** : titre découpé avec « une histoire. » sur sa propre ligne, introduction fixe précisant le sujet du site, actions hiérarchisées. À la demande de Deltouille, les statistiques quittent le hero pour une carte autonome sous la bannière, avant « Par où commencer ? », sur le principe de Mizuki (https://mizuki.mysqil.com/). Titre à gauche et chiffres à droite sur grand écran ; titre au-dessus des chiffres sur mobile, grille adaptable au texte agrandi. Le voile de l'accueil protège le texte à gauche et conserve davantage de lumière à droite ; sur téléphone, cadrage à 58 % et voile vertical. Hauteur minimale de 92 svh, dont la valeur est plafonnée à 60 rem : le contenu peut toujours allonger la bannière. Les boutons occupent toute la largeur sur téléphone et peuvent revenir à la ligne au-delà de 600 px.
+- **Écarté** : animation, carrousel ou nouveau visuel chargé ; l'illustration existante suffit et aucun JavaScript supplémentaire n'est nécessaire. Les styles du voile restent propres à l'accueil pour préserver les articles. Tailles et couleurs reprennent les jetons existants.
+- **Navigation** : le nom de la marque peut être tronqué visuellement (son nom accessible reste complet) et les commandes peuvent passer sur une seconde ligne quand le texte agrandi l’impose. Cela évite leur débordement sur les petits écrans.
+- **Ajustement** : à la demande de Deltouille, le bouton de descente est recentré horizontalement au bas du hero (`left: 50%` et translation de la moitié de sa largeur), au lieu d'être aligné à droite.
+- **Vérifications** : scènes dédiées aux formats paysage, aux points de rupture et au texte agrandi à 200 %, en complément des captures existantes ; contrôle des cibles tactiles, du dégagement sous la navigation, des actions au-dessus de la vague et de la carte sous le hero. Un test du HTML garantit que les chiffres sont dans le contenu principal et absents de la bannière.
+- **Résultat** : `npm run verify` vert ; 36 captures d'accueil passent, avec axe-core sans violation, de 320 à 1920 px, en clair et sombre. La passe générale sur le site publié a aussi contrôlé les autres pages ; les scènes `/demo` sont exclues sous `astro preview`. Les contrôles géométriques ont été exercés avec des rectangles invalides simulés (chevauchement et débordement détectés).
+
 ## D37 — Accueil : plus de machine à écrire (20 oct. 2026)
 
 - **Contexte** : sur mobile, la ligne « Ici, on vous raconte … » changeait de longueur à chaque sujet (une à trois lignes) et faisait sauter les boutons et les chiffres du Hero. La capture d'un iPhone montrait aussi les chiffres à moitié sous la vague : la bannière avait une hauteur fixe (`clamp(37.5rem, 100svh, 68.75rem)`) et le contenu, plus haut que l'écran, débordait vers le bas. Deltouille : « on retire tout ça ».

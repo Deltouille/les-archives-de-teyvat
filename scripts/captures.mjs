@@ -39,8 +39,34 @@ const MOT = EXEMPLE.titre.split(/[^\p{L}]+/u).sort((a, b) => b.length - a.length
 // { attendre: ms }. Un .focus() par script ne déclenche pas :focus-visible, une vraie touche Tab si.
 // `navigation` : sélecteur d'un lien cliqué ensuite ; la scène continue sur la nouvelle page, où window.__transition
 // dit si le navigateur l'a révélée par une View Transition (événement pagereveal). `hauteur` : hauteur de fenêtre (sinon 844 en mobile, 900 au-delà). `mouvement: true` : pas d'émulation du mouvement réduit (pour tester une animation). `verifier` est du JavaScript évalué dans la page, qui renvoie la liste des problèmes (vide si tout va bien).
+// Le contenu doit rester accessible même en paysage et avec le texte agrandi.
+const VERIFIER_HERO = `(() => {
+  const problemes = [];
+  const titre = document.querySelector('#accueil-titre').getBoundingClientRect();
+  const barre = document.querySelector('[data-navbar]').getBoundingClientRect();
+  const carte = document.querySelector('[data-statistiques]').getBoundingClientRect();
+  const hero = document.querySelector('[data-hero]').getBoundingClientRect();
+  const actions = document.querySelector('[data-actions-accueil]').getBoundingClientRect();
+  const vague = document.querySelector('[data-hero] > svg').getBoundingClientRect();
+  if (titre.top < barre.bottom + 16) problemes.push('le titre est trop proche de la navigation : ' + Math.round(titre.top - barre.bottom) + ' px');
+  if (actions.bottom > vague.top) problemes.push('les boutons passent sous la vague');
+  if (carte.top < hero.bottom) problemes.push('la carte de statistiques chevauche le hero');
+  for (const chiffre of document.querySelectorAll('[data-chiffres] li')) {
+    if (chiffre.scrollWidth > chiffre.clientWidth) problemes.push('un libellé de chiffre déborde');
+  }
+  for (const lien of document.querySelectorAll('[data-actions-accueil] a')) {
+    const cadre = lien.getBoundingClientRect();
+    if (cadre.height < 48) problemes.push('une cible tactile mesure moins de 48 px');
+    if (cadre.left < 0 || cadre.right > innerWidth) problemes.push('un bouton sort de l’écran');
+  }
+  return problemes;
+})()`;
+
 const SCENES = [
-  { nom: 'accueil', url: '/' },
+  { nom: 'accueil', url: '/', verifier: VERIFIER_HERO },
+  { nom: 'accueil-paysage', url: '/', largeurs: [667, 844], hauteur: 390, fenetre: true, verifier: VERIFIER_HERO },
+  { nom: 'accueil-intermediaire', url: '/', largeurs: [600, 840, 1920], fenetre: true, verifier: VERIFIER_HERO },
+  { nom: 'accueil-texte-agrandi', url: '/', largeurs: [320, 1024], actions: "document.documentElement.style.fontSize = '200%'", verifier: VERIFIER_HERO },
   { nom: 'demo', url: '/demo', largeurs: [1440, 390] },
   {
     nom: 'accueil-haut',
@@ -49,16 +75,24 @@ const SCENES = [
     verifier: `(() => document.querySelector('[data-navbar]').hasAttribute('data-sur-image') ? [] : ['la barre devrait être transparente sur la bannière d’accueil'])()`,
   },
   {
-    // Petit téléphone : la bannière d'accueil s'allonge au lieu de glisser les chiffres sous la vague (D37).
+    // Petit téléphone : le hero s'allonge pour garder les actions au-dessus de la vague.
     nom: 'accueil-petit-ecran',
     url: '/',
     largeurs: [320],
     hauteur: 568,
     fenetre: true,
+    verifier: VERIFIER_HERO,
+  },
+  {
+    nom: 'accueil-statistiques',
+    url: '/',
+    largeurs: [320, 390, 840, 1440],
+    fenetre: true,
+    actions: "document.querySelector('[data-statistiques]').scrollIntoView();",
     verifier: `(() => {
-      const chiffres = document.querySelector('[data-chiffres]').getBoundingClientRect();
-      const vague = document.querySelector('[data-hero] > svg').getBoundingClientRect();
-      return chiffres.bottom <= vague.top ? [] : ['les chiffres passent sous la vague (' + Math.round(chiffres.bottom - vague.top) + ' px)'];
+      const carte = document.querySelector('[data-statistiques]').getBoundingClientRect();
+      const barre = document.querySelector('[data-navbar]').getBoundingClientRect();
+      return carte.top >= barre.bottom && carte.bottom <= innerHeight ? [] : ['la carte de statistiques doit être visible en entier'];
     })()`,
   },
   {

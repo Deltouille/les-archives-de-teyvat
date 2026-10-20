@@ -2,6 +2,7 @@
 import Site from '../layouts/Site.astro';
 import Icon from '../components/Icon.astro';
 import HeroAccueil from '../components/HeroAccueil.astro';
+import StatistiquesAccueil from '../components/StatistiquesAccueil.astro';
 import EnTeteSection from '../components/EnTeteSection.astro';
 import CarteALaUne from '../components/CarteALaUne.astro';
 import CartePremiersPas from '../components/CartePremiersPas.astro';
@@ -27,9 +28,11 @@ const NOMBRE_RECENTS = 6;
 const recents = articles.slice(0, NOMBRE_RECENTS);
 ---
 <Site titre="Les histoires de Teyvat commencent ici">
-  <HeroAccueil slot="hero" lectures={articles.length} themes={themes.length} />
+  <HeroAccueil slot="hero" />
 
-  <EnTeteSection titre="Par où commencer ?" class="mt-4" />
+  <StatistiquesAccueil lectures={articles.length} themes={themes.length} />
+
+  <EnTeteSection titre="Par où commencer ?" />
   <section class="grid gap-4 md:grid-cols-[minmax(0,1.7fr)_minmax(16rem,1fr)] lg:gap-6" aria-label="À découvrir" data-a-la-une>
     {aLaUne && <CarteALaUne article={aLaUne} />}
     <CartePremiersPas lectures={avecTag('premiers-pas').length} />

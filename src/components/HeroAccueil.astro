@@ -3,29 +3,39 @@ import Icon from './Icon.astro';
 import Banniere from './Banniere.astro';
 import { cheminTag, imageDe } from '../lib/contenu';
 
-interface Props { lectures: number; themes: number; }
-const { lectures, themes } = Astro.props;
-const bouton = 'text-etiquette-g inline-flex h-12 items-center justify-center gap-2 rounded-full px-6 transition-colors duration-200 ease-standard';
+const bouton = 'text-etiquette-g inline-flex min-h-12 items-center justify-center gap-3 rounded-full px-6 py-3 transition-colors duration-200 ease-standard focus-visible:outline-white';
 ---
-<Banniere image={imageDe('fond-d-ecran')} titre="accueil-titre" class="min-h-[clamp(37.5rem,100svh,68.75rem)]">
-  {/* Hauteur minimale seulement : sur un petit écran, la bannière s'allonge au lieu de glisser les chiffres sous
-       la vague. pt-28 : la barre de navigation fixe (64 px) recouvre le haut de la bannière. */}
-  <div class="mx-auto mt-auto w-full max-w-site px-4 pt-28 pb-32 sm:px-6 md:pb-44 lg:px-10">
-    <h1 id="accueil-titre" class="mb-6 max-w-[14ch] text-shadow-lg [&_em]:text-ciel">Chaque voyage commence par une <em>histoire.</em></h1>
-
-    <div class="flex flex-col gap-3 sm:flex-row">
-      <a class:list={[bouton, 'bg-ciel text-nuit hover:bg-ciel-clair']} href={cheminTag('premiers-pas')}>Commencer le voyage <Icon nom="fleche" taille={20} /></a>
-      <a class:list={[bouton, 'border border-white/25 bg-white/10 text-white backdrop-blur-md hover:bg-white/20']} href="/lore">Explorer le lore</a>
+<Banniere image={imageDe('fond-d-ecran')} titre="accueil-titre" class="hero-accueil min-h-[min(92svh,60rem)]">
+  {/* Le contenu reste dans le flux : petits écrans et texte agrandi peuvent allonger la bannière. */}
+  <div class="mx-auto flex w-full max-w-site flex-1 flex-col justify-center px-5 pt-32 pb-28 sm:px-6 sm:pt-44 md:pb-40 lg:px-10">
+    <div class="max-w-[34rem]" data-introduction>
+      <h1 id="accueil-titre" class="text-affichage-p text-shadow-lg sm:text-affichage-m lg:text-affichage-g">
+        Chaque voyage<br />commence par <span class="block">une <em class="text-ciel">histoire.</em></span>
+      </h1>
+      <p class="text-corps-g mt-6 max-w-[36ch] text-pretty text-white/85 sm:text-titre-g">
+        Des premiers pas aux secrets des Archontes, découvrez les histoires de Genshin Impact, en français.
+      </p>
+      <div class="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap" data-actions-accueil>
+        <a class:list={[bouton, 'bg-ciel text-nuit shadow-niveau-2 hover:bg-ciel-clair']} href={cheminTag('premiers-pas')}>Commencer le voyage <Icon nom="fleche" taille={20} /></a>
+        <a class:list={[bouton, 'border border-white/60 bg-nuit/35 text-white hover:bg-white/16']} href="/lore">Explorer le lore</a>
+      </div>
     </div>
-
-    <ul class="text-corps-m mt-10 flex gap-8 text-white/75" aria-label="En quelques chiffres" data-chiffres>
-      <li><strong class="text-grand-titre-g block font-serif font-medium text-white">{lectures}</strong> lectures</li>
-      <li><strong class="text-grand-titre-g block font-serif font-medium text-white">{themes}</strong> thèmes</li>
-      <li><strong class="text-grand-titre-g block font-serif font-medium text-white">7</strong> nations</li>
-    </ul>
   </div>
-
-  {/* Flèche fixe : l'ancienne flèche flottante bougeait sans fin (WCAG 2.2.2), pour un simple repère. */}
-  <a class="absolute bottom-24 left-1/2 hidden size-11 -translate-x-1/2 place-items-center rounded-full border border-white/25 bg-white/8 text-white backdrop-blur-sm transition-colors hover:bg-white/16 md:grid" href="#contenu" aria-label="Aller au contenu"><Icon nom="chevron" taille={22} class="rotate-90" /></a>
+  <a class="text-etiquette-g absolute left-1/2 bottom-28 hidden min-h-11 -translate-x-1/2 items-center gap-3 rounded-full px-4 text-white/85 transition-colors hover:bg-white/16 focus-visible:outline-white lg:flex" href="#contenu">
+    Au fil des histoires <Icon nom="chevron" taille={20} class="rotate-90" />
+  </a>
 </Banniere>
 
+<style>
+  /* Le voile propre à l'accueil protège la colonne de lecture tout en laissant l'illustration respirer. */
+  :global(.hero-accueil .voile-banniere) {
+    background: linear-gradient(90deg, color-mix(in srgb, var(--color-nuit) 92%, transparent), color-mix(in srgb, var(--color-nuit) 72%, transparent) 35%, transparent 75%),
+      linear-gradient(0deg, color-mix(in srgb, var(--color-nuit) 85%, transparent), transparent 55%, color-mix(in srgb, var(--color-nuit) 35%, transparent));
+  }
+  @media (width < 600px) {
+    :global(.hero-accueil > img) { object-position: 58% center; }
+    :global(.hero-accueil .voile-banniere) {
+      background: linear-gradient(0deg, color-mix(in srgb, var(--color-nuit) 96%, transparent), color-mix(in srgb, var(--color-nuit) 80%, transparent) 50%, color-mix(in srgb, var(--color-nuit) 75%, transparent) 100%);
+    }
+  }
+</style>

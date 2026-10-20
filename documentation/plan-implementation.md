@@ -170,6 +170,12 @@ Chaque étape se termine seulement quand :
 
 ---
 
+## Étape 17 — Composition responsive du hero d'accueil ✅ (ajoutée à la demande)
+
+- [x] Titre et actions hiérarchisés, introduction fixe et voile adapté au téléphone ; statistiques dans une carte sous le hero.
+- [x] Captures aux points de rupture, en paysage et avec le texte agrandi à 200 % ; contrôles de géométrie et de taille des cibles tactiles.
+- **Décision** : D38.
+
 ## Questions ouvertes (CDC §10)
 
 À trancher quand l'étape concernée arrive ; la réponse va dans `decisions.md`.

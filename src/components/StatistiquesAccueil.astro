@@ -1,0 +1,20 @@
+---
+import Icon from './Icon.astro';
+
+interface Props { lectures: number; themes: number; }
+const { lectures, themes } = Astro.props;
+---
+<section class="flex flex-col gap-6 rounded-carte border border-ligne bg-surface p-6 shadow-niveau-1 sm:p-8 lg:flex-row lg:items-center lg:justify-between lg:gap-12" aria-labelledby="statistiques-titre" data-statistiques>
+  <div class="flex items-center gap-4">
+    <span class="hidden size-12 shrink-0 place-items-center rounded-grand bg-tonal text-sur-tonal sm:grid"><Icon nom="strates" taille={28} /></span>
+    <div class="min-w-0 [overflow-wrap:anywhere]">
+      <h2 id="statistiques-titre" class="text-titre-g">Les archives en chiffres</h2>
+      <p class="text-corps-m mt-1 text-discret">Un univers à découvrir, histoire après histoire.</p>
+    </div>
+  </div>
+  <ul class="grid grid-cols-[repeat(auto-fit,minmax(min(100%,4rem),1fr))] gap-4 border-t border-ligne pt-5 text-discret lg:w-1/2 lg:shrink-0 lg:border-t-0 lg:border-l lg:pt-0 lg:pl-8" aria-label="En quelques chiffres" data-chiffres>
+    <li><strong class="text-affichage-p block font-serif font-medium text-primaire">{lectures}</strong><span class="text-corps-m">lectures</span></li>
+    <li><strong class="text-affichage-p block font-serif font-medium text-primaire">{themes}</strong><span class="text-corps-m">thèmes</span></li>
+    <li><strong class="text-affichage-p block font-serif font-medium text-primaire">7</strong><span class="text-corps-m">nations</span></li>
+  </ul>
+</section>
