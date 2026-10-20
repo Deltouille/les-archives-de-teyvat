@@ -3,7 +3,6 @@ titre: "Acte I : La terre mystique aux mille rochers"
 description: "À Liyue, le Voyageur assiste à la mort de Rex Lapis, devient suspect et sollicite les Adeptes pour faire éclater la vérité."
 image: liyue
 publieLe: 2026-10-20
-brouillon: true
 tags: [quetes, quete-d-archons, liyue, premiers-pas]
 quete:
   serie: quete-d-archons

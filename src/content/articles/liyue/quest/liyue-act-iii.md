@@ -4,7 +4,6 @@ description: "Invité au Palais de Jade, le Voyageur découvre les secrets des F
 image: liyue
 imageAlt: "Paysages de montagnes et de pierre de la région de Liyue"
 publieLe: 2026-10-20
-brouillon: true
 tags: [quetes, quete-d-archons, liyue]
 quete:
   serie: quete-d-archons

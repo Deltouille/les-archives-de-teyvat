@@ -65,3 +65,12 @@
 /tags/quete-d-archons/
 /tags/teyvat/
 /tags/voyageur/
+# Publiées depuis la réécriture (20 oct. 2026).
+/lore/mondstadt-act-i/
+/lore/mondstadt-act-ii/
+/lore/mondstadt-act-iii/
+/lore/liyue-act-i/
+/lore/liyue-act-ii/
+/lore/liyue-act-iii/
+/lore/liyue-act-iv-prelude/
+/lore/liyue-act-iv/

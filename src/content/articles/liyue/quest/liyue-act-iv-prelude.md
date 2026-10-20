@@ -3,7 +3,6 @@ titre: "Acte IV - Prélude : Dainsleif, le Gardien du rameau"
 description: "À Mondstadt, le Voyageur rencontre Dainsleif et suit la piste de l'Ordre de l'Abîme jusqu'à un indice troublant sur son jumeau."
 image: mondstadt
 publieLe: 2026-10-20
-brouillon: true
 tags: [quetes, quete-d-archons, mondstadt]
 quete:
   serie: quete-d-archons

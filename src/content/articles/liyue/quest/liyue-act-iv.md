@@ -4,7 +4,6 @@ description: "En enquêtant sur l'Ordre de l'Abîme avec Dainsleif, le Voyageur 
 image: liyue
 imageAlt: "Les paysages montagneux de Liyue, point de départ de l'enquête sur l'Ordre de l'Abîme"
 publieLe: 2026-10-20
-brouillon: true
 tags: [quetes, quete-d-archons, liyue]
 quete:
   serie: quete-d-archons

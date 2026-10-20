@@ -4,7 +4,6 @@ description: "Guidé par Zhongli, le Voyageur prépare les adieux à Rex Lapis, 
 image: liyue
 imageAlt: "Paysage de Liyue, nation de l'Archon Géo"
 publieLe: 2026-10-20
-brouillon: true
 tags: [quetes, quete-d-archons, liyue]
 quete:
   serie: quete-d-archons
