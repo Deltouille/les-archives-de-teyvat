@@ -38,7 +38,7 @@ const MOT = EXEMPLE.titre.split(/[^\p{L}]+/u).sort((a, b) => b.length - a.length
 // `clavier` : vraies frappes envoyées après les actions, par le protocole DevTools — { touche, ctrl? }, { texte } ou
 // { attendre: ms }. Un .focus() par script ne déclenche pas :focus-visible, une vraie touche Tab si.
 // `navigation` : sélecteur d'un lien cliqué ensuite ; la scène continue sur la nouvelle page, où window.__transition
-// dit si le navigateur l'a révélée par une View Transition (événement pagereveal). `mouvement: true` : pas d'émulation du mouvement réduit (pour tester une animation). `verifier` est du JavaScript évalué dans la page, qui renvoie la liste des problèmes (vide si tout va bien).
+// dit si le navigateur l'a révélée par une View Transition (événement pagereveal). `hauteur` : hauteur de fenêtre (sinon 844 en mobile, 900 au-delà). `mouvement: true` : pas d'émulation du mouvement réduit (pour tester une animation). `verifier` est du JavaScript évalué dans la page, qui renvoie la liste des problèmes (vide si tout va bien).
 const SCENES = [
   { nom: 'accueil', url: '/' },
   { nom: 'demo', url: '/demo', largeurs: [1440, 390] },
@@ -49,49 +49,16 @@ const SCENES = [
     verifier: `(() => document.querySelector('[data-navbar]').hasAttribute('data-sur-image') ? [] : ['la barre devrait être transparente sur la bannière d’accueil'])()`,
   },
   {
-    nom: 'machine-a-ecrire',
+    // Petit téléphone : la bannière d'accueil s'allonge au lieu de glisser les chiffres sous la vague (D37).
+    nom: 'accueil-petit-ecran',
     url: '/',
-    largeurs: [1440],
+    largeurs: [320],
+    hauteur: 568,
     fenetre: true,
-    mouvement: true,
-    actions: `
-      const sujet = () => document.querySelector('[data-sujets]').textContent;
-      window.__debut = sujet();
-      // On attend que le texte soit en train de s'écrire (deux relevés successifs différents) : cliquer pendant
-      // une attente entre deux sujets ne prouverait rien, le texte y est immobile de toute façon.
-      let precedent = sujet();
-      for (let t = 0; t < 8000; t += 20) { await attendre(20); if (sujet() !== precedent) break; precedent = sujet(); }
-      window.__apres = sujet();
-      document.querySelector('[data-pause]').click();
-      window.__fige = sujet();
-      await attendre(1500);
-      window.__toujours = sujet();`,
     verifier: `(() => {
-      const p = [];
-      const machine = document.querySelector('[data-machine]');
-      const pause = machine.querySelector('[data-pause]');
-      if (pause.hidden) p.push('le bouton pause devrait être visible pendant l’animation');
-      if (window.__apres === window.__debut) p.push('le sujet devrait changer');
-      if (window.__toujours !== window.__fige) p.push('la pause devrait figer le texte (' + window.__fige + ' → ' + window.__toujours + ')');
-      if (pause.getAttribute('aria-pressed') !== 'true') p.push('aria-pressed devrait passer à true en pause');
-      if (getComputedStyle(machine.querySelector('[data-sujets] + span')).animationName !== 'none') p.push('le curseur ne devrait plus clignoter en pause');
-      return p;
-    })()`,
-  },
-  {
-    nom: 'machine-a-ecrire-mouvement-reduit',
-    url: '/',
-    largeurs: [1440],
-    fenetre: true,
-    actions: `await attendre(3500);`,
-    verifier: `(() => {
-      const p = [];
-      const machine = document.querySelector('[data-machine]');
-      const cible = machine.querySelector('[data-sujets]');
-      if (cible.textContent !== JSON.parse(cible.dataset.sujets)[0]) p.push('en mouvement réduit, le premier sujet devrait rester affiché');
-      if (!machine.querySelector('[data-pause]').hidden) p.push('sans animation, pas de bouton pause');
-      if (getComputedStyle(machine.querySelector('[data-sujets] + span')).animationName !== 'none') p.push('le curseur ne devrait pas clignoter');
-      return p;
+      const chiffres = document.querySelector('[data-chiffres]').getBoundingClientRect();
+      const vague = document.querySelector('[data-hero] > svg').getBoundingClientRect();
+      return chiffres.bottom <= vague.top ? [] : ['les chiffres passent sous la vague (' + Math.round(chiffres.bottom - vague.top) + ' px)'];
     })()`,
   },
   {
@@ -440,7 +407,7 @@ try {
     for (const largeur of scene.largeurs ?? LARGEURS) {
       for (const theme of THEMES) {
         const nom = `${scene.nom}-${largeur}-${theme}`;
-        const hauteurFenetre = largeur < 600 ? 844 : 900;
+        const hauteurFenetre = scene.hauteur ?? (largeur < 600 ? 844 : 900);
         await cdp.envoyer('Emulation.setDeviceMetricsOverride', { width: largeur, height: hauteurFenetre, deviceScaleFactor: 1, mobile: largeur < 600 });
         // Mouvement réduit : les transitions sont instantanées, la capture ne tombe pas au milieu d'une animation.
         await cdp.envoyer('Emulation.setEmulatedMedia', { features: [{ name: 'prefers-color-scheme', value: theme === 'sombre' ? 'dark' : 'light' }, { name: 'prefers-reduced-motion', value: scene.mouvement ? 'no-preference' : 'reduce' }] });

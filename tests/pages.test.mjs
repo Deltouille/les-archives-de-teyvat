@@ -103,19 +103,11 @@ test('les pages éditoriales existent ; la 404 n’est pas indexée ni dans le s
   assert.doesNotMatch(await lire('a-propos/index.html'), /Shirone/);
 });
 
-test('accueil : bannière, titre unique, sujets de la machine à écrire lisibles sans JavaScript', async () => {
+test('accueil : bannière, titre unique, sans machine à écrire (D36)', async () => {
   const html = await lire('index.html');
   assert.equal((html.match(/<h1\b/g) ?? []).length, 1);
   assert.match(html, /data-hero/);
-  const machine = html.split('data-machine')[1].split('</p>')[0];
-  // Un sujet par article publié (accroche, sinon « titre »), dans le même ordre que la bibliothèque (D28).
-  const decoder = t => t.replaceAll('&quot;', '"').replaceAll('&#39;', "'").replaceAll('&amp;', '&');
-  const sujets = JSON.parse(decoder(machine.match(/data-sujets="([^"]*)"/)[1]));
-  const attendus = articles.map(a => a.accroche ?? `« ${a.titre} »`);
-  assert.deepEqual([...sujets].sort(), [...attendus].sort(), 'un sujet par article');
-  assert.ok(decoder(machine).includes(`>${sujets[0]}<`), 'premier sujet écrit dans le HTML');
-  assert.match(machine, /class="sr-only">les histoires de Teyvat\.</, 'phrase stable pour les lecteurs d’écran');
-  assert.match(machine, /<button[^>]*aria-label="Pause de l’animation"[^>]*aria-pressed="false"[^>]*hidden/, 'bouton pause caché tant que l’animation ne tourne pas');
+  assert.doesNotMatch(html, /data-machine|data-sujets|Ici, on vous raconte/);
 });
 
 test('accueil : les chiffres suivent le contenu', async () => {

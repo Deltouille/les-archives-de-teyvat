@@ -22,7 +22,6 @@ export async function lireArticles() {
       titre: champ('titre'),
       tags: liste(champ('tags') ?? ''),
       brouillon: champ('brouillon') === 'true',
-      accroche: champ('accroche'),
       aLaUne: champ('aLaUne') === 'true',
       publieLe: champ('publieLe'),
       spoilers: Boolean(champ('spoilers')),

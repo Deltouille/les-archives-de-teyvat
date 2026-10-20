@@ -162,6 +162,12 @@ Chaque étape se termine seulement quand :
 - [x] « À la une » choisi par le contenu (`aLaUne`, sinon le plus récent) ; l'accueil se construit même sans article.
 - **Décision** : D28.
 
+## Étape 16 — Accueil sans machine à écrire ✅ (ajoutée à la demande)
+
+- [x] Ligne « Ici, on vous raconte … » retirée (sujets, curseur, bouton pause, script, champ `accroche`).
+- [x] Bannière d'accueil en hauteur minimale : sur petit téléphone, les chiffres restent au-dessus de la vague (capture `accueil-petit-ecran`).
+- **Décision** : D37.
+
 ---
 
 ## Questions ouvertes (CDC §10)
@@ -169,6 +175,6 @@ Chaque étape se termine seulement quand :
 À trancher quand l'étape concernée arrive ; la réponse va dans `decisions.md`.
 
 - ~~Parallaxe au défilement sur les bannières ?~~ Non par défaut, bannière fixe (D11).
-- ~~Curseur clignotant et flèche flottante de l'accueil : garder ?~~ Curseur gardé pendant l'animation seulement, flèche fixe, bouton pause (D12).
+- ~~Curseur clignotant et flèche flottante de l'accueil : garder ?~~ Curseur gardé pendant l'animation seulement, flèche fixe, bouton pause (D12) ; machine à écrire retirée depuis (D37).
 - ~~Ligne « fil d'Ariane / type » de l'article : pleine largeur ?~~ Alignée sur la colonne de lecture (D11).
 - Reprendre du site Nuxt : infobox des régions/personnages, listes curatées, mise en avant, page théories ? (après l'étape 8)
