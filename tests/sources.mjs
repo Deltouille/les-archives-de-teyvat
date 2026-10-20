@@ -8,6 +8,14 @@ const DOSSIER_ARTICLES = path.resolve('src/content/articles');
 
 const liste = valeur => valeur.replace(/^\[|\]$/g, '').split(',').map(v => v.trim()).filter(Boolean);
 
+/** Champ quete (série, chapitre, acte), ou undefined. @param {string} entete */
+function queteDe(entete) {
+  const bloc = entete.match(/^quete:\s*\n((?:[ \t]+.*(?:\n|$))+)/m)?.[1];
+  if (!bloc) return undefined;
+  const valeur = nom => bloc.match(new RegExp(`^\\s+${nom}:\\s*(\\S+)`, 'm'))?.[1];
+  return { serie: valeur('serie'), chapitre: Number(valeur('chapitre')), acte: Number(valeur('acte')) };
+}
+
 /** Les articles, avec les champs dont les tests ont besoin. */
 export async function lireArticles() {
   // Récursif : les articles peuvent être rangés en sous-dossiers.
@@ -30,6 +38,7 @@ export async function lireArticles() {
       // Crédits : nombre d'entrées de chaque type (champ credits).
       creditsWiki: (entete.match(/^\s+(?:-\s+)?type:\s*wiki\s*$/gm) ?? []).length,
       creditsCommunaute: (entete.match(/^\s+(?:-\s+)?type:\s*communaute\s*$/gm) ?? []).length,
+      quete: queteDe(entete),
       titres: [...texte.split(/^---$/m).slice(2).join('---').matchAll(/^## (.+)$/gm)].map(m => m[1]),
     };
   }));

@@ -8,7 +8,7 @@ import { NOMS_RESERVES as RESERVES, TAGS_SUPPRIMES } from './redirections.mjs';
 import { verifierCredit } from './credits.mjs';
 
 /**
- * @param {{ id: string, filePath?: string, data: { tags: string[], image: string, publieLe: Date, modifieLe?: Date, credits?: any[] } }[]} articles
+ * @param {{ id: string, filePath?: string, data: { tags: string[], image: string, publieLe: Date, modifieLe?: Date, credits?: any[], quete?: { serie: string, chapitre: number, acte: number } } }[]} articles
  * @param {{ id: string, data: { theme: boolean, singulier?: string, icone?: string } }[]} tags
  * @param {Set<string>} images noms des .webp de src/assets/images, sans extension
  */
@@ -20,6 +20,8 @@ export function validerContenus(articles, tags, images) {
     }
   }
   const connus = new Map(tags.map(t => [t.id, t]));
+  // Place de chaque épisode dans sa série : deux articles au même endroit rendraient l'ordre ambigu.
+  const places = new Map();
   for (const article of articles) {
     // Chemin réel (les articles peuvent être rangés en sous-dossiers) ; à défaut, chemin à plat.
     const origine = article.filePath ?? `src/content/articles/${article.id}.md`;
@@ -33,6 +35,13 @@ export function validerContenus(articles, tags, images) {
     }
     if (!images.has(data.image)) throw new Error(`Image inconnue « ${data.image} » dans ${origine} : ajoutez src/assets/images/${data.image}.webp`);
     if (data.modifieLe && data.modifieLe < data.publieLe) throw new Error(`modifieLe antérieur à publieLe dans ${origine}`);
+    if (data.quete) {
+      const { serie, chapitre, acte } = data.quete;
+      if (!data.tags.includes(serie)) throw new Error(`Série « ${serie} » absente des tags de ${origine} : ajoutez-la à « tags »`);
+      const place = `${serie} / chapitre ${chapitre} / acte ${acte}`;
+      if (places.has(place)) throw new Error(`Même place dans la série (${place}) pour ${places.get(place)} et ${origine}`);
+      places.set(place, origine);
+    }
     for (const credit of data.credits ?? []) {
       const refus = verifierCredit(credit);
       if (refus) throw new Error(`Crédit invalide dans ${origine} : ${refus}`);

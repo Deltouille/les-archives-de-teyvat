@@ -182,6 +182,13 @@ Chaque étape se termine seulement quand :
 - [x] Test de cohérence de la fiche avec le code (`tests/documentation.test.mjs`).
 - **Décision** : D40.
 
+## Étape 19 — Ordre de l'histoire ✅ (ajoutée à la demande)
+
+- [x] Champ `quete` (série, chapitre, acte) validé : série parmi les tags, place unique.
+- [x] Pages de tag dans l'ordre de l'histoire ; liens « Épisode précédent / suivant » en fin d'épisode (scène `episodes-voisins`).
+- [x] Les huit actes du prologue et du chapitre I placés.
+- **Décision** : D41.
+
 ## Questions ouvertes (CDC §10)
 
 À trancher quand l'étape concernée arrive ; la réponse va dans `decisions.md`.

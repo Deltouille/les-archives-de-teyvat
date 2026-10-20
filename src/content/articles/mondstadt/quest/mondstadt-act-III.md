@@ -1,10 +1,14 @@
 ---
-titre: "Acte III : Chanson du dragon et de la liberté"
+titre: "Prologue - Acte III : Chanson du dragon et de la liberté"
 description: "Résumé de la première quête d'Archon."
 image: mondstadt
 imageAlt: "Les paysages verdoyants de Teyvat au début du voyage"
 publieLe: 2026-10-13
 tags: [quetes, mondstadt, quete-d-archons, premiers-pas]
+quete:
+  serie: quete-d-archons
+  chapitre: 0
+  acte: 3
 spoilers: "Résumé du prologue des quêtes d’Archons, acte II"
 resume:
   - "Le Voyageur et ses alliés affrontent Dvalin dans son antre et parviennent à le libérer de l'influence de l'Ordre de l'Abîme."

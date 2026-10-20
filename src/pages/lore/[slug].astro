@@ -12,11 +12,12 @@ import EncadreSources from '../../components/EncadreSources.astro';
 import Sommaire from '../../components/Sommaire.astro';
 import TagsArticle from '../../components/TagsArticle.astro';
 import EncadreCredits from '../../components/EncadreCredits.astro';
+import EpisodesVoisins from '../../components/EpisodesVoisins.astro';
 import ProgressionLecture from '../../components/ProgressionLecture.astro';
 import EnTeteSection from '../../components/EnTeteSection.astro';
 import GrilleArticles from '../../components/GrilleArticles.astro';
 import { bibliotheque, cheminTag, imageDe, transitionImage, type Article } from '../../lib/contenu';
-import { articlesLies, minutesDeLecture, dateFr } from '../../lib/bibliotheque.mjs';
+import { articlesLies, episodesVoisins, minutesDeLecture, dateFr } from '../../lib/bibliotheque.mjs';
 
 export async function getStaticPaths() {
   const { articles } = await bibliotheque();
@@ -29,6 +30,7 @@ const { Content, headings } = await render(article);
 const { data } = article;
 const theme = themeDe(article);
 const lies = articlesLies(article, articles);
+const { precedent, suivant } = episodesVoisins(article, articles);
 const image = imageDe(data.image);
 // Image de partage au format attendu par les réseaux (1200 × 630), au lieu de l'original de plus d'un mégaoctet.
 const partage = await getImage({ src: image, width: 1200, height: 630, fit: 'cover', format: 'jpg', quality: 80 });
@@ -65,6 +67,7 @@ const jour = (d: Date) => d.toISOString().slice(0, 10);
         <div class="prose"><Content /></div>
         {data.sources.length > 0 && <EncadreSources sources={data.sources} />}
         {data.credits.length > 0 && <EncadreCredits credits={data.credits} />}
+        {data.quete && (precedent || suivant) && <EpisodesVoisins serie={tag(data.quete.serie)} precedent={precedent} suivant={suivant} />}
         <TagsArticle tags={data.tags.map(tag)} />
       </div>
       {avecSommaire && (

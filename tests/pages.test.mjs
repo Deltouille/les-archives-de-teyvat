@@ -408,3 +408,28 @@ test('aucun petit texte au-dessus des titres (sur-titre), sauf les titres de blo
   }
   assert.deepEqual([...new Set(erreurs)], []);
 });
+
+// Ordre de l'histoire (champ quete, D41) : série, chapitre, acte.
+const ordreDeQuete = (a, b) => a.quete.serie.localeCompare(b.quete.serie, 'fr') || a.quete.chapitre - b.quete.chapitre || a.quete.acte - b.quete.acte;
+
+test('pages de tag : les épisodes de quête d’abord, dans l’ordre de l’histoire', async () => {
+  for (const { id } of tags) {
+    const grille = (await lire(`lore/tags/${id}/index.html`)).split('data-grille-articles')[1]?.split('</main>')[0] ?? '';
+    const liens = [...grille.matchAll(/href="\/lore\/([^"/]+)"/g)].map(m => m[1]);
+    const episodes = articles.filter(a => a.tags.includes(id) && a.quete).sort(ordreDeQuete).map(a => a.id);
+    assert.deepEqual(liens.slice(0, episodes.length), episodes, id);
+  }
+});
+
+test('épisodes de quête : liens vers le précédent et le suivant de la série, rien pour les autres articles', async () => {
+  for (const article of articles) {
+    const html = await lire(`lore/${article.id}/index.html`);
+    const navigation = html.split('data-episodes')[1]?.split('</nav>')[0];
+    if (!article.quete) { assert.equal(navigation, undefined, article.id); continue; }
+    const serie = articles.filter(a => a.quete?.serie === article.quete.serie).sort(ordreDeQuete);
+    const position = serie.indexOf(article);
+    const voisin = rel => navigation?.match(new RegExp(`href="/lore/([^"]+)"[^>]*rel="${rel}"`))?.[1];
+    assert.equal(voisin('prev'), serie[position - 1]?.id, `${article.id} : précédent`);
+    assert.equal(voisin('next'), serie[position + 1]?.id, `${article.id} : suivant`);
+  }
+});

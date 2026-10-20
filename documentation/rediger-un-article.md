@@ -41,6 +41,7 @@ Entre deux lignes `---`, en tête de fichier. Mets les textes entre guillemets d
 | `brouillon` | à mettre | `true` : l'article reste visible en développement mais n'est pas publié tant que Deltouille n'a pas relu et retiré la ligne. |
 | `aLaUne` | ne pas mettre | Choix éditorial réservé à Deltouille (mise en avant sur l'accueil). |
 | `tags` | **obligatoire** | Liste d'identifiants du registre, **au moins un thème** (voir § 4). |
+| `quete` | **obligatoire pour un épisode** | Place de l'article dans une suite d'épisodes, qui fixe son ordre sur les pages de tag et ses liens « Épisode précédent / suivant » : `serie` (un des tags de l'article : `quete-d-archons` pour les quêtes d'Archons), `chapitre` (`0` = prologue à Mondstadt, `1` = Liyue, `2` = Inazuma…), `acte` (décimal pour un épisode intercalé : `3.5` entre les actes III et IV). Deux articles ne peuvent pas occuper la même place. Absent pour un article qui n'est pas un épisode. |
 | `spoilers` | conseillé | Une phrase disant jusqu'où l'article dévoile l'histoire. Affichée dans l'encadré « Avant de lire ». |
 | `resume` | conseillé | **Trois** phrases courtes qui résument l'article. Encadré « L'essentiel en quelques mots ». |
 | `sources` | conseillé | Où retrouver l'histoire **dans le jeu** : liste de `titre` + `detail`. Encadré « Pour retrouver l'histoire dans le jeu ». Ce n'est pas la liste des sites consultés : ceux-là vont dans `credits`. |
@@ -131,6 +132,10 @@ imageAlt: "Les paysages verdoyants de Teyvat au début du voyage"
 publieLe: 2026-10-13
 brouillon: true
 tags: [quetes, quete-d-archons, mondstadt, premiers-pas]
+quete:
+  serie: quete-d-archons
+  chapitre: 0
+  acte: 1
 spoilers: "Prologue des quêtes d’Archons, acte I."
 resume:
   - "Le Voyageur cherche son jumeau et arrive à Mondstadt avec Paimon."
@@ -164,6 +169,7 @@ Alors qu'il se trouve près du Cap de la Promesse, le Voyageur repêche une étr
 - [ ] Description propre à cet article (pas celle d'un autre épisode de la série).
 - [ ] Tous les tags existent dans le registre ; le premier thème est le bon.
 - [ ] L'image existe.
+- [ ] Pour un épisode de quête : `quete` rempli (série présente dans `tags`, chapitre et acte justes, place libre dans la série).
 - [ ] `spoilers`, `resume` et `sources` décrivent bien **cet** article (attention aux copier-coller d'un article voisin).
 - [ ] Un crédit par source adaptée ou utilisée ; `modifications` rempli pour le wiki ; adresses en `https://`.
 - [ ] Sections en `##`, pas de `#`, pas de HTML ni d'image dans le corps.

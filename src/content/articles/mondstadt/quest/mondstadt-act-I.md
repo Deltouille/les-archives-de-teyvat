@@ -1,10 +1,14 @@
 ---
-titre: "Acte I : Le Voyageur qui attrapa le vent"
+titre: "Prologue - Acte I : Le Voyageur qui attrapa le vent"
 description: "Résumé de la première quête d'Archon."
 image: mondstadt
 imageAlt: "Les paysages verdoyants de Teyvat au début du voyage"
 publieLe: 2026-10-13
 tags: [quete-d-archons, quetes, mondstadt, premiers-pas]
+quete:
+  serie: quete-d-archons
+  chapitre: 0
+  acte: 1
 spoilers: "Intégralité du prologue des quêtes d’Archons, actes I à III."
 resume:
   - "Le Voyageur cherche son jumeau et arrive à Mondstadt avec Paimon."
@@ -26,7 +30,7 @@ Au cours de leurs voyages à travers les mondes, le Voyageur et son jumeau sont 
 
 Un combat s'engage, au cours duquel l'entité inconnue parvient à emprisonner le jumeau du Voyageur, avant de lui faire subir le même sort. Privés de leurs pouvoirs, les deux jumeaux se retrouvent ainsi piégés à Teyvat.
 
-Après une période de temps indéterminée, le Voyageur finit par se réveiller et commence à errer à travers Teyvat.
+500 ans plus tard, le Voyageur finit par se réveiller et commence à errer à travers Teyvat.
 
 ## La rencontre avec Paimon
 

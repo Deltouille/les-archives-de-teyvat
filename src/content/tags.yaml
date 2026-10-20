@@ -48,6 +48,9 @@ teyvat:
 mondstadt:
   libelle: Mondstadt
   description: La cité de la liberté.
+liyue:
+  libelle: Liyue
+  description: La cité des contrats.
 elements:
   libelle: Éléments
   description: Les sept éléments qui structurent Teyvat et ses nations.

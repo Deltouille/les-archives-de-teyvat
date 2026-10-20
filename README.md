@@ -23,7 +23,7 @@ Astro (sortie statique), Tailwind CSS v4 avec un système de design Material 3 g
 
 ## Écrire un article
 
-Un fichier Markdown dans `src/content/articles/`, rangé dans les sous-dossiers de votre choix ; son **nom** donne l'URL (`/lore/<nom>`), le dossier n'y change rien. Renommer un article publié demande une redirection (`src/lib/redirections.mjs`, puis `npm run vercel`). Les tags sont déclarés dans `src/content/tags.yaml`, les images sont des `.webp` dans `src/assets/images/`. Le champ facultatif `aLaUne: true` choisit l'article mis en avant sur l'accueil (à défaut, le plus récent).
+Un fichier Markdown dans `src/content/articles/`, rangé dans les sous-dossiers de votre choix ; son **nom** donne l'URL (`/lore/<nom>`), le dossier n'y change rien. Renommer un article publié demande une redirection (`src/lib/redirections.mjs`, puis `npm run vercel`). Les tags sont déclarés dans `src/content/tags.yaml`, les images sont des `.webp` dans `src/assets/images/`. Un épisode de quête déclare sa place dans l'histoire avec `quete` (`serie: quete-d-archons`, `chapitre: 0` pour le prologue, `acte: 1`) : les pages de tag suivent cet ordre et chaque épisode mène au précédent et au suivant. Le champ facultatif `aLaUne: true` choisit l'article mis en avant sur l'accueil (à défaut, le plus récent).
 
 Un article repris d'une page du Genshin Impact Wiki ou d'une théorie publiée ailleurs déclare sa source dans `credits` (lien, auteur, modifications) : elle est créditée en fin d'article et sur `/credits`. Le build échoue, en nommant le fichier, si un tag est inconnu, si aucun tag n'est un thème, si l'image manque ou si un crédit est incomplet.
 

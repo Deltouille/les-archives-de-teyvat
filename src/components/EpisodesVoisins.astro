@@ -1,0 +1,22 @@
+---
+import Icon from './Icon.astro';
+import { cheminArticle, type Article, type Tag } from '../lib/contenu';
+// Fin d'un épisode de quête : liens vers l'épisode précédent et le suivant de la même série (champ quete, D41).
+interface Props { serie: Tag; precedent?: Article; suivant?: Article; }
+const { serie, precedent, suivant } = Astro.props;
+const lien = 'flex flex-col gap-1 rounded-carte border border-contour p-5 transition-colors duration-200 ease-standard hover:bg-texte/8';
+---
+<nav class="mt-10 grid gap-3 sm:grid-cols-2" aria-label={`${serie.data.libelle} : épisodes voisins`} data-pagefind-ignore data-episodes>
+  {precedent && (
+    <a class={lien} href={cheminArticle(precedent)} rel="prev">
+      <span class="text-etiquette-g flex items-center gap-2 text-discret"><Icon nom="fleche" taille={20} class="rotate-180" />Épisode précédent</span>
+      <span class="text-titre-m text-primaire">{precedent.data.titre}</span>
+    </a>
+  )}
+  {suivant && (
+    <a class:list={[lien, 'sm:col-start-2 sm:items-end sm:text-right']} href={cheminArticle(suivant)} rel="next">
+      <span class="text-etiquette-g flex items-center gap-2 text-discret">Épisode suivant<Icon nom="fleche" taille={20} /></span>
+      <span class="text-titre-m text-primaire">{suivant.data.titre}</span>
+    </a>
+  )}
+</nav>

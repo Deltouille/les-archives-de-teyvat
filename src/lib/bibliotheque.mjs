@@ -2,6 +2,8 @@
 // contenu.ts l'applique aux collections Astro.
 
 const plusRecentDAbord = (a, b) => b.data.publieLe.getTime() - a.data.publieLe.getTime();
+// Ordre de l'histoire (champ `quete`) : série, puis chapitre, puis acte (décimales permises pour un intermède).
+const ordreDeQuete = (a, b) => a.data.quete.serie.localeCompare(b.data.quete.serie, 'fr') || a.data.quete.chapitre - b.data.quete.chapitre || a.data.quete.acte - b.data.quete.acte;
 
 /**
  * Articles à afficher : les brouillons ne sortent pas du dev. Du plus récent au plus ancien.
@@ -55,4 +57,30 @@ export const dateFr = date => date.toLocaleDateString('fr-FR', { day: 'numeric',
 export function articleALaUne(articles) {
   const parDate = [...articles].sort(plusRecentDAbord);
   return parDate.find(a => a.data.aLaUne) ?? parDate[0];
+}
+
+/**
+ * Ordre d'une page de tag : les épisodes de quête d'abord, dans l'ordre de l'histoire, puis les autres articles du plus
+ * récent au plus ancien. Les listes de nouveautés (Explorer, accueil) restent par date.
+ * @template {{ data: { publieLe: Date, quete?: { serie: string, chapitre: number, acte: number } } }} A
+ * @param {A[]} articles
+ * @returns {A[]}
+ */
+export const ordreDeLecture = articles => [
+  ...articles.filter(a => a.data.quete).sort(ordreDeQuete),
+  ...articles.filter(a => !a.data.quete).sort(plusRecentDAbord),
+];
+
+/**
+ * Épisodes précédent et suivant d'un article dans sa série (champ `quete`), parmi les articles affichés.
+ * @template {{ id: string, data: { quete?: { serie: string, chapitre: number, acte: number } } }} A
+ * @param {A} article
+ * @param {A[]} articles
+ * @returns {{ precedent?: A, suivant?: A }}
+ */
+export function episodesVoisins(article, articles) {
+  if (!article.data.quete) return {};
+  const serie = articles.filter(a => a.data.quete?.serie === article.data.quete.serie).sort(ordreDeQuete);
+  const position = serie.findIndex(a => a.id === article.id);
+  return position === -1 ? {} : { precedent: serie[position - 1], suivant: serie[position + 1] };
 }

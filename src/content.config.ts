@@ -19,6 +19,9 @@ const articles = defineCollection({
     brouillon: z.boolean().default(false),
     // Accueil : article mis « à la une » (le plus récent des articles marqués ; à défaut, le plus récent).
     aLaUne: z.boolean().default(false),
+    // Place dans une suite d'épisodes (quête d'Archons…) : série = un des tags de l'article ; chapitre 0 = prologue ;
+    // acte décimal pour un intermède (3.5 entre les actes III et IV). Ordonne les pages de tag et relie les épisodes voisins.
+    quete: z.object({ serie: z.string(), chapitre: z.number().int().min(0), acte: z.number().positive() }).optional(),
     // Identifiants déclarés dans tags.yaml ; au moins un doit être un thème.
     tags: z.array(z.string()).min(1),
     // Encadrés facultatifs : ils ne s'affichent que s'ils sont remplis.

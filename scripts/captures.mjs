@@ -96,6 +96,21 @@ const SCENES = [
     })()`,
   },
   {
+    // Fin d'un épisode de quête : liens vers l'épisode précédent et le suivant (D41). L'article d'exemple ouvre le prologue.
+    nom: 'episodes-voisins',
+    url: ARTICLE,
+    largeurs: [1440, 390],
+    fenetre: true,
+    actions: "document.querySelector('[data-episodes]').scrollIntoView({ block: 'center' }); await attendre(400);",
+    verifier: `(() => {
+      const p = [];
+      const suivant = document.querySelector('[data-episodes] a[rel=next]');
+      if (!suivant) p.push('l’épisode d’ouverture devrait mener à l’épisode suivant');
+      else if (suivant.getBoundingClientRect().right > innerWidth) p.push('le lien vers l’épisode suivant sort de l’écran');
+      return p;
+    })()`,
+  },
+  {
     nom: 'recherche-au-clavier',
     url: '/lore',
     largeurs: [1440, 1024],

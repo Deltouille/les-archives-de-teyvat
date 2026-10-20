@@ -54,3 +54,10 @@ test('un crédit invalide fait échouer le build, en nommant le fichier', () => 
   assert.throws(() => valider([article('diluc', { credits: [credit] })]), /Crédit invalide dans src\/content\/articles\/diluc\.md : .*modifications/);
   assert.doesNotThrow(() => valider([article('diluc', { credits: [{ ...credit, modifications: 'Traduit.' }] })]));
 });
+
+test('épisode de quête : sa série doit être un de ses tags, et sa place unique dans la série', () => {
+  const quete = (chapitre, acte) => ({ tags: ['personnages', 'mondstadt'], quete: { serie: 'mondstadt', chapitre, acte } });
+  assert.doesNotThrow(() => valider([article('acte-1', quete(0, 1)), article('acte-2', quete(0, 2)), article('intermede', quete(0, 1.5))]));
+  assert.throws(() => valider([article('acte-1', { quete: { serie: 'mondstadt', chapitre: 0, acte: 1 } })]), /Série « mondstadt » absente des tags de src\/content\/articles\/acte-1\.md/);
+  assert.throws(() => valider([article('acte-1', quete(0, 1)), article('doublon', quete(0, 1))]), /Même place dans la série \(mondstadt \/ chapitre 0 \/ acte 1\) pour src\/content\/articles\/acte-1\.md et src\/content\/articles\/doublon\.md/);
+});

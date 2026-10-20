@@ -6,6 +6,7 @@ import FilAriane from '../../../components/FilAriane.astro';
 import Puces from '../../../components/Puces.astro';
 import GrilleArticles from '../../../components/GrilleArticles.astro';
 import { bibliotheque, cheminTag, type Tag } from '../../../lib/contenu';
+import { ordreDeLecture } from '../../../lib/bibliotheque.mjs';
 
 export async function getStaticPaths() {
   const { tags } = await bibliotheque();
@@ -15,7 +16,8 @@ export async function getStaticPaths() {
 const { tag } = Astro.props as { tag: Tag };
 const { themes, avecTag } = await bibliotheque();
 const { data } = tag;
-const lectures = avecTag(tag.id);
+// Épisodes de quête dans l'ordre de l'histoire, puis le reste par date.
+const lectures = ordreDeLecture(avecTag(tag.id));
 const nombre = `${lectures.length} lecture${lectures.length > 1 ? 's' : ''}`;
 ---
 <Site titre={data.libelle} description={data.description}>
