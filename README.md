@@ -27,6 +27,8 @@ Un fichier Markdown dans `src/content/articles/`, rangé dans les sous-dossiers 
 
 Un article repris d'une page du Genshin Impact Wiki ou d'une théorie publiée ailleurs déclare sa source dans `credits` (lien, auteur, modifications) : elle est créditée en fin d'article et sur `/credits`. Le build échoue, en nommant le fichier, si un tag est inconnu, si aucun tag n'est un thème, si l'image manque ou si un crédit est incomplet.
 
+Pour faire rédiger un article par un agent à partir d'un lien (page du wiki, vidéo…), donnez-lui la fiche [`documentation/rediger-un-article.md`](documentation/rediger-un-article.md) : format, tags, droits et style y sont décrits.
+
  Détails : `CLAUDE.md`, section « Modèle de contenu ».
 
 ## Mise en ligne (Vercel)

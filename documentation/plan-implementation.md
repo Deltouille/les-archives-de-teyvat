@@ -176,6 +176,12 @@ Chaque étape se termine seulement quand :
 - [x] Captures aux points de rupture, en paysage et avec le texte agrandi à 200 % ; contrôles de géométrie et de taille des cibles tactiles.
 - **Décision** : D38.
 
+## Étape 18 — Fiche de rédaction pour les agents ✅ (ajoutée à la demande)
+
+- [x] `documentation/rediger-un-article.md` : d'un lien à un article au bon format (nom de fichier, frontmatter, tags, image, crédits et droits, structure, style, vérifications).
+- [x] Test de cohérence de la fiche avec le code (`tests/documentation.test.mjs`).
+- **Décision** : D40.
+
 ## Questions ouvertes (CDC §10)
 
 À trancher quand l'étape concernée arrive ; la réponse va dans `decisions.md`.

@@ -434,3 +434,13 @@ Le déploiement lui-même est fait par Deltouille ; tout le reste de l'étape 8 
 - **Choix** : vrai conteneur ICO 32 × 32 généré depuis le SVG existant ; SVG déclaré en dernier avec `sizes="any"`. Les deux liens portent `?v=2` pour renouveler leur cache. Le chemin `/favicon.ico` reste disponible pour les navigateurs qui le demandent automatiquement.
 - **Écarté** : supprimer seulement le lien ICO laisserait l'ancien fichier accessible ; demander seulement de vider le cache ne corrigerait pas l'incohérence.
 - **Test** : conteneur ICO valide, pixels identiques au SVG rendu en 32 × 32 et liens versionnés dans le HTML.
+
+## D40 — Fiche de rédaction pour les agents (20 oct. 2026)
+
+- **Contexte** : Deltouille veut pouvoir donner un simple lien à un agent, qui récupère le contenu d'une source et rend une entrée au bon format.
+- **Choix** : une fiche autonome, `documentation/rediger-un-article.md`, avec une en-tête de skill (`name`, `description`), lisible depuis son adresse GitHub sans le reste du dépôt. Elle tire ses règles du code (schéma de `content.config.ts`, `validation.mjs`, `credits.mjs`, noms réservés de `redirections.mjs`) et ses habitudes des trois actes du prologue (sections en `##`, paragraphes courts, présent de narration, noms français officiels, trois points de résumé). L'agent rend le nom du fichier, le fichier complet et une liste de points à vérifier.
+- **Droits** : seul le Genshin Impact Wiki (CC BY-SA 3.0) peut être traduit et adapté ; vidéos, fils Reddit, publications et blogs inspirent un texte original crédité en `communaute` ; textes du jeu paraphrasés, citations courtes.
+- **Par défaut `brouillon: true`** : rien ne se publie sans relecture de Deltouille (visible en dev, exclu du build). `aLaUne` reste un choix éditorial, hors de la fiche.
+- **Volatile pointé, stable recopié** : registre des tags et dossier d'images désignés par leur adresse (ils changent souvent) ; thèmes, noms réservés, champs et plateformes recopiés, et vérifiés par `tests/documentation.test.mjs` (la liste d'images recopiée doit seulement exister). Vérifié en sabotant la fiche (ligne de champ et nom interdit retirés : les deux tests échouent).
+- **Écarté** : un vrai skill dans `.claude/skills/` (lisible par Claude Code seulement, pas par un agent à qui l'on donne un lien) ; recopier tout `tags.yaml` (dériverait à chaque ajout de tag).
+- **Constaté dans les articles existants, non corrigé** (contenu de Deltouille) : les actes II et III titrent leurs sections en `###`, si bien qu'ils n'ont pas de sommaire (seuls les `##` y entrent) ; les trois actes ont la même `description` ; les `sources` des actes II et III et le `spoilers` de l'acte III reprennent ceux d'un acte voisin.
