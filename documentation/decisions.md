@@ -411,12 +411,12 @@ Le déploiement lui-même est fait par Deltouille ; tout le reste de l'étape 8 
 - **Informations déplacées plutôt que perdues** : nombre de lectures des pages de tag sous la description (masqué à zéro, la page disant déjà « Aucune lecture ») ; temps de lecture des cartes dans le bas de carte, lisible par les lecteurs d'écran (seul « Découvrir » reste décoratif) ; « erreur 404 » dans la phrase de la page introuvable.
 - **Test** : aucun élément `sur-titre` dans les pages publiées, hors des trois titres de bloc permis ; nombre de lectures présent si et seulement si le tag en a.
 
-## D39 — Favicon de secours harmonisé (20 oct. 2026)
+## D37 — Accueil : plus de machine à écrire (20 oct. 2026)
 
-- **Contexte** : le navigateur affiche un ancien symbole au lieu de l'étoile. Le SVG était correct, mais `favicon.ico` contenait encore le logo Astro (un PNG simplement nommé `.ico`), déclaré après le SVG.
-- **Choix** : vrai conteneur ICO 32 × 32 généré depuis le SVG existant ; SVG déclaré en dernier avec `sizes="any"`. Les deux liens portent `?v=2` pour renouveler leur cache. Le chemin `/favicon.ico` reste disponible pour les navigateurs qui le demandent automatiquement.
-- **Écarté** : supprimer seulement le lien ICO laisserait l'ancien fichier accessible ; demander seulement de vider le cache ne corrigerait pas l'incohérence.
-- **Test** : conteneur ICO valide, pixels identiques au SVG rendu en 32 × 32 et liens versionnés dans le HTML.
+- **Contexte** : sur mobile, la ligne « Ici, on vous raconte … » changeait de longueur à chaque sujet (une à trois lignes) et faisait sauter les boutons et les chiffres du Hero. La capture d'un iPhone montrait aussi les chiffres à moitié sous la vague : la bannière avait une hauteur fixe (`clamp(37.5rem, 100svh, 68.75rem)`) et le contenu, plus haut que l'écran, débordait vers le bas. Deltouille : « on retire tout ça ».
+- **Choix** : ligne retirée en entier, avec tout ce qui ne servait qu'à elle : sujets (`sujetDAccueil`), mélange (`src/lib/aleatoire.mjs`), champ de frontmatter `accroche` (aucun article ne l'utilisait), curseur (`animate-clignote`), bouton pause et ses icônes, scènes `machine-a-ecrire*`. Remplace la partie machine à écrire de D12 et D28 (« à la une » choisi par le contenu reste). La bannière d'accueil passe en **hauteur minimale** : elle s'allonge sur un petit écran au lieu de faire glisser les chiffres sous la vague.
+- **Écarté** : réserver la hauteur de la ligne la plus longue (`min-h`) : le texte restait animé, et la hauteur dépendait des titres d'articles et de la largeur d'écran ; tronquer les sujets à une ligne : on perdait le sens des titres.
+- **Tests** : l'accueil publié ne contient plus la machine à écrire ; capture `accueil-petit-ecran` (fenêtre 320 × 568) : les chiffres finissent au-dessus de la vague (61 px de marge). Vérification sabotée (hauteur fixe + trois lignes de texte en plus, comme l’ancienne machine à écrire) : échoue, chiffres 83 px sous la vague.
 
 ## D38 — Hero d'accueil : composition et adaptation aux écrans (20 oct. 2026)
 
@@ -428,9 +428,9 @@ Le déploiement lui-même est fait par Deltouille ; tout le reste de l'étape 8 
 - **Vérifications** : scènes dédiées aux formats paysage, aux points de rupture et au texte agrandi à 200 %, en complément des captures existantes ; contrôle des cibles tactiles, du dégagement sous la navigation, des actions au-dessus de la vague et de la carte sous le hero. Un test du HTML garantit que les chiffres sont dans le contenu principal et absents de la bannière.
 - **Résultat** : `npm run verify` vert ; 36 captures d'accueil passent, avec axe-core sans violation, de 320 à 1920 px, en clair et sombre. La passe générale sur le site publié a aussi contrôlé les autres pages ; les scènes `/demo` sont exclues sous `astro preview`. Les contrôles géométriques ont été exercés avec des rectangles invalides simulés (chevauchement et débordement détectés).
 
-## D37 — Accueil : plus de machine à écrire (20 oct. 2026)
+## D39 — Favicon de secours harmonisé (20 oct. 2026)
 
-- **Contexte** : sur mobile, la ligne « Ici, on vous raconte … » changeait de longueur à chaque sujet (une à trois lignes) et faisait sauter les boutons et les chiffres du Hero. La capture d'un iPhone montrait aussi les chiffres à moitié sous la vague : la bannière avait une hauteur fixe (`clamp(37.5rem, 100svh, 68.75rem)`) et le contenu, plus haut que l'écran, débordait vers le bas. Deltouille : « on retire tout ça ».
-- **Choix** : ligne retirée en entier, avec tout ce qui ne servait qu'à elle : sujets (`sujetDAccueil`), mélange (`src/lib/aleatoire.mjs`), champ de frontmatter `accroche` (aucun article ne l'utilisait), curseur (`animate-clignote`), bouton pause et ses icônes, scènes `machine-a-ecrire*`. Remplace la partie machine à écrire de D12 et D28 (« à la une » choisi par le contenu reste). La bannière d'accueil passe en **hauteur minimale** : elle s'allonge sur un petit écran au lieu de faire glisser les chiffres sous la vague.
-- **Écarté** : réserver la hauteur de la ligne la plus longue (`min-h`) : le texte restait animé, et la hauteur dépendait des titres d'articles et de la largeur d'écran ; tronquer les sujets à une ligne : on perdait le sens des titres.
-- **Tests** : l'accueil publié ne contient plus la machine à écrire ; capture `accueil-petit-ecran` (fenêtre 320 × 568) : les chiffres finissent au-dessus de la vague (61 px de marge). Vérification sabotée (hauteur fixe + trois lignes de texte en plus, comme l’ancienne machine à écrire) : échoue, chiffres 83 px sous la vague.
+- **Contexte** : le navigateur affiche un ancien symbole au lieu de l'étoile. Le SVG était correct, mais `favicon.ico` contenait encore le logo Astro (un PNG simplement nommé `.ico`), déclaré après le SVG.
+- **Choix** : vrai conteneur ICO 32 × 32 généré depuis le SVG existant ; SVG déclaré en dernier avec `sizes="any"`. Les deux liens portent `?v=2` pour renouveler leur cache. Le chemin `/favicon.ico` reste disponible pour les navigateurs qui le demandent automatiquement.
+- **Écarté** : supprimer seulement le lien ICO laisserait l'ancien fichier accessible ; demander seulement de vider le cache ne corrigerait pas l'incohérence.
+- **Test** : conteneur ICO valide, pixels identiques au SVG rendu en 32 × 32 et liens versionnés dans le HTML.
