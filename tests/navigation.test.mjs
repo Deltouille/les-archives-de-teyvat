@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { lienActif, trierParLibelle } from '../src/lib/navigation.mjs';
+import { lienActif, dansLeLore, pageExacte, trierParLibelle } from '../src/lib/navigation.mjs';
 
 test('« Accueil » n’est actif que sur la page d’accueil', () => {
   assert.ok(lienActif('/', '/'));
@@ -17,6 +17,16 @@ test('« Tags » couvre l’index et les pages de tag, sauf les quêtes qui ont 
   assert.ok(!lienActif('/lore/tags/quetes', '/lore/tags'));
   assert.ok(lienActif('/lore/tags/quetes', '/lore/tags/quetes'));
   assert.ok(!lienActif('/lore/tags/quetes-secondaires', '/lore/tags'.concat('/quetes')));
+});
+
+test('la rubrique « Le lore » de la barre couvre aussi les quêtes et les tags', () => {
+  for (const chemin of ['/lore', '/lore/venti', '/lore/tags', '/lore/tags/', '/lore/tags/quetes']) assert.ok(dansLeLore(chemin), chemin);
+  for (const chemin of ['/', '/a-propos', '/lorem']) assert.ok(!dansLeLore(chemin), chemin);
+});
+
+test('pageExacte ignore la barre finale, pas les sous-pages', () => {
+  assert.ok(pageExacte('/lore/tags/', '/lore/tags'));
+  assert.ok(!pageExacte('/lore/tags/mondstadt', '/lore/tags'));
 });
 
 test('les autres liens sont actifs sur leur page exacte', () => {

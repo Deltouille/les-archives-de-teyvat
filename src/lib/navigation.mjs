@@ -8,7 +8,7 @@ export const CHEMIN_QUETES = '/lore/tags/quetes';
 /**
  * Le lien `href` est-il celui de la page `chemin` ?
  * « Le lore » couvre la bibliothèque et les articles ; « Tags » l'index et les pages de tag, sauf les quêtes,
- * qui ont leur propre entrée dans la barre.
+ * qui ont leur propre entrée dans le menu mobile.
  * @param {string} chemin
  * @param {string} href
  */
@@ -16,8 +16,17 @@ export function lienActif(chemin, href) {
   const page = sansBarreFinale(chemin);
   if (href === '/lore') return sous(page, '/lore') && !sous(page, '/lore/tags');
   if (href === '/lore/tags') return sous(page, '/lore/tags') && page !== CHEMIN_QUETES;
-  return page === sansBarreFinale(href);
+  return pageExacte(chemin, href);
 }
+
+/** La page `chemin` est-elle exactement `href` (à la barre finale près) ? */
+export const pageExacte = (chemin, href) => sansBarreFinale(chemin) === sansBarreFinale(href);
+
+/**
+ * La page est-elle dans la rubrique « Le lore » de la barre (bibliothèque, articles, quêtes, tags) ?
+ * @param {string} chemin
+ */
+export const dansLeLore = chemin => sous(sansBarreFinale(chemin), '/lore');
 
 /**
  * Le loader file() ne conserve pas l'ordre du YAML : on trie par libellé, selon l'ordre alphabétique français.

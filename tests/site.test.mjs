@@ -70,8 +70,14 @@ test('la navigation : lien actif signalé, thèmes du registre dans le menu, bou
   assert.match(html, /<a href="\/"[^>]*aria-current="page"[^>]*>Accueil<\/a>/);
   assert.equal((html.match(/aria-current="page"/g) ?? []).length, 2, 'Accueil, dans la barre et dans le menu mobile');
   const menuLore = html.split('data-menu-lore')[1].split('</div>')[0];
-  for (const theme of ['concepts', 'evenements', 'factions', 'personnages', 'regions']) assert.match(menuLore, new RegExp(`href="/lore/tags/${theme}"`), theme);
-  assert.doesNotMatch(menuLore, /href="\/lore\/tags\/quetes"/, 'les quêtes ont leur propre entrée');
+  for (const theme of ['quetes', 'concepts', 'evenements', 'factions', 'personnages', 'regions']) assert.match(menuLore, new RegExp(`href="/lore/tags/${theme}"`), theme);
+  assert.match(menuLore, /href="\/lore\/tags"/, 'l’index des tags est dans le menu « Le lore »');
+  const barre = html.split('aria-label="Navigation principale"')[1].split('</nav>')[0].replace(/data-menu-lore[\s\S]*?<\/div>/, '');
+  assert.doesNotMatch(barre, /href="\/lore\/tags/, 'ni quêtes ni tags en entrée de premier niveau');
+  // Sur l'index des tags, « Le lore » signale la rubrique (aria-current="true") et l'entrée du menu la page.
+  const tags = await lire('lore/tags/index.html');
+  assert.match(tags, /<a href="\/lore"[^>]*aria-current="true"[^>]*data-lien-lore/);
+  assert.match(tags.split('data-menu-lore')[1].split('</div>')[0], /<a href="\/lore\/tags"[^>]*aria-current="page"/);
   assert.match(html, /<button[^>]*data-bouton-theme[^>]*aria-label="Thème sombre"[^>]*aria-pressed="false"/);
   assert.match(html, /aria-controls="menu-mobile"[^>]*>/);
   assert.match(html, /<div id="menu-mobile"[^>]*hidden/);

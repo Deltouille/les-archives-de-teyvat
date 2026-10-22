@@ -453,3 +453,16 @@ Le déploiement lui-même est fait par Deltouille ; tout le reste de l'étape 8 
 - **Épisodes voisins** : en fin d'épisode, après les crédits, liens « Épisode précédent / suivant » dans la même série, par-delà les chapitres (l'acte III du prologue mène à l'acte I de Liyue), parmi les articles affichés (un brouillon n'est lié qu'en dev). `rel=prev/next`, `<nav>` nommée d'après la série.
 - **Écarté** : un `ordre` numérique global (numérotation à tenir à la main, rien à en déduire) ; le tri sur le nom de fichier (les noms sont libres et ne doivent pas porter de sens) ; une étiquette « Prologue · Acte I » sur les cartes (possible plus tard à partir du même champ, non demandée).
 - **Tests** : tri et voisins (unitaires, intercalé et autre série compris), validation (série absente, place en double), pages construites (ordre de chaque page de tag, liens précédent/suivant de chaque épisode, aucun lien pour un article hors série), fiche de rédaction à jour. Vérifiés en sabotant l'ordre (inversé) : les deux tests de pages échouent. Capture `episodes-voisins` (1440 et 390, clair et sombre) avec axe-core sans violation.
+
+## D42 — Titres de page : le nom de la page (22 oct. 2026)
+
+- **Contexte** : Deltouille n'aime pas les titres d'accroche des pages sans bannière (« Prendre le temps de comprendre. » sur `/a-propos`, « Tirez un fil. » et son chapeau sur `/lore/tags`) : on ne sait pas où l'on est, et le titre ne correspond ni au menu ni au `<title>`.
+- **Choix** : le `h1` est le nom de la page, celui du menu et du `<title>` : « À propos », « Confidentialité », « Explorer le lore », « Tous les tags », « Page introuvable » (404). Chapeaux d'accroche supprimés (`/lore`, `/lore/tags`) ; le chapeau des pages de tag reste, c'est la description du tag. Sur `/lore/tags`, sections « Thèmes » et « Autres tags » (« Tous les tags » aurait répété le `h1`).
+- **Inchangé** : le hero de l'accueil (page d'entrée, pas une page de rubrique), les titres de section de l'accueil, les pages déjà nommées (« Crédits et licences », « Mentions légales »).
+
+## D43 — Quêtes et tags rangés sous « Le lore » (22 oct. 2026)
+
+- **Contexte** : la barre alignait « Le lore », « Quêtes » et « Tags », trois entrées pour la même bibliothèque. Demande de Deltouille : les ranger dans le menu « Le lore ».
+- **Choix** : barre réduite à Accueil, Le lore, À propos. Le menu déroulant liste les quêtes en tête, les autres thèmes, puis « Tous les tags » sous un séparateur ; l'entrée de la page courante porte `aria-current="page"`. « Le lore » reste la page courante sur `/lore` et les articles, et devient `aria-current="true"` (rubrique) sur les pages de tag et de quêtes (`dansLeLore`, `src/lib/navigation.mjs`).
+- **Inchangé** : le menu mobile garde « Résumés de quêtes » et « Tous les tags » en entrées principales (un tiroir n'a pas de déroulant).
+- **Tests** : `dansLeLore` et `pageExacte` (unitaires) ; dans `dist/`, menu complet, aucune entrée de premier niveau vers `/lore/tags…`, état de rubrique sur l'index des tags ; captures `menu-lore-au-clavier` sans violation axe-core.

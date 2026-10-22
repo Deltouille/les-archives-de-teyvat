@@ -10,12 +10,9 @@ const autres = tags.filter(t => !t.data.theme);
 const compte = (id: string) => { const n = avecTag(id).length; return `${n} lecture${n > 1 ? 's' : ''}`; };
 ---
 <Site titre="Tous les tags" description="Les thèmes et les tags du lore de Teyvat, avec leur description.">
-  <EnTetePage>
-    Tirez un <em>fil.</em>
-    <Fragment slot="chapeau">Chaque lecture porte des tags : un thème, une nation, un personnage, une idée. Suivez-en un pour relier les histoires entre elles.</Fragment>
-  </EnTetePage>
+  <EnTetePage>Tous les tags</EnTetePage>
 
-  <EnTeteSection titre="Par où entrer" />
+  <EnTeteSection titre="Thèmes" />
   <ul class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3" data-themes>
     {themes.map(t => (
       <li class="group relative flex items-start gap-4 rounded-carte bg-surface p-5 transition-shadow hover:shadow-niveau-2 has-[a:focus-visible]:outline-3 has-[a:focus-visible]:outline-offset-2 has-[a:focus-visible]:outline-primaire">
@@ -29,7 +26,7 @@ const compte = (id: string) => { const n = avecTag(id).length; return `${n} lect
     ))}
   </ul>
 
-  <EnTeteSection titre="Tous les tags" />
+  <EnTeteSection titre="Autres tags" />
   <ul class="grid gap-x-8 sm:grid-cols-2 lg:grid-cols-3" data-tags>
     {autres.map(t => (
       <li class="border-b border-ligne">

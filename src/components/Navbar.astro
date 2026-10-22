@@ -4,7 +4,7 @@ import Marque from './Marque.astro';
 import BoutonTheme from './BoutonTheme.astro';
 import MenuMobile from './MenuMobile.astro';
 import { registreDesTags, cheminTag } from '../lib/contenu';
-import { lienActif, CHEMIN_QUETES } from '../lib/navigation.mjs';
+import { lienActif, dansLeLore, pageExacte, CHEMIN_QUETES } from '../lib/navigation.mjs';
 import { NOM } from '../lib/projet.mjs';
 
 interface Props { surHero?: boolean; }
@@ -12,11 +12,19 @@ const { surHero = false } = Astro.props;
 const chemin = Astro.url.pathname;
 const courant = (href: string) => (lienActif(chemin, href) ? 'page' : undefined);
 
-// Les quêtes ont leur propre entrée dans la barre : le menu déroulant liste les autres thèmes.
-const themes = (await registreDesTags()).themes.filter(t => cheminTag(t.id) !== CHEMIN_QUETES);
+// Le menu déroulant « Le lore » réunit les quêtes (en tête), les autres thèmes et l'index des tags.
+// Le menu mobile garde les quêtes et les tags dans ses entrées principales : ses thèmes sont les autres.
+const tousLesThemes = (await registreDesTags()).themes;
+const themes = tousLesThemes.filter(t => cheminTag(t.id) !== CHEMIN_QUETES);
+const entreesLore = [...tousLesThemes.filter(t => cheminTag(t.id) === CHEMIN_QUETES), ...themes]
+  .map(({ id, data }) => ({ href: cheminTag(id), libelle: data.libelle, description: data.description, icone: data.icone }));
+// « Le lore » est la page courante sur /lore et les articles ; sur une page de tag, il signale seulement la rubrique.
+const rubriqueLore = courant('/lore') ?? (dansLeLore(chemin) ? 'true' : undefined);
+const entreeMenu = 'flex items-start gap-3 rounded-moyen p-3 transition-colors hover:bg-texte/8 aria-[current=page]:bg-tonal aria-[current=page]:text-sur-tonal';
 
 // Lien de la barre : indicateur actif M3 (conteneur secondaire), couche d'état de 8 % au survol.
 const lien = 'text-etiquette-g flex h-10 items-center gap-1 rounded-full px-4 transition-colors duration-200 ease-standard hover:bg-texte/8 aria-[current=page]:bg-tonal aria-[current=page]:text-sur-tonal sur-image:hover:bg-white/12 sur-image:aria-[current=page]:bg-white/16 sur-image:aria-[current=page]:text-white';
+const lienRubrique = 'aria-[current=true]:bg-tonal aria-[current=true]:text-sur-tonal sur-image:aria-[current=true]:bg-white/16 sur-image:aria-[current=true]:text-white';
 // Bouton icône M3 standard ; verre dépoli quand la barre survole la bannière.
 const boutonIcone = 'grid size-10 place-items-center rounded-full text-discret transition-colors duration-200 ease-standard hover:bg-texte/8 sur-image:border sur-image:border-white/20 sur-image:bg-white/8 sur-image:text-white sur-image:backdrop-blur-md sur-image:hover:bg-white/16';
 ---
@@ -46,26 +54,29 @@ const boutonIcone = 'grid size-10 place-items-center rounded-full text-discret t
     <nav class="mx-auto hidden items-center gap-1 md:flex" aria-label="Navigation principale">
       <a href="/" class={lien} aria-current={courant('/')}>Accueil</a>
       <div class="group/lore relative">
-        <a href="/lore" class={lien} aria-current={courant('/lore')} data-lien-lore>
+        <a href="/lore" class:list={[lien, lienRubrique]} aria-current={rubriqueLore} data-lien-lore>
           Le lore
           <Icon nom="chevron" taille={18} class="rotate-90 opacity-70 transition-transform duration-200 group-focus-within/lore:-rotate-90 group-hover/lore:-rotate-90" />
         </a>
         {/* Déroulant au survol et au focus clavier ; le lien « Le lore » reste cliquable pour qui n'a pas de survol.
              Le ::before comble l'espace entre le lien et le menu pour que le survol ne se perde pas en chemin. */}
         <div class="invisible absolute top-full left-1/2 mt-2 w-96 -translate-x-1/2 -translate-y-1 rounded-grand border border-ligne bg-surface p-2 text-texte opacity-0 shadow-niveau-2 transition duration-200 ease-standard before:absolute before:inset-x-0 before:-top-2 before:h-2 group-focus-within/lore:visible group-focus-within/lore:translate-y-0 group-focus-within/lore:opacity-100 group-hover/lore:visible group-hover/lore:translate-y-0 group-hover/lore:opacity-100" data-menu-lore>
-          {themes.map(({ id, data }) => (
-            <a href={cheminTag(id)} class="flex items-start gap-3 rounded-moyen p-3 transition-colors hover:bg-texte/8">
-              {data.icone && <span class="grid size-10 shrink-0 place-items-center rounded-moyen bg-tonal text-sur-tonal"><Icon nom={data.icone} taille={22} /></span>}
+          {entreesLore.map(({ href, libelle, description, icone }) => (
+            <a href={href} class={entreeMenu} aria-current={courant(href)}>
+              {icone && <span class="grid size-10 shrink-0 place-items-center rounded-moyen bg-tonal text-sur-tonal"><Icon nom={icone} taille={22} /></span>}
               <span>
-                <strong class="text-titre-p block">{data.libelle}</strong>
-                <span class="text-corps-p mt-0.5 block text-discret">{data.description}</span>
+                <strong class="text-titre-p block">{libelle}</strong>
+                <span class="text-corps-p mt-0.5 block text-discret">{description}</span>
               </span>
             </a>
           ))}
+          <hr class="mx-3 my-2 border-ligne" />
+          <a href="/lore/tags" class:list={[entreeMenu, 'items-center']} aria-current={pageExacte(chemin, '/lore/tags') ? 'page' : undefined}>
+            <span class="grid size-10 shrink-0 place-items-center rounded-moyen bg-tonal text-sur-tonal"><Icon nom="tag" taille={22} /></span>
+            <strong class="text-titre-p">Tous les tags</strong>
+          </a>
         </div>
       </div>
-      <a href={CHEMIN_QUETES} class={lien} aria-current={courant(CHEMIN_QUETES)}>Quêtes</a>
-      <a href="/lore/tags" class={lien} aria-current={courant('/lore/tags')}>Tags</a>
       <a href="/a-propos" class:list={[lien, 'hidden lg:flex']} aria-current={courant('/a-propos')}>À propos</a>
     </nav>
 
