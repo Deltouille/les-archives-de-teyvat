@@ -1,7 +1,7 @@
 ---
 import Icon from './Icon.astro';
 import { cheminTag, type Tag } from '../lib/contenu';
-import { lienActif, CHEMIN_QUETES } from '../lib/navigation.mjs';
+import { lienActif, CHEMIN_QUETES, CHEMIN_THEORIES } from '../lib/navigation.mjs';
 
 interface Props { themes: Tag[]; }
 const { themes } = Astro.props;
@@ -14,6 +14,7 @@ const principaux = [
   { href: '/', libelle: 'Accueil', icone: 'maison' },
   { href: '/lore', libelle: 'Explorer le lore', icone: 'boussole' },
   { href: CHEMIN_QUETES, libelle: 'Résumés de quêtes', icone: 'livre' },
+  { href: CHEMIN_THEORIES, libelle: 'Théories', icone: 'ampoule' },
   { href: '/lore/tags', libelle: 'Tous les tags', icone: 'tag' },
 ] as const;
 ---

@@ -38,6 +38,12 @@ evenements:
   description: Les moments décisifs dont les échos résonnent encore.
   theme: true
   icone: horloge
+theories:
+  libelle: Théories
+  singulier: Théorie
+  description: Hypothèses et lectures des mystères de Teyvat, à distinguer de ce que le jeu affirme.
+  theme: true
+  icone: ampoule
 
 premiers-pas:
   libelle: Premiers pas

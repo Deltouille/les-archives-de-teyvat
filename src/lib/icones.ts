@@ -20,8 +20,9 @@ import coche from '@material-symbols/svg-400/rounded/check.svg?raw';
 import oeil from '@material-symbols/svg-400/rounded/visibility.svg?raw';
 import minuteur from '@material-symbols/svg-400/rounded/schedule.svg?raw';
 import calendrier from '@material-symbols/svg-400/rounded/calendar_today.svg?raw';
+import ampoule from '@material-symbols/svg-400/rounded/lightbulb.svg?raw';
 
-const sources = { maison, livre, boussole, personne, strates, horloge, etincelle, recherche, fleche, chevron, lune, soleil, fermer, tag, menu, coche, oeil, minuteur, calendrier };
+const sources = { maison, livre, boussole, personne, strates, horloge, etincelle, recherche, fleche, chevron, lune, soleil, fermer, tag, menu, coche, oeil, minuteur, calendrier, ampoule };
 
 export type NomIcone = keyof typeof sources;
 export const NOMS_ICONES = Object.keys(sources) as [NomIcone, ...NomIcone[]];

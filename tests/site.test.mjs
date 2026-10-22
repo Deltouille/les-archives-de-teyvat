@@ -73,11 +73,16 @@ test('la navigation : lien actif signalé, thèmes du registre dans le menu, bou
   for (const theme of ['quetes', 'concepts', 'evenements', 'factions', 'personnages', 'regions']) assert.match(menuLore, new RegExp(`href="/lore/tags/${theme}"`), theme);
   assert.match(menuLore, /href="\/lore\/tags"/, 'l’index des tags est dans le menu « Le lore »');
   const barre = html.split('aria-label="Navigation principale"')[1].split('</nav>')[0].replace(/data-menu-lore[\s\S]*?<\/div>/, '');
-  assert.doesNotMatch(barre, /href="\/lore\/tags/, 'ni quêtes ni tags en entrée de premier niveau');
+  assert.doesNotMatch(menuLore, /href="\/lore\/tags\/theories"/, 'les théories ont leur entrée dans la barre');
+  assert.deepEqual([...barre.matchAll(/href="(\/lore\/tags[^"]*)"/g)].map(m => m[1]), ['/lore/tags/theories'], 'seules les théories ont une entrée de premier niveau sous /lore/tags');
   // Sur l'index des tags, « Le lore » signale la rubrique (aria-current="true") et l'entrée du menu la page.
   const tags = await lire('lore/tags/index.html');
   assert.match(tags, /<a href="\/lore"[^>]*aria-current="true"[^>]*data-lien-lore/);
   assert.match(tags.split('data-menu-lore')[1].split('</div>')[0], /<a href="\/lore\/tags"[^>]*aria-current="page"/);
+  // Sur la page des théories, c'est l'entrée « Théories » qui est la page courante, pas la rubrique « Le lore ».
+  const theories = await lire('lore/tags/theories/index.html');
+  assert.match(theories, /<a href="\/lore\/tags\/theories"[^>]*aria-current="page"[^>]*>Théories<\/a>/);
+  assert.doesNotMatch(theories, /<a href="\/lore"[^>]*aria-current=/);
   assert.match(html, /<button[^>]*data-bouton-theme[^>]*aria-label="Thème sombre"[^>]*aria-pressed="false"/);
   assert.match(html, /aria-controls="menu-mobile"[^>]*>/);
   assert.match(html, /<div id="menu-mobile"[^>]*hidden/);

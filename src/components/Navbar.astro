@@ -4,7 +4,7 @@ import Marque from './Marque.astro';
 import BoutonTheme from './BoutonTheme.astro';
 import MenuMobile from './MenuMobile.astro';
 import { registreDesTags, cheminTag } from '../lib/contenu';
-import { lienActif, dansLeLore, pageExacte, CHEMIN_QUETES } from '../lib/navigation.mjs';
+import { lienActif, dansLeLore, pageExacte, CHEMIN_QUETES, CHEMIN_THEORIES } from '../lib/navigation.mjs';
 import { NOM } from '../lib/projet.mjs';
 
 interface Props { surHero?: boolean; }
@@ -12,9 +12,10 @@ const { surHero = false } = Astro.props;
 const chemin = Astro.url.pathname;
 const courant = (href: string) => (lienActif(chemin, href) ? 'page' : undefined);
 
-// Le menu déroulant « Le lore » réunit les quêtes (en tête), les autres thèmes et l'index des tags.
-// Le menu mobile garde les quêtes et les tags dans ses entrées principales : ses thèmes sont les autres.
-const tousLesThemes = (await registreDesTags()).themes;
+// Le menu déroulant « Le lore » réunit les quêtes (en tête), les autres thèmes et l'index des tags ; les théories
+// ont leur propre entrée dans la barre. Le menu mobile garde quêtes, théories et tags dans ses entrées principales :
+// ses thèmes sont les autres.
+const tousLesThemes = (await registreDesTags()).themes.filter(t => cheminTag(t.id) !== CHEMIN_THEORIES);
 const themes = tousLesThemes.filter(t => cheminTag(t.id) !== CHEMIN_QUETES);
 const entreesLore = [...tousLesThemes.filter(t => cheminTag(t.id) === CHEMIN_QUETES), ...themes]
   .map(({ id, data }) => ({ href: cheminTag(id), libelle: data.libelle, description: data.description, icone: data.icone }));
@@ -77,6 +78,7 @@ const boutonIcone = 'grid size-10 place-items-center rounded-full text-discret t
           </a>
         </div>
       </div>
+      <a href={CHEMIN_THEORIES} class={lien} aria-current={courant(CHEMIN_THEORIES)}>Théories</a>
       <a href="/a-propos" class:list={[lien, 'hidden lg:flex']} aria-current={courant('/a-propos')}>À propos</a>
     </nav>
 

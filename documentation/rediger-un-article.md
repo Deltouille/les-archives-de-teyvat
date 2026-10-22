@@ -54,7 +54,8 @@ Les encadrés `spoilers`, `resume` et `sources` ne s'affichent que s'ils sont re
 Le registre est `src/content/tags.yaml` : <https://raw.githubusercontent.com/Deltouille/les-archives-de-teyvat/main/src/content/tags.yaml>. Lis-le avant de choisir.
 
 - **Obligatoire** : n'utilise que des identifiants qui y figurent. Un tag inconnu fait échouer le build. S'il en manque un, ne l'invente pas dans l'article : propose-le dans tes points à vérifier (identifiant, `libelle`, `description`).
-- **Obligatoire** : au moins un **thème** (tag marqué `theme: true`). Thèmes actuels : `quetes`, `concepts`, `personnages`, `regions`, `factions`, `evenements`.
+- **Obligatoire** : au moins un **thème** (tag marqué `theme: true`). Thèmes actuels : `quetes`, `concepts`, `personnages`, `regions`, `factions`, `evenements`, `theories`.
+- **`theories`** : seulement pour un article qui défend une hypothèse ou une lecture non confirmée par le jeu. Il passe alors **en premier** (badge « Théorie »), pour que le lecteur sache d'emblée que ce n'est pas du lore établi.
 - **L'ordre compte** : le **premier thème** de la liste donne le badge de l'article, son fil d'Ariane et son filtre de recherche. Mets donc d'abord le thème qui décrit le mieux l'article.
 - Ajoute ensuite les tags utiles pour relier les articles : nation (`mondstadt`), série (`quete-d-archons`), `premiers-pas` pour une lecture d'introduction. Les articles qui partagent le plus de tags sont proposés en fin de lecture : des tags pertinents valent mieux que beaucoup de tags.
 

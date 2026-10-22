@@ -15,13 +15,15 @@ test('« Le lore » couvre la bibliothèque et les articles, pas les pages de ta
 test('« Tags » couvre l’index et les pages de tag, sauf les quêtes qui ont leur entrée', () => {
   for (const chemin of ['/lore/tags', '/lore/tags/', '/lore/tags/mondstadt']) assert.ok(lienActif(chemin, '/lore/tags'), chemin);
   assert.ok(!lienActif('/lore/tags/quetes', '/lore/tags'));
+  assert.ok(!lienActif('/lore/tags/theories', '/lore/tags'));
+  assert.ok(lienActif('/lore/tags/theories/', '/lore/tags/theories'));
   assert.ok(lienActif('/lore/tags/quetes', '/lore/tags/quetes'));
   assert.ok(!lienActif('/lore/tags/quetes-secondaires', '/lore/tags'.concat('/quetes')));
 });
 
 test('la rubrique « Le lore » de la barre couvre aussi les quêtes et les tags', () => {
   for (const chemin of ['/lore', '/lore/venti', '/lore/tags', '/lore/tags/', '/lore/tags/quetes']) assert.ok(dansLeLore(chemin), chemin);
-  for (const chemin of ['/', '/a-propos', '/lorem']) assert.ok(!dansLeLore(chemin), chemin);
+  for (const chemin of ['/', '/a-propos', '/lorem', '/lore/tags/theories', '/lore/tags/theories/']) assert.ok(!dansLeLore(chemin), chemin);
 });
 
 test('pageExacte ignore la barre finale, pas les sous-pages', () => {
