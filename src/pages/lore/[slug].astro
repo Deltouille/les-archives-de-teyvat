@@ -11,6 +11,7 @@ import EncadreResume from '../../components/EncadreResume.astro';
 import EncadreSources from '../../components/EncadreSources.astro';
 import Sommaire from '../../components/Sommaire.astro';
 import TagsArticle from '../../components/TagsArticle.astro';
+import CarteSeRelier from '../../components/CarteSeRelier.astro';
 import EncadreCredits from '../../components/EncadreCredits.astro';
 import EpisodesVoisins from '../../components/EpisodesVoisins.astro';
 import ProgressionLecture from '../../components/ProgressionLecture.astro';
@@ -37,12 +38,15 @@ const partage = await getImage({ src: image, width: 1200, height: 630, fit: 'cov
 const titres = headings.filter(h => h.depth === 2);
 const avecSommaire = titres.length > 0;
 const jour = (d: Date) => d.toISOString().slice(0, 10);
+const minutes = minutesDeLecture(article.body ?? '');
 ---
 <Site titre={data.titre} description={data.description} image={partage.src} article>
   <Banniere slot="hero" image={image} alt={data.imageAlt} titre="article-titre" transition={transitionImage(article)} class="min-h-[35rem] md:h-[clamp(32rem,78svh,48rem)]">
     {/* Même gouttière que le <main> : le titre commence au même bord que la colonne de lecture.
          pt-28 : la barre de navigation fixe (64 px) recouvre le haut de la bannière. */}
+    {/* En grande largeur, le titre s'aligne sur la colonne de texte (16rem = colonne du sommaire + gouttière). */}
     <header class="mx-auto mt-auto w-full max-w-site px-4 pt-28 pb-24 sm:px-6 md:pb-36 lg:px-10">
+      <div class="lg:mx-auto lg:max-w-article lg:px-64">
       <h1 id="article-titre" class="max-w-[18ch] text-shadow-lg" data-pagefind-meta="title">{data.titre}</h1>
       <p class="mt-4 max-w-2xl text-white/85" data-pagefind-meta="description">{data.description}</p>
       <p class="text-corps-m mt-6 flex flex-wrap items-center gap-2 text-white/75">
@@ -50,17 +54,20 @@ const jour = (d: Date) => d.toISOString().slice(0, 10);
         <span>Les chroniques de Teyvat</span><span aria-hidden="true">·</span><time datetime={jour(data.publieLe)}>{dateFr(data.publieLe)}</time>
         {data.modifieLe && <><span aria-hidden="true">·</span><span>mis à jour le <time datetime={jour(data.modifieLe)}>{dateFr(data.modifieLe)}</time></span></>}
       </p>
+      </div>
     </header>
   </Banniere>
 
   <ProgressionLecture />
   <article data-pagefind-body data-lecture>
-    <div class="mb-8 flex max-w-5xl flex-wrap items-center justify-between gap-x-6 gap-y-3" data-pagefind-ignore>
+    {/* Au-delà de 1200 px (lg), trois colonnes : sommaire, texte, à-côté (thème, durée, date, tags) ; le thème et la
+         durée quittent alors la ligne du fil d'Ariane pour la colonne de droite. */}
+    <div class="mb-8 flex max-w-5xl flex-wrap items-center justify-between gap-x-6 gap-y-3 lg:mx-auto lg:max-w-article lg:px-64" data-pagefind-ignore>
       <FilAriane etapes={[{ libelle: 'Accueil', href: '/' }, { libelle: 'Explorer', href: '/lore' }, { libelle: theme.data.libelle, href: cheminTag(theme.id) }, { libelle: data.titre }]} class="[&_li:last-child]:hidden sm:[&_li:last-child]:flex" />
-      <p class="text-corps-m flex items-center gap-3 text-discret"><span class="pastille" data-pagefind-filter="theme">{theme.data.singulier}</span>{minutesDeLecture(article.body ?? '')} min de lecture</p>
+      <p class="text-corps-m flex items-center gap-3 text-discret lg:hidden"><span class="pastille" data-pagefind-filter="theme">{theme.data.singulier}</span>{minutes} min de lecture</p>
     </div>
-    <div class:list={['max-w-5xl', avecSommaire && 'sm:grid sm:grid-cols-[minmax(0,1fr)_11rem] sm:gap-8 lg:grid-cols-[minmax(0,1fr)_13rem] lg:gap-12']}>
-      <div class="min-w-0">
+    <div class:list={['max-w-5xl lg:mx-auto lg:grid lg:max-w-article lg:grid-cols-[13rem_minmax(0,1fr)_13rem] lg:gap-12', avecSommaire && 'sm:grid sm:grid-cols-[minmax(0,1fr)_11rem] sm:gap-8']}>
+      <div class="min-w-0 lg:col-start-2 lg:row-start-1">
         {data.spoilers && <EncadreSpoilers perimetre={data.spoilers} />}
         {data.resume.length > 0 && <EncadreResume points={data.resume} />}
         {avecSommaire && <Sommaire titres={titres} avecSources={data.sources.length > 0} forme="repliable" />}
@@ -68,26 +75,34 @@ const jour = (d: Date) => d.toISOString().slice(0, 10);
         {data.sources.length > 0 && <EncadreSources sources={data.sources} />}
         {data.credits.length > 0 && <EncadreCredits credits={data.credits} />}
         {data.quete && (precedent || suivant) && <EpisodesVoisins serie={tag(data.quete.serie)} precedent={precedent} suivant={suivant} />}
-        <TagsArticle tags={data.tags.map(tag)} />
+        <TagsArticle tags={data.tags.map(tag)} class="mt-8 lg:hidden" />
       </div>
       {avecSommaire && (
-        <aside class="hidden sm:block" data-pagefind-ignore>
+        <aside class="hidden sm:block lg:col-start-1 lg:row-start-1" data-pagefind-ignore>
           <div class="sticky top-24">
             <Sommaire titres={titres} avecSources={data.sources.length > 0} forme="laterale" />
-            <a href={cheminTag('premiers-pas')} class="flex flex-col items-start gap-2 rounded-carte bg-conteneur-primaire p-5 text-sur-conteneur-primaire transition-shadow hover:shadow-niveau-1">
-              <Icon nom="boussole" />
-              <strong class="text-titre-p">Chaque histoire se relie.</strong>
-              <span class="text-corps-p">Commencez par nos premières lectures.</span>
-              <Icon nom="fleche" taille={20} />
-            </a>
+            <CarteSeRelier class="lg:hidden" />
           </div>
         </aside>
       )}
+      <aside class="hidden lg:col-start-3 lg:row-start-1 lg:block" aria-label="À propos de cet article" data-pagefind-ignore>
+        <div class="sticky top-24 flex flex-col items-start gap-6">
+          <ul class="text-corps-m flex flex-col items-start gap-3 text-discret">
+            <li><span class="pastille">{theme.data.singulier}</span></li>
+            <li class="flex items-center gap-2"><Icon nom="minuteur" taille={20} />{minutes} min de lecture</li>
+            <li class="flex items-center gap-2"><Icon nom="calendrier" taille={20} />{data.modifieLe
+              ? <span>Mis à jour le <time datetime={jour(data.modifieLe)}>{dateFr(data.modifieLe)}</time></span>
+              : <span>Publié le <time datetime={jour(data.publieLe)}>{dateFr(data.publieLe)}</time></span>}</li>
+          </ul>
+          <TagsArticle tags={data.tags.map(tag)} class="" />
+          <CarteSeRelier />
+        </div>
+      </aside>
     </div>
   </article>
 
   {lies.length > 0 && (
-    <section data-pagefind-ignore aria-labelledby="lies-titre">
+    <section class="lg:mx-auto lg:max-w-article" data-pagefind-ignore aria-labelledby="lies-titre">
       <EnTeteSection titre="Pour aller plus loin" id="lies-titre" />
       <GrilleArticles articles={lies} />
     </section>

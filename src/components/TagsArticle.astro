@@ -1,7 +1,7 @@
 ---
 import { cheminTag, type Tag } from '../lib/contenu';
-interface Props { tags: Tag[]; }
+interface Props { tags: Tag[]; class?: string; }
 ---
-<ul class="mt-8 flex flex-wrap gap-2" aria-label="Tags de l’article" data-pagefind-ignore>
+<ul class:list={['flex flex-wrap gap-2', Astro.props.class ?? 'mt-8']} aria-label="Tags de l’article" data-pagefind-ignore>
   {Astro.props.tags.map(t => <li><a class="text-etiquette-g flex h-8 items-center rounded-petit border border-contour px-3 text-primaire transition-colors hover:bg-texte/8" href={cheminTag(t.id)}>#{t.data.libelle}</a></li>)}
 </ul>

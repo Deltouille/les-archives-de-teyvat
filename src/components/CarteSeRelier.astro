@@ -1,0 +1,12 @@
+---
+import Icon from './Icon.astro';
+import { cheminTag } from '../lib/contenu';
+// Petite carte de la colonne latérale d'un article : renvoie vers les premières lectures.
+interface Props { class?: string; }
+---
+<a href={cheminTag('premiers-pas')} class:list={['flex flex-col items-start gap-2 rounded-carte bg-conteneur-primaire p-5 text-sur-conteneur-primaire transition-shadow hover:shadow-niveau-1', Astro.props.class]}>
+  <Icon nom="boussole" />
+  <strong class="text-titre-p">Chaque histoire se relie.</strong>
+  <span class="text-corps-p">Commencez par nos premières lectures.</span>
+  <Icon nom="fleche" taille={20} />
+</a>

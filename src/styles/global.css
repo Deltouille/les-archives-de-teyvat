@@ -70,6 +70,8 @@
 
   /* Largeur maximale du contenu (en-tête, <main>, pied de page). */
   --container-site: 92.5rem;
+  /* Page d'article en grande largeur : sommaire 13rem, gouttières 3rem, texte 48rem au plus, colonne d'à-côté 13rem. */
+  --container-article: 80rem;
 
   /* L'espacement reste celui de Tailwind (multiples de 4 px) : c'est déjà la grille de 4 dp de M3. */
 }

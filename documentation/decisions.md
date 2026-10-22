@@ -466,3 +466,10 @@ Le déploiement lui-même est fait par Deltouille ; tout le reste de l'étape 8 
 - **Choix** : barre réduite à Accueil, Le lore, À propos. Le menu déroulant liste les quêtes en tête, les autres thèmes, puis « Tous les tags » sous un séparateur ; l'entrée de la page courante porte `aria-current="page"`. « Le lore » reste la page courante sur `/lore` et les articles, et devient `aria-current="true"` (rubrique) sur les pages de tag et de quêtes (`dansLeLore`, `src/lib/navigation.mjs`).
 - **Inchangé** : le menu mobile garde « Résumés de quêtes » et « Tous les tags » en entrées principales (un tiroir n'a pas de déroulant).
 - **Tests** : `dansLeLore` et `pageExacte` (unitaires) ; dans `dist/`, menu complet, aucune entrée de premier niveau vers `/lore/tags…`, état de rubrique sur l'index des tags ; captures `menu-lore-au-clavier` sans violation axe-core.
+
+## D44 — Article en trois colonnes en grande largeur (22 oct. 2026)
+
+- **Contexte** : sur ordinateur, le bloc de l'article (1024 px) était calé à gauche d'un conteneur de 1360 à 1480 px : tout le vide s'accumulait à droite. Deltouille le trouvait trop vide ; le mobile convenait.
+- **Choix** (retenu par Deltouille parmi deux maquettes) : au-delà de 1200 px (`lg`), trois colonnes centrées dans `max-w-article` (80rem) : sommaire (13rem), texte (48rem au plus, la mesure de lecture ne s'élargit pas), à-côté (13rem) avec thème, durée de lecture, date, tags et carte « premiers pas » (`CarteSeRelier.astro`). Le titre de la bannière, le fil d'Ariane et « Pour aller plus loin » s'alignent sur ce gabarit. Le thème et la durée quittent la ligne du fil d'Ariane, les tags la fin de l'article (ils sont dans l'à-côté). Entre 600 et 1200 px, mise en page inchangée (texte + sommaire) ; en mobile, inchangée.
+- **Écarté** : centrer le bloc existant (le vide était seulement réparti des deux côtés) ; élargir la colonne de texte (déjà vers 90 caractères par ligne).
+- **Tests** : scène `article-lecture` (1440 et 1920) qui vérifie l'ordre des colonnes, la largeur du texte et l'alignement du titre de la bannière ; vérifiée en sabotant l'alignement.

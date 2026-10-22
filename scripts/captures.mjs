@@ -188,6 +188,24 @@ const SCENES = [
   { nom: 'bibliotheque', url: '/lore' },
   { nom: 'article', url: ARTICLE },
   {
+    // Colonne de lecture et sommaire en grande largeur, une fois la bannière passée.
+    nom: 'article-lecture',
+    url: ARTICLE,
+    largeurs: [1440, 1920],
+    fenetre: true,
+    actions: `document.querySelector('.prose h2').scrollIntoView(); await attendre(300);`,
+    // Trois colonnes : sommaire à gauche, texte de 48rem au plus, à-côté à droite ; le titre de la bannière s'aligne sur le texte.
+    verifier: `(() => {
+      const p = [];
+      const boite = s => document.querySelector(s).getBoundingClientRect();
+      const texte = boite('.prose'), sommaire = boite('aside [data-sommaire]'), acote = boite('aside[aria-label="À propos de cet article"]');
+      if (!(sommaire.right < texte.left && texte.right < acote.left)) p.push('sommaire, texte et à-côté devraient se suivre de gauche à droite');
+      if (texte.width > 768.5) p.push('la colonne de texte dépasse 48rem (' + Math.round(texte.width) + ' px)');
+      if (Math.abs(boite('#article-titre').left - texte.left) > 1) p.push('le titre de la bannière devrait s’aligner sur le texte');
+      return p;
+    })()`,
+  },
+  {
     nom: 'article-haut',
     url: ARTICLE,
     fenetre: true,
