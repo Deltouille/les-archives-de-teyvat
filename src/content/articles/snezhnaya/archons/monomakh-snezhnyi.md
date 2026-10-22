@@ -4,7 +4,7 @@ description: "Premier Archon Cryo de Snezhnaya, Monomakh Snezhnyi fonde Kitezh, 
 image: monomakh-snezhnaya
 imageAlt: "Les étendues enneigées de Snezhnaya"
 publieLe: 2026-10-22
-brouillon: true
+brouillon: false
 tags: [personnages]
 spoilers: "Histoire de l'ancien Archon Cryo, événements du Cataclysme et révélations de la quête « An Ark That Used to Be a Soul »."
 resume:
