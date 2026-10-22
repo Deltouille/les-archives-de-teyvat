@@ -15,7 +15,8 @@
     "astro": "astro",
     "palette": "node scripts/palette.mjs",
     "captures": "node scripts/captures.mjs",
-    "vercel": "node scripts/vercel.mjs"
+    "vercel": "node scripts/vercel.mjs",
+    "image": "node scripts/image.mjs"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.7.4",
@@ -29,6 +30,7 @@
     "@material/material-color-utilities": "^0.3.0",
     "axe-core": "^4.14.0",
     "pagefind": "^1.5.2",
+    "sharp": "^0.35.5",
     "typescript": "^6.0.3"
   },
   "license": "GPL-3.0-or-later"

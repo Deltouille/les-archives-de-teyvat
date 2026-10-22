@@ -62,7 +62,7 @@ Le registre est `src/content/tags.yaml` : <https://raw.githubusercontent.com/Del
 
 - Un nom de fichier de `src/assets/images/`, sans `.webp` : liste à jour sur <https://github.com/Deltouille/les-archives-de-teyvat/tree/main/src/assets/images>. Au moment d'écrire cette fiche : `fontaine`, `inazuma`, `liyue`, `mondstadt`, `natlan`, `nod-krai`, `snezhnaya`, `sumeru`, `teyvat` (`fond-d-ecran` est réservé à l'accueil).
 - **Obligatoire** : l'image doit exister, sinon le build échoue. Choisis celle de la nation concernée (`teyvat` pour un sujet qui dépasse une nation).
-- Ne télécharge et n'ajoute aucune image toi-même : si une image dédiée serait meilleure, dis-le dans tes points à vérifier.
+- Ne télécharge et n'ajoute aucune image toi-même : si une image dédiée serait meilleure, dis-le dans tes points à vérifier, avec son lien si tu en connais un (elle sera ajoutée par `npm run image -- <lien> <nom>`). Une bannière s'affiche en pleine largeur : une illustration en paysage d'au moins 1600 px de large convient, un portrait de personnage sur fond transparent non.
 - Pas d'image dans le corps de l'article.
 
 ## 6. Droits et crédits
