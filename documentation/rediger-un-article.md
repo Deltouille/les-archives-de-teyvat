@@ -61,10 +61,10 @@ Le registre est `src/content/tags.yaml` : <https://raw.githubusercontent.com/Del
 
 ## 5. L'image
 
-- Un nom de fichier de `src/assets/images/`, sans `.webp` : liste à jour sur <https://github.com/Deltouille/les-archives-de-teyvat/tree/main/src/assets/images>. Au moment d'écrire cette fiche : `fontaine`, `inazuma`, `liyue`, `mondstadt`, `natlan`, `nod-krai`, `snezhnaya`, `sumeru`, `teyvat` (`fond-d-ecran` est réservé à l'accueil).
+- Le nom d'un fichier `.webp` de `src/assets/images/` (rangé dans n'importe quel sous-dossier), sans dossier ni `.webp` : liste à jour sur <https://github.com/Deltouille/les-archives-de-teyvat/tree/main/src/assets/images>. Au moment d'écrire cette fiche : `fontaine`, `inazuma`, `liyue`, `mondstadt`, `natlan`, `nod-krai`, `snezhnaya`, `sumeru`, `teyvat` (`fond-d-ecran` est réservé à l'accueil).
 - **Obligatoire** : l'image doit exister, sinon le build échoue. Choisis celle de la nation concernée (`teyvat` pour un sujet qui dépasse une nation).
 - Ne télécharge et n'ajoute aucune image toi-même : si une image dédiée serait meilleure, dis-le dans tes points à vérifier, avec son lien si tu en connais un (elle sera ajoutée par `npm run image -- <lien> <nom>`). Une bannière s'affiche en pleine largeur : une illustration en paysage d'au moins 1600 px de large convient, un portrait de personnage sur fond transparent non.
-- Pas d'image dans le corps de l'article.
+- **Dans le corps**, seulement si on te fournit des images pour cet article : `![description de l'image](<nom>)`, seule sur sa ligne, avec le même nom sans dossier ni extension que pour `image`. La description est obligatoire (le build échoue sans elle) : décris ce que l'image montre, en une phrase. N'invente pas d'image : un nom inconnu fait échouer le build.
 
 ## 6. Droits et crédits
 
@@ -108,7 +108,7 @@ Les textes du site sont sous licence **CC BY-SA 3.0**. Ce que tu as le droit de 
 - `###` seulement pour découper une longue section.
 - L'ordre suit l'histoire, du début à la fin.
 - Longueur habituelle : 800 à 2 000 mots, de 6 à 12 sections. Un paragraphe = une à trois phrases, séparé du suivant par une ligne vide.
-- Markdown simple : paragraphes, `**gras**` avec parcimonie, listes si elles aident vraiment. Pas de HTML, pas de tableau, pas d'image, pas de citation `>` décorative.
+- Markdown simple : paragraphes, `**gras**` avec parcimonie, listes si elles aident vraiment. Pas de HTML, pas de tableau, pas de citation `>` décorative ; une image seulement si elle t'est fournie (§ 5).
 - Liens vers d'autres articles du site seulement s'ils existent, sous la forme `/lore/<nom-du-fichier>`, sans barre finale.
 
 ### Style
@@ -173,5 +173,5 @@ Alors qu'il se trouve près du Cap de la Promesse, le Voyageur repêche une étr
 - [ ] Pour un épisode de quête : `quete` rempli (série présente dans `tags`, chapitre et acte justes, place libre dans la série).
 - [ ] `spoilers`, `resume` et `sources` décrivent bien **cet** article (attention aux copier-coller d'un article voisin).
 - [ ] Un crédit par source adaptée ou utilisée ; `modifications` rempli pour le wiki ; adresses en `https://`.
-- [ ] Sections en `##`, pas de `#`, pas de HTML ni d'image dans le corps.
+- [ ] Sections en `##`, pas de `#`, pas de HTML ; images du corps fournies, citées par leur nom, avec une description.
 - [ ] Noms français officiels ; noms incertains listés dans les points à vérifier.

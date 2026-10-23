@@ -11,7 +11,7 @@ const articles = defineCollection({
   schema: z.object({
     titre: z.string(),
     description: z.string(),
-    // Nom d'un .webp de src/assets/images, sans extension.
+    // Nom d'un .webp de src/assets/images (dans n'importe quel sous-dossier), sans dossier ni extension.
     image: z.string(),
     imageAlt: z.string().default(''),
     publieLe: z.coerce.date(),

@@ -6,11 +6,12 @@
 // prendre ces noms (src/lib/redirections.mjs).
 import { NOMS_RESERVES as RESERVES, TAGS_SUPPRIMES } from './redirections.mjs';
 import { verifierCredit } from './credits.mjs';
+import { imagesDuCorps } from './images.mjs';
 
 /**
- * @param {{ id: string, filePath?: string, data: { tags: string[], image: string, publieLe: Date, modifieLe?: Date, credits?: any[], quete?: { serie: string, chapitre: number, acte: number } } }[]} articles
+ * @param {{ id: string, filePath?: string, body?: string, data: { tags: string[], image: string, publieLe: Date, modifieLe?: Date, credits?: any[], quete?: { serie: string, chapitre: number, acte: number } } }[]} articles
  * @param {{ id: string, data: { theme: boolean, singulier?: string, icone?: string } }[]} tags
- * @param {Set<string>} images noms des .webp de src/assets/images, sans extension
+ * @param {Set<string>} images noms des .webp de src/assets/images (sous-dossiers compris), sans dossier ni extension
  */
 export function validerContenus(articles, tags, images) {
   for (const tag of tags) {
@@ -33,7 +34,13 @@ export function validerContenus(articles, tags, images) {
     if (!data.tags.some(tag => connus.get(tag)?.data.theme)) {
       throw new Error(`Aucun thème dans ${origine} : ajoutez au moins un tag marqué « theme: true » dans tags.yaml`);
     }
-    if (!images.has(data.image)) throw new Error(`Image inconnue « ${data.image} » dans ${origine} : ajoutez src/assets/images/${data.image}.webp`);
+    if (!images.has(data.image)) throw new Error(`Image inconnue « ${data.image} » dans ${origine} : ajoutez ${data.image}.webp sous src/assets/images (dans le dossier de votre choix)`);
+    // Images du corps (![texte](<nom>)) : le plugin Markdown signale aussi l'erreur, mais Astro la journalise sans
+    // arrêter le build ; c'est ici qu'elle le fait échouer.
+    for (const { nom, alt } of imagesDuCorps(article.body ?? '')) {
+      if (!images.has(nom)) throw new Error(`Image inconnue « ${nom} » dans le corps de ${origine} : ajoutez ${nom}.webp sous src/assets/images (dans le dossier de votre choix)`);
+      if (!alt.trim()) throw new Error(`Image « ${nom} » sans texte alternatif dans ${origine} : écrivez ![description de l'image](${nom})`);
+    }
     if (data.modifieLe && data.modifieLe < data.publieLe) throw new Error(`modifieLe antérieur à publieLe dans ${origine}`);
     if (data.quete) {
       const { serie, chapitre, acte } = data.quete;

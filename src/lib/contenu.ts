@@ -4,6 +4,7 @@ import { trierParLibelle } from './navigation.mjs';
 import { validerContenus } from './validation.mjs';
 import { articlesPublies, themePrincipal } from './bibliotheque.mjs';
 import { doublonsDIdentifiants } from './identifiant.mjs';
+import { doublonsDImages, nomDImage } from './images.mjs';
 
 // Chemins de tous les fichiers d'articles, pour repérer deux fichiers de même nom dans deux dossiers : ils voudraient
 // la même URL, et le chargeur de contenu garderait l'un en écrasant l'autre sans erreur.
@@ -19,15 +20,15 @@ export const cheminTag = (id: string) => `/lore/tags/${id}`;
  *  rester unique sur une page, sinon le navigateur abandonne toute la transition. */
 export const transitionImage = (article: Article) => `image-${article.id}`;
 
-// Toutes les images, par nom : src/assets/images/<nom>.webp. Astro les optimise à l'usage (<Image />).
-const images = Object.fromEntries(
-  Object.entries(import.meta.glob<{ default: ImageMetadata }>('../assets/images/*.webp', { eager: true }))
-    .map(([chemin, module]) => [chemin.split('/').pop()!.replace(/\.webp$/, ''), module.default]),
-);
+// Toutes les images, par nom de fichier : src/assets/images/<dossiers libres>/<nom>.webp. Comme pour les articles,
+// le dossier ne compte pas. Astro les optimise à l'usage (<Image />).
+const modulesImages = import.meta.glob<{ default: ImageMetadata }>('../assets/images/**/*.webp', { eager: true });
+const FICHIERS_IMAGES = Object.keys(modulesImages).map(c => c.replace(/^\.\.\//, 'src/'));
+const images = Object.fromEntries(Object.entries(modulesImages).map(([chemin, module]) => [nomDImage(chemin), module.default]));
 
 export function imageDe(nom: string): ImageMetadata {
   const image = images[nom];
-  if (!image) throw new Error(`Image inconnue : src/assets/images/${nom}.webp`);
+  if (!image) throw new Error(`Image inconnue : aucun fichier ${nom}.webp sous src/assets/images`);
   return image;
 }
 
@@ -45,6 +46,8 @@ export async function bibliotheque() {
   const [tous, { tags, themes }] = await Promise.all([getCollection('articles'), registreDesTags()]);
   const doublons = doublonsDIdentifiants(FICHIERS_ARTICLES);
   if (doublons.length) throw new Error(doublons.map(d => `Même URL /lore/${d.identifiant} pour ${d.chemins.join(' et ')} : renommez l'un des fichiers`).join('\n'));
+  const memesImages = doublonsDImages(FICHIERS_IMAGES);
+  if (memesImages.length) throw new Error(memesImages.map(d => `Même image « ${d.nom} » pour ${d.chemins.join(' et ')} : renommez l'un des fichiers`).join('\n'));
   validerContenus(tous, tags, new Set(Object.keys(images)));
   const articles = articlesPublies(tous, { dev: import.meta.env.DEV });
   const parId = new Map(tags.map(t => [t.id, t]));

@@ -32,7 +32,13 @@ test('les noms réservés aux pages de tags et aux redirections sont refusés', 
 });
 
 test('une image absente de src/assets/images est refusée', () => {
-  assert.throws(() => valider([article('diluc', { image: 'mondstad' })]), /Image inconnue « mondstad » dans src\/content\/articles\/diluc\.md : ajoutez src\/assets\/images\/mondstad\.webp/);
+  assert.throws(() => valider([article('diluc', { image: 'mondstad' })]), /Image inconnue « mondstad » dans src\/content\/articles\/diluc\.md : ajoutez mondstad\.webp sous src\/assets\/images/);
+});
+
+test('une image du corps doit exister et avoir un texte alternatif', () => {
+  assert.doesNotThrow(() => valider([{ ...article('diluc'), body: 'Texte.\n\n![Le ciel de Teyvat](teyvat)\n\n![](https://exemple.fr/x.png)' }]));
+  assert.throws(() => valider([{ ...article('diluc'), body: '![Le ciel](teyva)' }]), /Image inconnue « teyva » dans le corps de src\/content\/articles\/diluc\.md/);
+  assert.throws(() => valider([{ ...article('diluc'), body: '![](teyvat)' }]), /Image « teyvat » sans texte alternatif dans src\/content\/articles\/diluc\.md/);
 });
 
 test('une date de mise à jour antérieure à la publication est refusée', () => {

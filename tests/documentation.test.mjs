@@ -5,6 +5,7 @@ import path from 'node:path';
 import { NOMS_RESERVES } from '../src/lib/redirections.mjs';
 import { PLATEFORMES } from '../src/lib/credits.mjs';
 import { DEPOT } from '../src/lib/projet.mjs';
+import { nomDImage } from '../src/lib/images.mjs';
 import { lireTags } from './sources.mjs';
 
 // La fiche donnée aux agents de rédaction (D40) répète des règles du code : elle doit les suivre.
@@ -27,7 +28,7 @@ test('fiche de rédaction : noms interdits, thèmes, plateformes et images suive
   assert.deepEqual(codes(themes).sort(), (await lireTags()).filter(t => t.theme).map(t => t.id).sort());
   const plateformes = fiche.split('`plateforme` doit correspondre')[1].split('\n')[0];
   for (const p of Object.keys(PLATEFORMES)) assert.ok(codes(plateformes).includes(p), p);
-  const images = new Set((await readdir(path.resolve('src/assets/images'))).map(f => f.replace(/\.webp$/, '')));
+  const images = new Set((await readdir(path.resolve('src/assets/images'), { recursive: true })).filter(f => f.endsWith('.webp')).map(nomDImage));
   for (const image of codes(fiche.split('Au moment d\'écrire cette fiche :')[1].split('\n')[0])) assert.ok(images.has(image), image);
   assert.ok(fiche.includes(DEPOT), 'adresse du dépôt');
 });

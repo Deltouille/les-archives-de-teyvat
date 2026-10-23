@@ -122,6 +122,8 @@
   .prose li { @apply mb-2; }
   .prose blockquote { @apply my-6 rounded-r-grand border-l-4 border-primaire bg-doux px-6 py-4 italic; }
   .prose code { @apply rounded-tres-petit bg-tonal px-1.5 py-0.5 text-corps-m text-sur-tonal; }
+  /* Images du corps (![texte](<nom>), D48) : pleine largeur de la colonne, coins des cartes. */
+  .prose img { @apply block h-auto w-full rounded-carte; }
 }
 
 /* Voile des bannières : assombrit la gauche et le bas, là où se pose le texte, sans éteindre le centre de l'image
