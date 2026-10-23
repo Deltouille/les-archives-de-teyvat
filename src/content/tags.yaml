@@ -38,6 +38,12 @@ evenements:
   description: Les moments décisifs dont les échos résonnent encore.
   theme: true
   icone: horloge
+bandes-annonces:
+  libelle: Bandes-annonces
+  singulier: Bande-annonce
+  description: Les résumés des bandes-annonces des nouvelles versions de Genshin Impact.
+  theme: true
+  icone: video
 theories:
   libelle: Théories
   singulier: Théorie

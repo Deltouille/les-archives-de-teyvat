@@ -504,3 +504,9 @@ Le déploiement lui-même est fait par Deltouille ; tout le reste de l'étape 8 
 - **Fiche de rédaction** : un agent n'insère une image dans le corps que si on la lui fournit, toujours avec une description.
 - **Écarté** : chemin relatif écrit à la main (casse au déplacement) ; alias d'import (`@/assets/…`), qui obligerait à écrire le dossier de l'image ; un composant MDX (passer les articles en `.mdx` pour un seul besoin).
 - **Correctif (dev)** : citer une image avant de l'avoir ajoutée laissait l'article **sans corps** en dev, même après l'ajout et un redémarrage. Le chargeur `glob()` ne refait le rendu que si le texte du fichier change (empreinte du contenu) : le rendu raté restait en cache. `outillageDeDev` relit désormais (effacer puis relire, comme D25) les articles qui citent une image `.webp` ajoutée, supprimée ou remplacée. Vérifié sur une copie du projet : corps vide avant l'ajout, rendu complet aussitôt après. Le build n'est pas concerné (la validation l'arrête avant).
+
+## D49 — Thème « Bandes-annonces » (23 oct. 2026)
+
+- **Contexte** : Deltouille publie des résumés de bandes-annonces de versions (le premier : live 7.2) et voulait les regrouper.
+- **Choix** : nouveau **thème** `bandes-annonces` (singulier « Bande-annonce », icône `video` = Material Symbols `smart_display`), plutôt qu'un tag simple : le badge « Bande-annonce » signale d'emblée un résumé d'annonce, pas du lore établi en jeu, et le thème rejoint le menu « Le lore » et les filtres de recherche comme les autres. Identifiant au pluriel, comme les autres thèmes (le tag `bande-annonce` créé juste avant n'avait jamais été publié : aucune redirection nécessaire).
+- **Inchangé** : les quatre tuiles de thème de l'accueil ; pas d'entrée dédiée dans la barre (contrairement aux Théories, D46).
