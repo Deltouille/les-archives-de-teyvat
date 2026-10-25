@@ -6,11 +6,11 @@ import { minutesDeLecture } from '../lib/bibliotheque.ts';
 
 interface Props {
   article: Article;
-  theme: Tag;
+  rubrique: Tag;
   /** Niveau du titre, selon la page : h2 dans une liste, h3 sous un titre de section. */
   niveau?: 'h2' | 'h3';
 }
-const { article, theme, niveau: Titre = 'h3' } = Astro.props;
+const { article, rubrique, niveau: Titre = 'h3' } = Astro.props;
 const { data } = article;
 ---
 {/* Un seul lien, sur le titre, étendu à toute la carte par son ::after : un lecteur d'écran n'entend qu'une fois
@@ -18,7 +18,7 @@ const { data } = article;
 <article class="group relative flex flex-col overflow-hidden rounded-carte bg-surface transition-shadow duration-200 ease-standard hover:shadow-niveau-2 has-[a:focus-visible]:outline-3 has-[a:focus-visible]:outline-offset-2 has-[a:focus-visible]:outline-primaire">
   <div class="relative aspect-video overflow-hidden">
     <Image class="size-full object-cover transition-transform duration-500 ease-standard group-hover:scale-105 [view-transition-class:image-article]" data-transition={transitionImage(article)} src={imageDe(data.image)} alt="" width={700} widths={[400, 700]} sizes="(min-width: 1200px) 33vw, (min-width: 600px) 50vw, 100vw" loading="lazy" />
-    <span class="text-etiquette-m absolute bottom-3 left-3 rounded-full bg-surface/90 px-3 py-1 text-texte backdrop-blur">{theme.data.singulier}</span>
+    <span class="text-etiquette-m absolute bottom-3 left-3 rounded-full bg-surface/90 px-3 py-1 text-texte backdrop-blur">{rubrique.data.singulier}</span>
   </div>
   <div class="flex flex-1 flex-col gap-2 p-5">
     <Titre class="text-titre-g font-semibold"><a href={cheminArticle(article)} class="after:absolute after:inset-0 after:content-[''] focus-visible:outline-none group-hover:text-primaire">{data.titre}</a></Titre>

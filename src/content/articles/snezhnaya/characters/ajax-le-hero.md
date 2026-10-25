@@ -5,7 +5,7 @@ image: snezhnaya
 imageAlt: "Les étendues enneigées de Snezhnaya"
 publieLe: 2026-10-22
 brouillon: false 
-tags: [personnages, theories]
+tags: [theories]
 spoilers: "Révèle des informations issues de l'Histoire générale de Snezhnaya, des Hymnes du grand nord et des notes de l'Ordo de Narzissenkreuz, ainsi que l'identité du Troisième Descendeur."
 resume:
   - "Ajax est un héros des contes de Snezhnaya, connu pour ses exploits en Hyperborée et son amour perdu pour une snegurochka."

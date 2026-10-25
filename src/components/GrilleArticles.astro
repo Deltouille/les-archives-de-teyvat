@@ -3,8 +3,8 @@ import CarteArticle from './CarteArticle.astro';
 import { bibliotheque, type Article } from '../lib/contenu';
 interface Props { articles: Article[]; niveau?: 'h2' | 'h3'; }
 const { articles, niveau } = Astro.props;
-const { themeDe } = await bibliotheque();
+const { rubriqueDe } = await bibliotheque();
 ---
 <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 lg:gap-6" data-grille-articles>
-  {articles.map(article => <CarteArticle article={article} theme={themeDe(article)} niveau={niveau} />)}
+  {articles.map(article => <CarteArticle article={article} rubrique={rubriqueDe(article)} niveau={niveau} />)}
 </div>

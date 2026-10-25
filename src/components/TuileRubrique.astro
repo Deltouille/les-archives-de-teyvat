@@ -1,0 +1,15 @@
+---
+import Icon from './Icon.astro';
+import { cheminTag, type Tag } from '../lib/contenu';
+// Tuile d'entrée par rubrique (accueil). La teinte est une paire conteneur / « sur » de la palette M3.
+interface Props { rubrique: Tag; accroche: string; teinte: string; }
+const { rubrique, accroche, teinte } = Astro.props;
+---
+<a href={cheminTag(rubrique.id)} class="flex items-center gap-3 rounded-grand bg-surface p-4 transition-shadow duration-200 hover:shadow-niveau-2">
+  {rubrique.data.icone && <span class:list={['grid size-12 shrink-0 place-items-center rounded-moyen', teinte]}><Icon nom={rubrique.data.icone} taille={26} /></span>}
+  <span class="min-w-0">
+    <strong class="text-titre-m block">{rubrique.data.libelle}</strong>
+    <span class="text-corps-p block text-discret">{accroche}</span>
+  </span>
+  <Icon nom="chevron" taille={20} class="ml-auto hidden text-discret sm:block" />
+</a>

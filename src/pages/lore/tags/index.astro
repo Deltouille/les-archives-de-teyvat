@@ -1,43 +1,33 @@
 ---
 import Site from '../../../layouts/Site.astro';
-import Icon from '../../../components/Icon.astro';
 import EnTetePage from '../../../components/EnTetePage.astro';
 import EnTeteSection from '../../../components/EnTeteSection.astro';
-import { bibliotheque, cheminTag } from '../../../lib/contenu';
+import CarteTag from '../../../components/CarteTag.astro';
+import { bibliotheque } from '../../../lib/contenu';
+import { FAMILLES, type Famille } from '../../../lib/familles.ts';
 
-const { tags, themes, avecTag } = await bibliotheque();
-const autres = tags.filter(t => !t.data.theme);
-const compte = (id: string) => { const n = avecTag(id).length; return `${n} lecture${n > 1 ? 's' : ''}`; };
+// Les rubriques (le genre d'article), puis les sujets rangés par famille, dans l'ordre de FAMILLES (D53) ; une carte
+// pour chacun.
+const { rubriques, sujets, avecTag } = await bibliotheque();
+const familles = (Object.entries(FAMILLES) as [Famille, string][])
+  .map(([famille, libelle]) => ({ famille, libelle, sujets: sujets.filter(s => s.data.famille === famille) }))
+  .filter(f => f.sujets.length > 0);
+const grille = 'grid gap-4 sm:grid-cols-2 lg:grid-cols-3';
 ---
-<Site titre="Tous les tags" description="Les thèmes et les tags du lore de Teyvat, avec leur description.">
-  <EnTetePage>Tous les tags</EnTetePage>
+<Site titre="Rubriques et sujets" description="Les rubriques et les sujets du lore de Teyvat : régions, séries, groupes et notions, avec leur description.">
+  <EnTetePage>Rubriques et sujets</EnTetePage>
 
-  <EnTeteSection titre="Thèmes" />
-  <ul class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3" data-themes>
-    {themes.map(t => (
-      <li class="group relative flex items-start gap-4 rounded-carte bg-surface p-5 transition-shadow hover:shadow-niveau-2 has-[a:focus-visible]:outline-3 has-[a:focus-visible]:outline-offset-2 has-[a:focus-visible]:outline-primaire">
-        {t.data.icone && <span class="grid size-12 shrink-0 place-items-center rounded-grand bg-tonal text-sur-tonal"><Icon nom={t.data.icone} /></span>}
-        <span class="min-w-0">
-          <a href={cheminTag(t.id)} class="text-titre-m block after:absolute after:inset-0 after:content-[''] focus-visible:outline-none group-hover:text-primaire">{t.data.libelle}</a>
-          <span class="text-corps-m mt-1 block text-discret">{t.data.description}</span>
-          <span class="text-etiquette-m mt-2 block text-primaire">{compte(t.id)}</span>
-        </span>
-      </li>
-    ))}
+  <EnTeteSection titre="Rubriques" />
+  <ul class={grille} data-rubriques>
+    {rubriques.map(t => <CarteTag tag={t} lectures={avecTag(t.id).length} />)}
   </ul>
 
-  <EnTeteSection titre="Autres tags" />
-  <ul class="grid gap-x-8 sm:grid-cols-2 lg:grid-cols-3" data-tags>
-    {autres.map(t => (
-      <li class="border-b border-ligne">
-        <a href={cheminTag(t.id)} class="group block py-4">
-          <span class="flex items-baseline justify-between gap-3">
-            <strong class="text-titre-p group-hover:text-primaire"><span class="text-primaire opacity-70">#</span>{t.data.libelle}</strong>
-            <span class="text-etiquette-m shrink-0 text-discret">{compte(t.id)}</span>
-          </span>
-          <span class="text-corps-m mt-1 block text-discret">{t.data.description}</span>
-        </a>
-      </li>
-    ))}
-  </ul>
+  {familles.map(({ famille, libelle, sujets: liste }) => (
+    <section aria-labelledby={`famille-${famille}`}>
+      <EnTeteSection titre={libelle} id={`famille-${famille}`} />
+      <ul class={grille} data-sujets={famille}>
+        {liste.map(t => <CarteTag tag={t} lectures={avecTag(t.id).length} />)}
+      </ul>
+    </section>
+  ))}
 </Site>

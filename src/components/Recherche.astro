@@ -43,7 +43,7 @@ import Icon from './Icon.astro';
     <a class="block rounded-grand p-3 transition-colors hover:bg-texte/8 focus-visible:bg-texte/8">
       <span class="flex items-center justify-between gap-3">
         <strong class="text-titre-m" data-titre></strong>
-        <span class="pastille shrink-0" data-theme hidden></span>
+        <span class="pastille shrink-0" data-rubrique hidden></span>
       </span>
       <span class="text-corps-m mt-1 block text-discret [&_mark]:rounded-tres-petit [&_mark]:bg-conteneur-or [&_mark]:px-0.5 [&_mark]:text-sur-conteneur-or" data-extrait></span>
     </a>
@@ -81,8 +81,8 @@ import Icon from './Icon.astro';
       const element = modele.content.firstElementChild!.cloneNode(true) as HTMLLIElement;
       element.querySelector('a')!.href = r.url;
       element.querySelector('[data-titre]')!.textContent = r.meta.title ?? r.url;
-      const theme = r.filters.theme?.[0];
-      if (theme) Object.assign(element.querySelector<HTMLElement>('[data-theme]')!, { textContent: theme, hidden: false });
+      const rubrique = r.filters.rubrique?.[0];
+      if (rubrique) Object.assign(element.querySelector<HTMLElement>('[data-rubrique]')!, { textContent: rubrique, hidden: false });
       // Extrait produit par Pagefind à partir de notre propre contenu : texte échappé, seuls les <mark> sont du HTML.
       element.querySelector('[data-extrait]')!.innerHTML = r.excerpt;
       return element;

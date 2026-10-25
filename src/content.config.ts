@@ -2,11 +2,12 @@ import { file, glob } from 'astro/loaders';
 import { z } from 'astro/zod';
 import { defineCollection } from 'astro:content';
 
+import { NOMS_FAMILLES } from './lib/familles.ts';
 import { NOMS_ICONES } from './lib/icones';
 import { identifiantDe } from './lib/identifiant.ts';
 
 // Un article = un fichier, rangé où l'on veut sous src/content/articles. Son URL est /lore/<nom-du-fichier> : elle ne
-// dépend ni des dossiers ni des tags, donc déplacer ou retaguer un article ne casse jamais un lien. Règles croisées (tags connus, thème, image, crédits) : src/lib/validation.ts.
+// dépend ni des dossiers ni des tags, donc déplacer ou retaguer un article ne casse jamais un lien. Règles croisées (tags connus, rubrique, image, crédits) : src/lib/validation.ts.
 const articles = defineCollection({
   loader: glob({ base: './src/content/articles', pattern: '**/*.md', generateId: ({ entry }) => identifiantDe(entry) }),
   schema: z.object({
@@ -23,7 +24,7 @@ const articles = defineCollection({
     // Place dans une suite d'épisodes (quête d'Archons…) : série = un des tags de l'article ; chapitre 0 = prologue ;
     // acte décimal pour un intermède (3.5 entre les actes III et IV). Ordonne les pages de tag et relie les épisodes voisins.
     quete: z.object({ serie: z.string(), chapitre: z.number().int().min(0), acte: z.number().positive() }).optional(),
-    // Identifiants déclarés dans tags.yaml ; au moins un doit être un thème.
+    // Identifiants déclarés dans tags.yaml : exactement une rubrique, et autant de sujets que nécessaire.
     tags: z.array(z.string()).min(1),
     // Encadrés facultatifs : ils ne s'affichent que s'ils sont remplis.
     resume: z.array(z.string()).default([]),
@@ -39,17 +40,20 @@ const articles = defineCollection({
   }),
 });
 
-// Le registre des tags : libellé et description de chacun, et lesquels sont des thèmes
-// (mis en avant dans le menu, avec une icône). L'ordre du fichier est libre : tout s'affiche par libellé.
+// Le registre des tags (D53). Deux sortes : les rubriques (rubrique: true), le genre d'article (une par article,
+// badge des cartes, menu, filtres) ; et les sujets, ce dont l'article parle, rangés par famille (src/lib/familles.ts).
+// L'ordre du fichier est libre : tout s'affiche par libellé.
 const tags = defineCollection({
   loader: file('./src/content/tags.yaml'),
   schema: z.object({
     libelle: z.string(),
     description: z.string(),
-    theme: z.boolean().default(false),
-    // Thèmes uniquement (exigés par la validation) : nom au singulier (badge des cartes) et icône (src/lib/icones.ts).
+    rubrique: z.boolean().default(false),
+    // Rubriques uniquement (exigés par la validation) : nom au singulier (badge des cartes) et icône (src/lib/icones.ts).
     singulier: z.string().optional(),
     icone: z.enum(NOMS_ICONES).optional(),
+    // Sujets uniquement (exigée par la validation) : la famille qui les range sur la page des sujets.
+    famille: z.enum(NOMS_FAMILLES).optional(),
   }),
 });
 

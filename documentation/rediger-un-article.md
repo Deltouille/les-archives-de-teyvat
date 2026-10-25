@@ -42,7 +42,7 @@ Entre deux lignes `---`, en tête de fichier. Mets les textes entre guillemets d
 | `modifieLe` | facultatif | Seulement pour la mise à jour d'un article existant ; jamais antérieure à `publieLe`. |
 | `brouillon` | à mettre | `true` : l'article reste visible en développement mais n'est pas publié tant que Deltouille n'a pas relu et retiré la ligne. |
 | `aLaUne` | ne pas mettre | Choix éditorial réservé à Deltouille (mise en avant sur l'accueil). |
-| `tags` | **obligatoire** | Liste d'identifiants du registre, **au moins un thème** (voir § 4). |
+| `tags` | **obligatoire** | Liste d'identifiants du registre : **une seule rubrique**, puis les sujets (voir § 4). |
 | `quete` | **obligatoire pour un épisode** | Place de l'article dans une suite d'épisodes, qui fixe son ordre sur les pages de tag et ses liens « Épisode précédent / suivant » : `serie` (un des tags de l'article : `quete-d-archons` pour les quêtes d'Archons), `chapitre` (`0` = prologue à Mondstadt, `1` = Liyue, `2` = Inazuma…), `acte` (décimal pour un épisode intercalé : `3.5` entre les actes III et IV). Deux articles ne peuvent pas occuper la même place. Absent pour un article qui n'est pas un épisode. |
 | `spoilers` | conseillé | Une phrase disant jusqu'où l'article dévoile l'histoire. Affichée dans l'encadré « Avant de lire ». |
 | `resume` | conseillé | **Trois** phrases courtes qui résument l'article. Encadré « L'essentiel en quelques mots ». |
@@ -56,10 +56,12 @@ Les encadrés `spoilers`, `resume` et `sources` ne s'affichent que s'ils sont re
 Le registre est `src/content/tags.yaml` : <https://raw.githubusercontent.com/Deltouille/les-archives-de-teyvat/main/src/content/tags.yaml>. Lis-le avant de choisir.
 
 - **Obligatoire** : n'utilise que des identifiants qui y figurent. Un tag inconnu fait échouer le build. S'il en manque un, ne l'invente pas dans l'article : propose-le dans tes points à vérifier (identifiant, `libelle`, `description`).
-- **Obligatoire** : au moins un **thème** (tag marqué `theme: true`). Thèmes actuels : `quetes`, `concepts`, `personnages`, `regions`, `factions`, `evenements`, `bandes-annonces`, `theories`.
-- **`theories`** : seulement pour un article qui défend une hypothèse ou une lecture non confirmée par le jeu. Il passe alors **en premier** (badge « Théorie »), pour que le lecteur sache d'emblée que ce n'est pas du lore établi.
-- **L'ordre compte** : le **premier thème** de la liste donne le badge de l'article, son fil d'Ariane et son filtre de recherche. Mets donc d'abord le thème qui décrit le mieux l'article.
-- Ajoute ensuite les tags utiles pour relier les articles : nation (`mondstadt`), série (`quete-d-archons`), `premiers-pas` pour une lecture d'introduction. Les articles qui partagent le plus de tags sont proposés en fin de lecture : des tags pertinents valent mieux que beaucoup de tags.
+Deux sortes de tags, à ne pas confondre :
+
+- **Obligatoire** : **une et une seule rubrique**, le *genre* de l'article (tag marqué `rubrique: true`). Rubriques actuelles : `quetes`, `personnages`, `theories`, `bandes-annonces`. Elle donne le badge de l'article, son fil d'Ariane et son filtre de recherche. Zéro ou deux rubriques font échouer le build.
+- **`theories`** : pour un article qui défend une hypothèse ou une lecture non confirmée par le jeu, même s'il porte sur un personnage : le lecteur sait ainsi d'emblée que ce n'est pas du lore établi.
+- Puis les **sujets**, ce dont parle l'article, autant que nécessaire. Chacun appartient à une famille : lieu (`mondstadt`, `liyue`), série (`quete-d-archons`), groupe (`descendeurs`), notion (`elements`), sélection (`premiers-pas` pour une lecture d'introduction). Les articles qui partagent le plus de tags sont proposés en fin de lecture : des sujets pertinents valent mieux que beaucoup de sujets.
+- Un sujet manquant se propose dans les points à vérifier avec sa famille (identifiant, `libelle`, `description`, `famille`).
 
 ## 5. L'image
 
@@ -202,7 +204,7 @@ Alors qu'il se trouve près du Cap de la Promesse, le Voyageur repêche une étr
 - [ ] Nom de fichier en minuscules avec tirets, absent de la liste des noms interdits.
 - [ ] `titre`, `description`, `image`, `publieLe`, `tags` présents ; `brouillon: true`.
 - [ ] Description propre à cet article (pas celle d'un autre épisode de la série).
-- [ ] Tous les tags existent dans le registre ; le premier thème est le bon.
+- [ ] Tous les tags existent dans le registre ; une seule rubrique, la bonne.
 - [ ] L'image existe.
 - [ ] Pour un épisode de quête : `quete` rempli (série présente dans `tags`, chapitre et acte justes, place libre dans la série).
 - [ ] `spoilers`, `resume` et `sources` décrivent bien **cet** article (attention aux copier-coller d'un article voisin).

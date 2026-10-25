@@ -12,12 +12,12 @@ const { surHero = false } = Astro.props;
 const chemin = Astro.url.pathname;
 const courant = (href: string) => (lienActif(chemin, href) ? 'page' : undefined);
 
-// Le menu déroulant « Le lore » réunit les quêtes (en tête), les autres thèmes et l'index des tags ; les théories
+// Le menu déroulant « Le lore » réunit les quêtes (en tête), les autres rubriques et la page des sujets ; les théories
 // ont leur propre entrée dans la barre. Le menu mobile garde quêtes, théories et tags dans ses entrées principales :
 // ses thèmes sont les autres.
-const tousLesThemes = (await registreDesTags()).themes.filter(t => cheminTag(t.id) !== CHEMIN_THEORIES);
-const themes = tousLesThemes.filter(t => cheminTag(t.id) !== CHEMIN_QUETES);
-const entreesLore = [...tousLesThemes.filter(t => cheminTag(t.id) === CHEMIN_QUETES), ...themes]
+const toutesLesRubriques = (await registreDesTags()).rubriques.filter(t => cheminTag(t.id) !== CHEMIN_THEORIES);
+const rubriques = toutesLesRubriques.filter(t => cheminTag(t.id) !== CHEMIN_QUETES);
+const entreesLore = [...toutesLesRubriques.filter(t => cheminTag(t.id) === CHEMIN_QUETES), ...rubriques]
   .map(({ id, data }) => ({ href: cheminTag(id), libelle: data.libelle, description: data.description, icone: data.icone }));
 // « Le lore » est la page courante sur /lore et les articles ; sur une page de tag, il signale seulement la rubrique.
 const rubriqueLore = courant('/lore') ?? (dansLeLore(chemin) ? 'true' : undefined);
@@ -74,7 +74,7 @@ const boutonIcone = 'grid size-10 place-items-center rounded-full text-discret t
           <hr class="mx-3 my-2 border-ligne" />
           <a href="/lore/tags" class:list={[entreeMenu, 'items-center']} aria-current={pageExacte(chemin, '/lore/tags') ? 'page' : undefined}>
             <span class="grid size-10 shrink-0 place-items-center rounded-moyen bg-tonal text-sur-tonal"><Icon nom="tag" taille={22} /></span>
-            <strong class="text-titre-p">Tous les tags</strong>
+            <strong class="text-titre-p">Tous les sujets</strong>
           </a>
         </div>
       </div>
@@ -96,7 +96,7 @@ const boutonIcone = 'grid size-10 place-items-center rounded-full text-discret t
     </div>
   </div>
 
-  <MenuMobile themes={themes} />
+  <MenuMobile rubriques={rubriques} />
 </header>
 
 <script>

@@ -287,9 +287,9 @@ const SCENES: Scene[] = [
       return p;
     })()`,
   },
-  { nom: 'index-des-tags', url: '/lore/tags' },
-  { nom: 'tag-theme', url: '/lore/tags/regions', largeurs: [1440, 390] },
-  { nom: 'tag-simple', url: '/lore/tags/mondstadt', largeurs: [1440, 390] },
+  { nom: 'rubriques-et-sujets', url: '/lore/tags' },
+  { nom: 'rubrique', url: '/lore/tags/quetes', largeurs: [1440, 390] },
+  { nom: 'sujet', url: '/lore/tags/descendeurs', largeurs: [1440, 390] },
   { nom: 'a-propos', url: '/a-propos', largeurs: [1440, 390] },
   { nom: 'confidentialite', url: '/confidentialite', largeurs: [1440, 390] },
   { nom: 'credits', url: '/credits', largeurs: [1440, 390] },
@@ -301,7 +301,7 @@ const SCENES: Scene[] = [
     largeurs: [1440],
     fenetre: true,
     // On part de la dernière puce de filtre : une tabulation mène au lien de la première carte.
-    actions: `document.querySelector('nav[aria-label="Filtrer par thème"] a:last-child').focus();`,
+    actions: `document.querySelector('nav[aria-label="Filtrer par rubrique"] a:last-child').focus();`,
     clavier: [{ touche: 'Tab' }],
     verifier: `(() => {
       const carte = document.querySelector('[data-grille-articles] article');

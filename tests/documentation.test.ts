@@ -22,11 +22,11 @@ test('fiche de rédaction : chaque champ du frontmatter est décrit', async () =
   expect([...tableau].sort()).toStrictEqual(champs.sort());
 });
 
-test('fiche de rédaction : noms interdits, thèmes, plateformes et images suivent le code', async () => {
+test('fiche de rédaction : noms interdits, rubriques, plateformes et images suivent le code', async () => {
   const interdits = fiche.split('**Interdit**')[1].split('\n')[0];
   expect(codes(interdits).sort()).toStrictEqual([...NOMS_RESERVES].sort());
-  const themes = fiche.split('Thèmes actuels :')[1].split('\n')[0];
-  expect(codes(themes).sort()).toStrictEqual((await lireTags()).filter(t => t.theme).map(t => t.id).sort());
+  const rubriques = fiche.split('Rubriques actuelles :')[1].split('\n')[0];
+  expect(codes(rubriques).sort()).toStrictEqual((await lireTags()).filter(t => t.rubrique).map(t => t.id).sort());
   const plateformes = fiche.split('`plateforme` doit correspondre')[1].split('\n')[0];
   for (const p of Object.keys(PLATEFORMES)) expect(codes(plateformes).includes(p), p).toBeTruthy();
   const images = new Set((await readdir(path.resolve('src/assets/images'), { recursive: true })).filter(f => f.endsWith('.webp')).map(nomDImage));

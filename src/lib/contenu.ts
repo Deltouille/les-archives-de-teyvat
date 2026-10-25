@@ -1,6 +1,6 @@
 import { getCollection, type CollectionEntry } from 'astro:content';
 
-import { articlesPublies, themePrincipal } from './bibliotheque.ts';
+import { articlesPublies, rubriqueDe, sujetsDe } from './bibliotheque.ts';
 import { doublonsDIdentifiants } from './identifiant.ts';
 import { doublonsDImages, nomDImage } from './images.ts';
 import { trierParLibelle } from './navigation.ts';
@@ -34,10 +34,10 @@ export function imageDe(nom: string): ImageMetadata {
   return image;
 }
 
-/** Tous les tags, par ordre alphabétique de libellé, et les thèmes parmi eux. */
+/** Tous les tags, par ordre alphabétique de libellé : les rubriques d'un côté, les sujets de l'autre (D53). */
 export async function registreDesTags() {
   const tags = trierParLibelle(await getCollection('tags'));
-  return { tags, themes: tags.filter(t => t.data.theme) };
+  return { tags, rubriques: tags.filter(t => t.data.rubrique), sujets: tags.filter(t => !t.data.rubrique) };
 }
 
 /**
@@ -45,7 +45,7 @@ export async function registreDesTags() {
  * En production, aucun brouillon ne traverse les props, les pages ou l'index de recherche.
  */
 export async function bibliotheque() {
-  const [tous, { tags, themes }] = await Promise.all([getCollection('articles'), registreDesTags()]);
+  const [tous, { tags, rubriques, sujets }] = await Promise.all([getCollection('articles'), registreDesTags()]);
   const doublons = doublonsDIdentifiants(FICHIERS_ARTICLES);
   if (doublons.length) throw new Error(doublons.map(d => `Même URL /lore/${d.identifiant} pour ${d.chemins.join(' et ')} : renommez l'un des fichiers`).join('\n'));
   const memesImages = doublonsDImages(FICHIERS_IMAGES);
@@ -61,9 +61,11 @@ export async function bibliotheque() {
   return {
     articles,
     tags,
-    themes,
+    rubriques,
+    sujets,
     tag,
-    themeDe: (article: Article) => themePrincipal(article, parId),
+    rubriqueDe: (article: Article) => rubriqueDe(article, parId),
+    sujetsDe: (article: Article) => sujetsDe(article, parId),
     avecTag: (id: string) => articles.filter(a => a.data.tags.includes(id)),
   };
 }

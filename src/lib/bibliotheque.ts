@@ -29,14 +29,18 @@ export function articlesLies<A extends { id: string; data: { publieLe: Date; tag
 }
 
 /**
- * Le thème principal d'un article est son premier tag-thème : il donne le badge des cartes et le fil d'Ariane.
- * La validation garantit qu'il existe.
+ * La rubrique d'un article, son seul tag marqué « rubrique » : elle donne le badge des cartes, le fil d'Ariane et le
+ * filtre de recherche. La validation garantit qu'il y en a exactement une.
  */
-export function themePrincipal<T extends { data: { theme: boolean } }>(article: { data: { tags: string[] } }, tagsParId: Map<string, T>): T {
-  const theme = article.data.tags.map(id => tagsParId.get(id)).find(t => t?.data.theme);
-  if (!theme) throw new Error(`Aucun thème parmi les tags « ${article.data.tags.join(', ')} »`);
-  return theme;
+export function rubriqueDe<T extends { data: { rubrique: boolean } }>(article: { data: { tags: string[] } }, tagsParId: Map<string, T>): T {
+  const rubrique = article.data.tags.map(id => tagsParId.get(id)).find(t => t?.data.rubrique);
+  if (!rubrique) throw new Error(`Aucune rubrique parmi les tags « ${article.data.tags.join(', ')} »`);
+  return rubrique;
 }
+
+/** Les sujets d'un article : ses tags, rubrique exceptée. */
+export const sujetsDe = <T extends { data: { rubrique: boolean } }>(article: { data: { tags: string[] } }, tagsParId: Map<string, T>): T[] =>
+  article.data.tags.map(id => tagsParId.get(id)).filter((t): t is T => t !== undefined && !t.data.rubrique);
 
 /** Minutes de lecture, à 200 mots par minute, au moins une. */
 export const minutesDeLecture = (texte: string) => Math.max(1, Math.ceil(texte.split(/\s+/).filter(Boolean).length / 200));

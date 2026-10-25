@@ -5,15 +5,15 @@ import Puces from '../../components/Puces.astro';
 import GrilleArticles from '../../components/GrilleArticles.astro';
 import { bibliotheque, cheminTag } from '../../lib/contenu';
 
-const { articles, themes, avecTag } = await bibliotheque();
+const { articles, rubriques, avecTag } = await bibliotheque();
 const puces = [
   { href: '/lore', libelle: 'Tout explorer', compte: articles.length, actif: true },
-  ...themes.map(t => ({ href: cheminTag(t.id), libelle: t.data.libelle, icone: t.data.icone, compte: avecTag(t.id).length })),
-  { href: '/lore/tags', libelle: 'Tous les tags', icone: 'tag' as const },
+  ...rubriques.map(t => ({ href: cheminTag(t.id), libelle: t.data.libelle, icone: t.data.icone, compte: avecTag(t.id).length })),
+  { href: '/lore/tags', libelle: 'Tous les sujets', icone: 'tag' as const },
 ];
 ---
-<Site titre="Explorer le lore" description="Tous les articles sur le lore de Genshin Impact : quêtes, personnages, régions, factions et événements de Teyvat.">
+<Site titre="Explorer le lore" description="Tous les articles sur le lore de Genshin Impact : résumés de quêtes, personnages, théories et bandes-annonces.">
   <EnTetePage>Explorer le lore</EnTetePage>
-  <Puces puces={puces} libelle="Filtrer par thème" />
+  <Puces puces={puces} libelle="Filtrer par rubrique" />
   <GrilleArticles articles={articles} niveau="h2" />
 </Site>

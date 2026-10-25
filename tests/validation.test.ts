@@ -3,18 +3,19 @@ import { test, expect } from 'vitest';
 import { validerContenus, type ArticleAValider, type TagAValider } from '../src/lib/validation.ts';
 
 const tags: TagAValider[] = [
-  { id: 'personnages', data: { theme: true, singulier: 'Personnage', icone: 'personne' } },
-  { id: 'mondstadt', data: { theme: false } },
+  { id: 'personnages', data: { rubrique: true, singulier: 'Personnage', icone: 'personne' } },
+  { id: 'theories', data: { rubrique: true, singulier: 'Théorie', icone: 'ampoule' } },
+  { id: 'mondstadt', data: { rubrique: false, famille: 'lieu' } },
 ];
 const images = new Set(['mondstadt', 'teyvat']);
 const article = (id: string, donnees: Partial<ArticleAValider['data']> & { brouillon?: boolean } = {}): ArticleAValider => ({ id, data: { tags: ['personnages'], image: 'mondstadt', publieLe: new Date('2025-03-15'), ...donnees } });
 const valider = (articles: ArticleAValider[], t = tags) => { validerContenus(articles, t, images); };
 
 test('un tag supprimé (dont l’adresse redirige) ne peut pas être redéclaré', () => {
-  expect(() => { valider([article('diluc')], [...tags, { id: 'anemo', data: { theme: false } }]); }).toThrow(/Tag « anemo » redéclaré dans src\/content\/tags\.yaml/);
+  expect(() => { valider([article('diluc')], [...tags, { id: 'anemo', data: { rubrique: false, famille: 'notion' } }]); }).toThrow(/Tag « anemo » redéclaré dans src\/content\/tags\.yaml/);
 });
 
-test('un article tagué avec au moins un thème, et dont l’image existe, est valide', () => {
+test('un article avec une rubrique et des sujets, dont l’image existe, est valide', () => {
   expect(() => { valider([article('diluc', { tags: ['personnages', 'mondstadt'] })]); }).not.toThrow();
 });
 
@@ -22,8 +23,9 @@ test('un tag absent de tags.yaml fait échouer le build, en nommant le fichier',
   expect(() => { valider([article('diluc', { tags: ['personnages', 'mondstad'] })]); }).toThrow(/Tag inconnu « mondstad » dans src\/content\/articles\/diluc\.md : déclarez-le dans src\/content\/tags\.yaml/);
 });
 
-test('un article sans thème est refusé', () => {
-  expect(() => { valider([article('diluc', { tags: ['mondstadt'] })]); }).toThrow(/Aucun thème dans src\/content\/articles\/diluc\.md/);
+test('un article a exactement une rubrique (D53)', () => {
+  expect(() => { valider([article('diluc', { tags: ['mondstadt'] })]); }).toThrow(/Aucune rubrique dans src\/content\/articles\/diluc\.md/);
+  expect(() => { valider([article('diluc', { tags: ['personnages', 'theories', 'mondstadt'] })]); }).toThrow(/Plusieurs rubriques dans src\/content\/articles\/diluc\.md \(personnages, theories\)/);
 });
 
 test('les noms réservés aux pages de tags et aux redirections sont refusés', () => {
@@ -46,9 +48,15 @@ test('une date de mise à jour antérieure à la publication est refusée', () =
   expect(() => { valider([article('diluc', { modifieLe: new Date('2025-04-01') })]); }).not.toThrow();
 });
 
-test('un thème doit avoir un singulier et une icône', () => {
-  const incomplet = [...tags, { id: 'quetes', data: { theme: true, singulier: 'Quête' } }];
-  expect(() => { valider([article('diluc')], incomplet); }).toThrow(/Thème « quetes » incomplet dans src\/content\/tags\.yaml : il lui faut « singulier » et « icone »/);
+test('une rubrique a un singulier et une icône, mais pas de famille', () => {
+  const incomplete = [...tags, { id: 'quetes', data: { rubrique: true, singulier: 'Quête' } }];
+  expect(() => { valider([article('diluc')], incomplete); }).toThrow(/Rubrique « quetes » incomplète dans src\/content\/tags\.yaml : il lui faut « singulier » et « icone »/);
+  const avecFamille = [...tags, { id: 'quetes', data: { rubrique: true, singulier: 'Quête', icone: 'livre', famille: 'serie' } }];
+  expect(() => { valider([article('diluc')], avecFamille); }).toThrow(/Rubrique « quetes » avec une famille/);
+});
+
+test('un sujet a une famille', () => {
+  expect(() => { valider([article('diluc')], [...tags, { id: 'liyue', data: { rubrique: false } }]); }).toThrow(/Sujet « liyue » sans famille dans src\/content\/tags\.yaml/);
 });
 
 test('les brouillons sont validés comme les autres', () => {

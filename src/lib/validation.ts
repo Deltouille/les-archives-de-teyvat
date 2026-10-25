@@ -14,13 +14,16 @@ export interface ArticleAValider {
   body?: string | undefined;
   data: { tags: string[]; image: string; publieLe: Date; modifieLe?: Date | undefined; credits?: Credit[]; quete?: { serie: string; chapitre: number; acte: number } | undefined };
 }
-export interface TagAValider { id: string; data: { theme: boolean; singulier?: string | undefined; icone?: string | undefined } }
+export interface TagAValider { id: string; data: { rubrique: boolean; singulier?: string | undefined; icone?: string | undefined; famille?: string | undefined } }
 
 function validerTags(tags: TagAValider[]) {
   for (const tag of tags) {
     if (TAGS_SUPPRIMES.includes(tag.id)) throw new Error(`Tag « ${tag.id} » redéclaré dans src/content/tags.yaml alors que son adresse redirige : retirez-le de TAGS_SUPPRIMES (src/lib/redirections.ts)`);
-    if (tag.data.theme && (!tag.data.singulier || !tag.data.icone)) {
-      throw new Error(`Thème « ${tag.id} » incomplet dans src/content/tags.yaml : il lui faut « singulier » et « icone »`);
+    if (tag.data.rubrique) {
+      if (!tag.data.singulier || !tag.data.icone) throw new Error(`Rubrique « ${tag.id} » incomplète dans src/content/tags.yaml : il lui faut « singulier » et « icone »`);
+      if (tag.data.famille) throw new Error(`Rubrique « ${tag.id} » avec une famille dans src/content/tags.yaml : seuls les sujets en ont une`);
+    } else if (!tag.data.famille) {
+      throw new Error(`Sujet « ${tag.id} » sans famille dans src/content/tags.yaml : ajoutez « famille » (lieu, serie, groupe, notion ou selection)`);
     }
   }
 }
@@ -29,9 +32,9 @@ function validerTagsDeLArticle({ data }: ArticleAValider, origine: string, connu
   for (const tag of data.tags) {
     if (!connus.has(tag)) throw new Error(`Tag inconnu « ${tag} » dans ${origine} : déclarez-le dans src/content/tags.yaml`);
   }
-  if (!data.tags.some(tag => connus.get(tag)?.data.theme)) {
-    throw new Error(`Aucun thème dans ${origine} : ajoutez au moins un tag marqué « theme: true » dans tags.yaml`);
-  }
+  const rubriques = data.tags.filter(tag => connus.get(tag)?.data.rubrique);
+  if (rubriques.length === 0) throw new Error(`Aucune rubrique dans ${origine} : ajoutez à « tags » une rubrique (tag marqué « rubrique: true » dans tags.yaml)`);
+  if (rubriques.length > 1) throw new Error(`Plusieurs rubriques dans ${origine} (${rubriques.join(', ')}) : gardez-en une seule`);
 }
 
 function validerImages(article: ArticleAValider, origine: string, images: Set<string>) {

@@ -3,8 +3,8 @@ import Icon from './Icon.astro';
 import { cheminTag, type Tag } from '../lib/contenu';
 import { lienActif, CHEMIN_QUETES, CHEMIN_THEORIES } from '../lib/navigation.ts';
 
-interface Props { themes: Tag[]; }
-const { themes } = Astro.props;
+interface Props { rubriques: Tag[]; }
+const { rubriques } = Astro.props;
 const chemin = Astro.url.pathname;
 const courant = (href: string) => (lienActif(chemin, href) ? 'page' : undefined);
 
@@ -15,7 +15,7 @@ const principaux = [
   { href: '/lore', libelle: 'Explorer le lore', icone: 'boussole' },
   { href: CHEMIN_QUETES, libelle: 'Résumés de quêtes', icone: 'livre' },
   { href: CHEMIN_THEORIES, libelle: 'Théories', icone: 'ampoule' },
-  { href: '/lore/tags', libelle: 'Tous les tags', icone: 'tag' },
+  { href: '/lore/tags', libelle: 'Tous les sujets', icone: 'tag' },
 ] as const;
 ---
 {/* Seul ce panneau est « fixed » : l'en-tête garde sa place, sinon le navigateur recale le défilement
@@ -25,8 +25,8 @@ const principaux = [
     {principaux.map(({ href, libelle, icone }) => <a href={href} class={lien} aria-current={courant(href)}><Icon nom={icone} />{libelle}</a>)}
   </nav>
   <p class="sur-titre px-4 pt-6 pb-2 text-discret">Au fil des histoires</p>
-  <nav class="grid grid-cols-2" aria-label="Thèmes du lore">
-    {themes.map(({ id, data }) => (
+  <nav class="grid grid-cols-2" aria-label="Rubriques du lore">
+    {rubriques.map(({ id, data }) => (
       <a href={cheminTag(id)} class:list={[lien, 'text-discret']} aria-current={courant(cheminTag(id))}>
         {data.icone && <Icon nom={data.icone} taille={20} />}{data.libelle}
       </a>

@@ -1,74 +1,68 @@
-# Registre des tags. Pour en ajouter un : une entrée ici, puis l'identifiant dans le frontmatter des articles.
-# Un tag inconnu, ou un article sans thème, fait échouer le build.
-# Les thèmes (theme: true) apparaissent dans le menu. Tout s'affiche par ordre alphabétique : l'ordre de ce fichier est libre.
+# Registre des tags (D53). Pour en ajouter un : une entrée ici, puis l'identifiant dans le frontmatter des articles.
+# Deux sortes de tags :
+# - les rubriques (rubrique: true) disent quel genre d'article c'est : une et une seule par article. Elles ont un
+#   singulier (badge des cartes) et une icône, et apparaissent dans le menu et les filtres de la bibliothèque ;
+# - les sujets disent de quoi parle l'article : autant que nécessaire. Chacun a une famille (lieu, serie, groupe,
+#   notion, selection, cf. src/lib/familles.ts) qui le range sur la page des sujets.
+# Un tag inconnu, un article sans rubrique ou avec deux rubriques fait échouer le build.
+# Tout s'affiche par ordre alphabétique : l'ordre de ce fichier est libre.
 
+# Rubriques
 quetes:
   libelle: Quêtes
   singulier: Quête
   description: Les aventures du Voyageur, racontées et expliquées.
-  theme: true
+  rubrique: true
   icone: livre
-concepts:
-  libelle: Concepts
-  singulier: Concept
-  description: Des repères pour comprendre les grandes idées de Teyvat.
-  theme: true
-  icone: etincelle
 personnages:
   libelle: Personnages
   singulier: Personnage
   description: Les visages, les choix et les histoires qui façonnent ce monde.
-  theme: true
+  rubrique: true
   icone: personne
-regions:
-  libelle: Régions
-  singulier: Région
-  description: Chaque nation a son histoire. Prenez le temps de la découvrir.
-  theme: true
-  icone: boussole
-factions:
-  libelle: Factions
-  singulier: Faction
-  description: Les organisations qui influencent le destin de Teyvat.
-  theme: true
-  icone: strates
-evenements:
-  libelle: Événements
-  singulier: Événement
-  description: Les moments décisifs dont les échos résonnent encore.
-  theme: true
-  icone: horloge
 bandes-annonces:
   libelle: Bandes-annonces
   singulier: Bande-annonce
   description: Les résumés des bandes-annonces des nouvelles versions de Genshin Impact.
-  theme: true
+  rubrique: true
   icone: video
 theories:
   libelle: Théories
   singulier: Théorie
   description: Hypothèses et lectures des mystères de Teyvat, à distinguer de ce que le jeu affirme.
-  theme: true
+  rubrique: true
   icone: ampoule
 
-premiers-pas:
-  libelle: Premiers pas
-  description: Quelques lectures pour entrer dans l’histoire de Teyvat.
+# Sujets
 teyvat:
   libelle: Teyvat
   description: Le monde de Genshin Impact et ses sept nations.
+  famille: lieu
 mondstadt:
   libelle: Mondstadt
   description: La cité de la liberté.
+  famille: lieu
 liyue:
   libelle: Liyue
   description: La cité des contrats.
-elements:
-  libelle: Éléments
-  description: Les sept éléments qui structurent Teyvat et ses nations.
+  famille: lieu
 quete-d-archons:
   libelle: Quête d’Archons
   description: La quête principale du Voyageur, nation après nation.
+  famille: serie
+descendeurs:
+  libelle: Descendeurs
+  description: Venus de la mer d'étoiles, les Descendeurs échappent aux lois de l'ordre divin et à la mémoire d'Irminsul. Quatre ont marqué l'histoire de Teyvat, assez puissants pour en changer le destin.
+  famille: groupe
+elements:
+  libelle: Éléments
+  description: Les sept éléments qui structurent Teyvat et ses nations.
+  famille: notion
 histoire:
   libelle: Histoire
   description: Les grands événements du passé de Teyvat.
+  famille: notion
+premiers-pas:
+  libelle: Premiers pas
+  description: Quelques lectures pour entrer dans l’histoire de Teyvat.
+  famille: selection

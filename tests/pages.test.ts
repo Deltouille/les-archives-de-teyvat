@@ -67,24 +67,30 @@ test('les encadrés d’un article suivent son frontmatter, et le sommaire ses t
 test('chaque article affiche ses tags, et « Pour aller plus loin » au plus 3 lectures', async () => {
   for (const article of articles) {
     const html = await lire(`lore/${article.id}/index.html`);
-    const liste = html.split('aria-label="Tags de l’article"')[1].split('</ul>')[0];
-    for (const tag of article.tags) expect(liste, `${article.id} → ${tag}`).toMatch(new RegExp(`href="/lore/tags/${tag}"`));
+    // Les sujets en bas d'article ; la rubrique est dans le badge et le fil d'Ariane (D53).
+    const rubriques = new Set(tags.filter(t => t.rubrique).map(t => t.id));
+    const sujets = article.tags.filter(t => !rubriques.has(t));
+    if (sujets.length) {
+      const liste = html.split('aria-label="Sujets de l’article"')[1].split('</ul>')[0];
+      for (const sujet of sujets) expect(liste, `${article.id} → ${sujet}`).toMatch(new RegExp(`href="/lore/tags/${sujet}"`));
+      expect(liste, `${article.id} : la rubrique n'est pas répétée en sujet`).not.toMatch(new RegExp([...rubriques].map(r => `href="/lore/tags/${r}"`).join('|')));
+    } else expect(html, `${article.id} : pas de liste de sujets vide`).not.toMatch(/aria-label="Sujets de l’article"/);
     const lies = html.split('id="lies-titre"')[1] ?? '';
     expect(cartes(lies) <= 3, `${article.id} : ${cartes(lies)} lectures liées`).toBeTruthy();
   }
 });
 
 test('chaque tag du registre a sa page, avec exactement ses lectures', async () => {
-  for (const { id, theme } of tags) {
+  for (const { id, rubrique } of tags) {
     const html = await lire(`lore/tags/${id}/index.html`);
     const attendues = articles.filter(a => a.tags.includes(id));
     expect(cartes(html), `${id} : nombre de cartes`).toBe(attendues.length);
     for (const a of attendues) expect(html, `${id} → ${a.id}`).toMatch(new RegExp(`href="/lore/${a.id}"`));
-    expect(html.includes('aria-label="Changer de thème"'), `${id} : filtres de thème seulement sur un thème`).toBe(theme);
+    expect(html.includes('aria-label="Changer de rubrique"'), `${id} : filtres de rubrique seulement sur une rubrique`).toBe(rubrique);
   }
 });
 
-test('la bibliothèque liste tous les articles, l’index des tags tout le registre', async () => {
+test('la bibliothèque liste tous les articles, la page des sujets tout le registre', async () => {
   expect(cartes(await lire('lore/index.html'))).toBe(articles.length);
   const index = await lire('lore/tags/index.html');
   for (const { id } of tags) expect(index, id).toMatch(new RegExp(`href="/lore/tags/${id}"`));
@@ -114,7 +120,7 @@ test('accueil : bannière, titre unique, sans machine à écrire (D36)', async (
 test('accueil : les chiffres suivent le contenu', async () => {
   const chiffres = (await lire('index.html')).split('data-chiffres')[1].split('</ul>')[0];
   const nombres = [...chiffres.matchAll(/<strong[^>]*>(\d+)<\/strong>/g)].map(m => Number(m[1]));
-  expect(nombres).toStrictEqual([articles.length, tags.filter(t => t.theme).length, 7]);
+  expect(nombres).toStrictEqual([articles.length, tags.filter(t => t.rubrique).length, 7]);
 });
 
 test('accueil : les statistiques sont dans une carte après le hero', async () => {
@@ -127,7 +133,7 @@ test('accueil : les statistiques sont dans une carte après le hero', async () =
   expect(contenu).toMatch(/aria-labelledby="statistiques-titre"/);
 });
 
-test('accueil : à la une, entrées par thème, lectures récentes', async () => {
+test('accueil : à la une, entrées par rubrique, lectures récentes', async () => {
   const html = await lire('index.html');
   const aLaUne = html.split('data-a-la-une')[1].split('</section>')[0];
   // Le plus récent des articles marqués aLaUne, sinon le plus récent.
@@ -137,7 +143,7 @@ test('accueil : à la une, entrées par thème, lectures récentes', async () =>
   expect(aLaUne).toMatch(/href="\/lore\/tags\/premiers-pas"/);
   expect(aLaUne).toMatch(new RegExp(`${articles.filter(a => a.tags.includes('premiers-pas')).length} lectures`));
   const entrees = html.split('data-entrees')[1].split('</section>')[0];
-  for (const id of ['quetes', 'concepts', 'personnages', 'regions']) expect(entrees, id).toMatch(new RegExp(`href="/lore/tags/${id}"`));
+  for (const id of ['quetes', 'personnages', 'theories', 'bandes-annonces']) expect(entrees, id).toMatch(new RegExp(`href="/lore/tags/${id}"`));
   const recents = html.split('id="recents-titre"')[1];
   expect(cartes(recents)).toBe(Math.min(6, articles.length));
   expect(html).toMatch(/href="\/lore\/tags"[^>]*>[\s\S]*Tirez un fil, suivez une histoire/);
@@ -149,7 +155,7 @@ test('recherche : l’index Pagefind couvre exactement les articles publiés, en
   expect(entree.languages.fr.page_count).toBe(articles.length);
   for (const a of articles) {
     const html = await lire(`lore/${a.id}/index.html`);
-    expect(html, `${a.id} : filtre de thème`).toMatch(/data-pagefind-filter="theme"/);
+    expect(html, `${a.id} : filtre de rubrique`).toMatch(/data-pagefind-filter="rubrique"/);
     expect(html, `${a.id} : titre`).toMatch(/data-pagefind-meta="title"/);
   }
 });
@@ -352,12 +358,13 @@ test('le dépôt est sur GitHub : plus aucune mention de l’ancienne plateforme
   for (const fichier of pages) expect(await readFile(fichier, 'utf8'), path.relative(racine, fichier)).not.toMatch(/gitlab/i);
 });
 
-test('en-tête d’un thème : l’emblème est à gauche du titre ; un tag simple n’a pas d’emblème', async () => {
-  for (const { id, theme } of tags) {
+test('en-tête d’une rubrique : l’emblème est à gauche du titre ; un sujet n’a ni emblème ni « # »', async () => {
+  for (const { id, rubrique } of tags) {
     const entete = /<header class="mt-4 mb-8[\s\S]*?<\/header>/.exec((await lire(`lore/tags/${id}/index.html`)))![0];
     const ligne = /<div class="mb-4[^"]*">([\s\S]*?)<\/h1>/.exec(entete)!;
     expect(ligne, `${id} : ligne du titre`).toBeTruthy();
-    expect(ligne[0].includes('flex items-center') && ligne[1].split('<h1')[0].includes('<svg'), `${id} : emblème à gauche du titre seulement pour un thème`).toBe(theme);
+    expect(ligne[0].includes('flex items-center') && ligne[1].split('<h1')[0].includes('<svg'), `${id} : emblème à gauche du titre seulement pour une rubrique`).toBe(rubrique);
+    expect(ligne[1].split('<h1')[1], `${id} : pas de « # » devant le titre (D53)`).not.toMatch(/>#</);
     expect(!entete.includes('sur-titre'), `${id} : pas de petit texte au-dessus du titre (D35)`).toBeTruthy();
     const nombre = articles.filter(a => a.tags.includes(id)).length;
     if (nombre) expect(entete, `${id} : nombre de lectures sous la description`).toMatch(new RegExp(`data-nombre-lectures>${nombre} lectures?<`));
@@ -471,7 +478,9 @@ test('chaque article : BlogPosting et balises article:* conformes à la page, la
     expect(meta(html, 'article:published_time'), article.id).toStrictEqual([blog.datePublished]);
     expect(meta(html, 'article:modified_time'), article.id).toStrictEqual([blog.dateModified]);
     expect(meta(html, 'article:tag').map(decoder), article.id).toStrictEqual(blog.keywords);
-    expect(meta(html, 'article:tag').length, article.id).toBe(article.tags.length);
+    // article:tag = les sujets ; la rubrique est la section de l'article (D53).
+    const rubriques = new Set(tags.filter(t => t.rubrique).map(t => t.id));
+    expect(meta(html, 'article:tag').length, article.id).toBe(article.tags.filter(t => !rubriques.has(t)).length);
     expect(meta(html, 'og:type'), article.id).toStrictEqual(['article']);
     expect([meta(html, 'og:image:width'), meta(html, 'og:image:height')], article.id).toStrictEqual([['1200'], ['630']]);
     const lastmod = (new RegExp(`<loc>[^<]+/lore/${article.id}</loc><lastmod>([^<]+)</lastmod>`).exec(sitemap))?.[1];
@@ -480,7 +489,7 @@ test('chaque article : BlogPosting et balises article:* conformes à la page, la
 });
 
 test('hors articles : ni balise article:*, ni BlogPosting, ni lastmod dans le sitemap', async () => {
-  for (const page of ['index.html', 'lore/index.html', 'lore/tags/regions/index.html', 'a-propos/index.html']) {
+  for (const page of ['index.html', 'lore/index.html', 'lore/tags/quetes/index.html', 'lore/tags/mondstadt/index.html', 'a-propos/index.html']) {
     const html = await lire(page);
     expect(meta(html, 'article:published_time'), page).toStrictEqual([]);
     expect(meta(html, 'og:type'), page).toStrictEqual(['website']);
@@ -491,7 +500,7 @@ test('hors articles : ni balise article:*, ni BlogPosting, ni lastmod dans le si
 });
 
 test('fil d’Ariane : décrit aux moteurs (BreadcrumbList) avec les mêmes étapes que la page', async () => {
-  for (const page of [EXEMPLE, 'lore/tags/regions/index.html']) {
+  for (const page of [EXEMPLE, 'lore/tags/quetes/index.html', 'lore/tags/mondstadt/index.html']) {
     const html = await lire(page);
     const fil = filDe(html);
     expect(fil, page).toBeTruthy();

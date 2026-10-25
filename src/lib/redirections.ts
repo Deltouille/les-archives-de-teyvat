@@ -5,7 +5,7 @@
 
 /** Articles du modèle par catégories (/lore/<catégorie>/<article>) → URL à plat. */
 const ANCIENS_ARTICLES: Record<string, string> = { 'regions/mondstadt': 'mondstadt', 'quetes/prologue-mondstadt': 'mondstadt-act-i', 'personnages/venti': 'venti', 'factions/archons': 'archons', 'factions/ordre-abysse': 'ordre-abysse', 'evenements/cataclysme': 'cataclysme' };
-/** Anciennes pages de catégorie /lore/<catégorie> → page du thème. */
+/** Anciennes pages de catégorie /lore/<catégorie> → page de la rubrique (ou des sujets, pour les catégories retirées). */
 export const ANCIENNES_CATEGORIES = ['quetes', 'concepts', 'personnages', 'regions', 'factions', 'evenements'];
 /** Anciennes pages de tag /tags/<tag>. */
 const ANCIENS_TAGS = ['abysse', 'anemo', 'archontes', 'barbatos', 'dvalin', 'elements', 'histoire', 'khaenri-ah', 'liberte', 'mondstadt', 'quete-d-archons', 'teyvat', 'voyageur'];
@@ -22,9 +22,10 @@ const ARTICLES_SUPPRIMES: Record<string, string> = {
   'ordre-abysse': '/lore/tags/factions',
   venti: '/lore/tags/personnages',
 };
-/** Tags supprimés (16 oct. 2026) : /lore/tags/<tag> → l'index des tags. Lu par la validation, qui interdit de les
- *  redéclarer sans les retirer d'ici (leur adresse est une redirection). */
-export const TAGS_SUPPRIMES = ['abysse', 'anemo', 'archontes', 'barbatos', 'dvalin', 'khaenri-ah', 'liberte', 'voyageur'];
+/** Tags supprimés : /lore/tags/<tag> → l'index des sujets. Le 16 oct. 2026, huit tags ; le 25 oct. 2026, les thèmes
+ *  devenus inutiles quand les thèmes sont devenus des rubriques (concepts, evenements, factions, regions ; D53). Lu par
+ *  la validation, qui interdit de les redéclarer sans les retirer d'ici (leur adresse est une redirection). */
+export const TAGS_SUPPRIMES = ['abysse', 'anemo', 'archontes', 'barbatos', 'dvalin', 'khaenri-ah', 'liberte', 'voyageur', 'concepts', 'evenements', 'factions', 'regions'];
 /** Autres adresses, dont celles du tout premier site. */
 const AUTRES: Record<string, string> = {
   '/dossiers/commencer': '/lore/tags/premiers-pas',

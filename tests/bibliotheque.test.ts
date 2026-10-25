@@ -1,6 +1,6 @@
 import { test, expect } from 'vitest';
 
-import { articlesPublies, articlesLies, minutesDeLecture, dateFr, themePrincipal, ordreDeLecture, episodesVoisins } from '../src/lib/bibliotheque.ts';
+import { articlesPublies, articlesLies, minutesDeLecture, dateFr, rubriqueDe, sujetsDe, ordreDeLecture, episodesVoisins } from '../src/lib/bibliotheque.ts';
 
 interface ArticleDeTest { id: string; data: { publieLe: Date; tags: string[]; brouillon?: boolean; quete?: { serie: string; chapitre: number; acte: number } } }
 
@@ -31,9 +31,11 @@ test('« Pour aller plus loin » : le plus de tags en commun, puis le plus réce
   expect(!articlesLies(venti, autres, 10).some(a => a.id === 'liyue'), 'aucun tag commun : pas lié').toBeTruthy();
 });
 
-test('le thème principal est le premier tag-thème de l’article', () => {
-  const tags = new Map([['mondstadt', { id: 'mondstadt', data: { theme: false } }], ['regions', { id: 'regions', data: { theme: true } }], ['concepts', { id: 'concepts', data: { theme: true } }]]);
-  expect(themePrincipal(article('x', '2025-01-01', ['mondstadt', 'regions', 'concepts']), tags).id).toBe('regions');
+test('la rubrique d’un article est son tag marqué « rubrique » ; ses sujets, les autres', () => {
+  const tags = new Map([['mondstadt', { id: 'mondstadt', data: { rubrique: false } }], ['quetes', { id: 'quetes', data: { rubrique: true } }], ['liyue', { id: 'liyue', data: { rubrique: false } }]]);
+  const x = article('x', '2025-01-01', ['mondstadt', 'quetes', 'liyue']);
+  expect(rubriqueDe(x, tags).id).toBe('quetes');
+  expect(sujetsDe(x, tags).map(t => t.id)).toStrictEqual(['mondstadt', 'liyue']);
 });
 
 test('temps de lecture : 200 mots par minute, au moins une minute', () => {

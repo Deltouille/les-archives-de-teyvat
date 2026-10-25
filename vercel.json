@@ -21,17 +21,17 @@
     },
     {
       "source": "/lore/factions/archons",
-      "destination": "/lore/tags/concepts",
+      "destination": "/lore/tags",
       "statusCode": 301
     },
     {
       "source": "/lore/factions/ordre-abysse",
-      "destination": "/lore/tags/factions",
+      "destination": "/lore/tags",
       "statusCode": 301
     },
     {
       "source": "/lore/evenements/cataclysme",
-      "destination": "/lore/tags/evenements",
+      "destination": "/lore/tags",
       "statusCode": 301
     },
     {
@@ -41,7 +41,7 @@
     },
     {
       "source": "/lore/concepts",
-      "destination": "/lore/tags/concepts",
+      "destination": "/lore/tags",
       "statusCode": 301
     },
     {
@@ -51,17 +51,17 @@
     },
     {
       "source": "/lore/regions",
-      "destination": "/lore/tags/regions",
+      "destination": "/lore/tags",
       "statusCode": 301
     },
     {
       "source": "/lore/factions",
-      "destination": "/lore/tags/factions",
+      "destination": "/lore/tags",
       "statusCode": 301
     },
     {
       "source": "/lore/evenements",
-      "destination": "/lore/tags/evenements",
+      "destination": "/lore/tags",
       "statusCode": 301
     },
     {
@@ -151,12 +151,12 @@
     },
     {
       "source": "/lore/teyvat",
-      "destination": "/lore/tags/regions",
+      "destination": "/lore/tags",
       "statusCode": 301
     },
     {
       "source": "/categories/regions",
-      "destination": "/lore/tags/regions",
+      "destination": "/lore/tags",
       "statusCode": 301
     },
     {
@@ -166,22 +166,22 @@
     },
     {
       "source": "/categories/factions",
-      "destination": "/lore/tags/factions",
+      "destination": "/lore/tags",
       "statusCode": 301
     },
     {
       "source": "/categories/evenements",
-      "destination": "/lore/tags/evenements",
+      "destination": "/lore/tags",
       "statusCode": 301
     },
     {
       "source": "/lore/archons",
-      "destination": "/lore/tags/concepts",
+      "destination": "/lore/tags",
       "statusCode": 301
     },
     {
       "source": "/lore/cataclysme",
-      "destination": "/lore/tags/evenements",
+      "destination": "/lore/tags",
       "statusCode": 301
     },
     {
@@ -191,7 +191,7 @@
     },
     {
       "source": "/lore/ordre-abysse",
-      "destination": "/lore/tags/factions",
+      "destination": "/lore/tags",
       "statusCode": 301
     },
     {
@@ -236,6 +236,26 @@
     },
     {
       "source": "/lore/tags/voyageur",
+      "destination": "/lore/tags",
+      "statusCode": 301
+    },
+    {
+      "source": "/lore/tags/concepts",
+      "destination": "/lore/tags",
+      "statusCode": 301
+    },
+    {
+      "source": "/lore/tags/evenements",
+      "destination": "/lore/tags",
+      "statusCode": 301
+    },
+    {
+      "source": "/lore/tags/factions",
+      "destination": "/lore/tags",
+      "statusCode": 301
+    },
+    {
+      "source": "/lore/tags/regions",
       "destination": "/lore/tags",
       "statusCode": 301
     }

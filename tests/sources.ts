@@ -49,11 +49,11 @@ export type ArticleSource = Awaited<ReturnType<typeof lireArticles>>[number];
 
 export const lireArticlesPublies = async () => (await lireArticles()).filter(a => !a.brouillon);
 
-/** Les identifiants du registre, et ceux qui sont des thèmes. */
+/** Les identifiants du registre, et ceux qui sont des rubriques. */
 export async function lireTags() {
   const texte = await readFile(path.resolve('src/content/tags.yaml'), 'utf8');
   const blocs = texte.split(/^(?=[a-z][a-z-]*:\s*$)/m).filter(b => /^[a-z]/.test(b));
-  return blocs.map(bloc => ({ id: /^([a-z-]+):/.exec(bloc)?.[1] ?? '', theme: /^\s+theme:\s*true\s*$/m.test(bloc) }));
+  return blocs.map(bloc => ({ id: /^([a-z-]+):/.exec(bloc)?.[1] ?? '', rubrique: /^\s+rubrique:\s*true\s*$/m.test(bloc) }));
 }
 
 /** Article de référence pour les tests et les captures : l'acte I du prologue de Mondstadt, choisi par Deltouille comme

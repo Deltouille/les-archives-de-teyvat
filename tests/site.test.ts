@@ -65,13 +65,13 @@ test('le thème est posé dans le <head>, avant le premier rendu', async () => {
   expect(tete).toMatch(/name="theme-color"[^>]*prefers-color-scheme: dark/);
 });
 
-test('la navigation : lien actif signalé, thèmes du registre dans le menu, bouton de thème accessible', async () => {
+test('la navigation : lien actif signalé, rubriques du registre dans le menu, bouton de thème accessible', async () => {
   const html = await lire('index.html');
   expect(html).toMatch(/<a href="\/"[^>]*aria-current="page"[^>]*>Accueil<\/a>/);
   expect((html.match(/aria-current="page"/g) ?? []).length, 'Accueil, dans la barre et dans le menu mobile').toBe(2);
   const menuLore = html.split('data-menu-lore')[1].split('</div>')[0];
-  for (const theme of ['quetes', 'concepts', 'evenements', 'factions', 'personnages', 'regions']) expect(menuLore, theme).toMatch(new RegExp(`href="/lore/tags/${theme}"`));
-  expect(menuLore, 'l’index des tags est dans le menu « Le lore »').toMatch(/href="\/lore\/tags"/);
+  for (const rubrique of ['quetes', 'personnages', 'bandes-annonces']) expect(menuLore, rubrique).toMatch(new RegExp(`href="/lore/tags/${rubrique}"`));
+  expect(menuLore, 'la page des sujets est dans le menu « Le lore »').toMatch(/href="\/lore\/tags"/);
   const barre = html.split('aria-label="Navigation principale"')[1].split('</nav>')[0].replace(/data-menu-lore[\s\S]*?<\/div>/, '');
   expect(menuLore, 'les théories ont leur entrée dans la barre').not.toMatch(/href="\/lore\/tags\/theories"/);
   expect([...barre.matchAll(/href="(\/lore\/tags[^"]*)"/g)].map(m => m[1]), 'seules les théories ont une entrée de premier niveau sous /lore/tags').toStrictEqual(['/lore/tags/theories']);

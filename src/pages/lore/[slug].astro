@@ -26,10 +26,11 @@ export async function getStaticPaths() {
 }
 
 const { article } = Astro.props as { article: Article };
-const { articles, tag, themeDe } = await bibliotheque();
+const { articles, tag, rubriqueDe, sujetsDe } = await bibliotheque();
 const { Content, headings } = await render(article);
 const { data } = article;
-const theme = themeDe(article);
+const rubrique = rubriqueDe(article);
+const sujets = sujetsDe(article);
 const lies = articlesLies(article, articles);
 const { precedent, suivant } = episodesVoisins(article, articles);
 const image = imageDe(data.image);
@@ -41,7 +42,7 @@ const jour = (d: Date) => d.toISOString().slice(0, 10);
 const minutes = minutesDeLecture(article.body ?? '');
 ---
 <Site titre={data.titre} description={data.description} image={partage.src} imageAlt={data.imageAlt} imageTaille={{ largeur: 1200, hauteur: 630 }}
-  article={{ publieLe: data.publieLe, modifieLe: data.modifieLe, section: theme.data.libelle, tags: data.tags.map(id => tag(id).data.libelle) }}>
+  article={{ publieLe: data.publieLe, modifieLe: data.modifieLe, section: rubrique.data.libelle, tags: sujets.map(s => s.data.libelle) }}>
   <Banniere slot="hero" image={image} alt={data.imageAlt} titre="article-titre" transition={transitionImage(article)} class="min-h-[35rem] md:h-[clamp(32rem,78svh,48rem)]">
     {/* Même gouttière que le <main> : le titre commence au même bord que la colonne de lecture.
          pt-28 : la barre de navigation fixe (64 px) recouvre le haut de la bannière. */}
@@ -61,11 +62,11 @@ const minutes = minutesDeLecture(article.body ?? '');
 
   <ProgressionLecture />
   <article data-pagefind-body data-lecture>
-    {/* Au-delà de 1200 px (lg), trois colonnes : sommaire, texte, à-côté (thème, durée, date, tags) ; le thème et la
+    {/* Au-delà de 1200 px (lg), trois colonnes : sommaire, texte, à-côté (rubrique, durée, date, sujets) ; la rubrique et la
          durée quittent alors la ligne du fil d'Ariane pour la colonne de droite. */}
     <div class="mb-8 flex max-w-5xl flex-wrap items-center justify-between gap-x-6 gap-y-3 lg:mx-auto lg:max-w-article lg:px-64" data-pagefind-ignore>
-      <FilAriane etapes={[{ libelle: 'Accueil', href: '/' }, { libelle: 'Explorer', href: '/lore' }, { libelle: theme.data.libelle, href: cheminTag(theme.id) }, { libelle: data.titre }]} class="[&_li:last-child]:hidden sm:[&_li:last-child]:flex" />
-      <p class="text-corps-m flex items-center gap-3 text-discret lg:hidden"><span class="pastille" data-pagefind-filter="theme">{theme.data.singulier}</span>{minutes} min de lecture</p>
+      <FilAriane etapes={[{ libelle: 'Accueil', href: '/' }, { libelle: 'Explorer', href: '/lore' }, { libelle: rubrique.data.libelle, href: cheminTag(rubrique.id) }, { libelle: data.titre }]} class="[&_li:last-child]:hidden sm:[&_li:last-child]:flex" />
+      <p class="text-corps-m flex items-center gap-3 text-discret lg:hidden"><span class="pastille" data-pagefind-filter="rubrique">{rubrique.data.singulier}</span>{minutes} min de lecture</p>
     </div>
     <div class:list={['max-w-5xl lg:mx-auto lg:grid lg:max-w-article lg:grid-cols-[13rem_minmax(0,1fr)_13rem] lg:gap-12', avecSommaire && 'sm:grid sm:grid-cols-[minmax(0,1fr)_11rem] sm:gap-8']}>
       <div class="min-w-0 lg:col-start-2 lg:row-start-1">
@@ -76,7 +77,7 @@ const minutes = minutesDeLecture(article.body ?? '');
         {data.sources.length > 0 && <EncadreSources sources={data.sources} />}
         {data.credits.length > 0 && <EncadreCredits credits={data.credits} />}
         {data.quete && (precedent || suivant) && <EpisodesVoisins serie={tag(data.quete.serie)} precedent={precedent} suivant={suivant} />}
-        <TagsArticle tags={data.tags.map(tag)} class="mt-8 lg:hidden" />
+        <TagsArticle tags={sujets} class="mt-8 lg:hidden" />
       </div>
       {avecSommaire && (
         <aside class="hidden sm:block lg:col-start-1 lg:row-start-1" data-pagefind-ignore>
@@ -89,13 +90,13 @@ const minutes = minutesDeLecture(article.body ?? '');
       <aside class="hidden lg:col-start-3 lg:row-start-1 lg:block" aria-label="À propos de cet article" data-pagefind-ignore>
         <div class="sticky top-24 flex flex-col items-start gap-6">
           <ul class="text-corps-m flex flex-col items-start gap-3 text-discret">
-            <li><span class="pastille">{theme.data.singulier}</span></li>
+            <li><span class="pastille">{rubrique.data.singulier}</span></li>
             <li class="flex items-center gap-2"><Icon nom="minuteur" taille={20} />{minutes} min de lecture</li>
             <li class="flex items-center gap-2"><Icon nom="calendrier" taille={20} />{data.modifieLe
               ? <span>Mis à jour le <time datetime={jour(data.modifieLe)}>{dateFr(data.modifieLe)}</time></span>
               : <span>Publié le <time datetime={jour(data.publieLe)}>{dateFr(data.publieLe)}</time></span>}</li>
           </ul>
-          <TagsArticle tags={data.tags.map(tag)} class="" />
+          <TagsArticle tags={sujets} class="" />
           <CarteSeRelier />
         </div>
       </aside>

@@ -6,24 +6,24 @@ import StatistiquesAccueil from '../components/StatistiquesAccueil.astro';
 import EnTeteSection from '../components/EnTeteSection.astro';
 import CarteALaUne from '../components/CarteALaUne.astro';
 import CartePremiersPas from '../components/CartePremiersPas.astro';
-import TuileTheme from '../components/TuileTheme.astro';
+import TuileRubrique from '../components/TuileRubrique.astro';
 import GrilleArticles from '../components/GrilleArticles.astro';
 import BandeauTags from '../components/BandeauTags.astro';
 import { bibliotheque } from '../lib/contenu';
 import { articleALaUne } from '../lib/bibliotheque.ts';
 import { donneesSite } from '../lib/referencement.ts';
 
-const { articles, themes, tag, avecTag } = await bibliotheque();
+const { articles, rubriques, tag, avecTag } = await bibliotheque();
 
 // L'accueil ne dépend d'aucun article précis (D28) : « à la une » vient du contenu.
-// Un tag inconnu dans les entrées par thème fait échouer le build (tag()).
+// Un tag inconnu dans les entrées par rubrique fait échouer le build (tag()).
 const aLaUne = articleALaUne(articles);
-// Quatre entrées par thème, chacune avec une teinte M3 (conteneur + « sur ») pour les distinguer d'un coup d'œil.
+// Une entrée par rubrique, chacune avec une teinte M3 (conteneur + « sur ») pour les distinguer d'un coup d'œil.
 const entrees = [
   { id: 'quetes', accroche: 'Revivez l’aventure', teinte: 'bg-conteneur-primaire text-sur-conteneur-primaire' },
-  { id: 'concepts', accroche: 'Reliez les idées', teinte: 'bg-conteneur-tertiaire text-sur-conteneur-tertiaire' },
   { id: 'personnages', accroche: 'Rencontrez leurs histoires', teinte: 'bg-conteneur-or text-sur-conteneur-or' },
-  { id: 'regions', accroche: 'Parcourez les nations', teinte: 'bg-conteneur-jade text-sur-conteneur-jade' },
+  { id: 'theories', accroche: 'Explorez les hypothèses', teinte: 'bg-conteneur-tertiaire text-sur-conteneur-tertiaire' },
+  { id: 'bandes-annonces', accroche: 'Suivez les nouveautés', teinte: 'bg-conteneur-jade text-sur-conteneur-jade' },
 ];
 const NOMBRE_RECENTS = 6;
 const recents = articles.slice(0, NOMBRE_RECENTS);
@@ -31,7 +31,7 @@ const recents = articles.slice(0, NOMBRE_RECENTS);
 <Site titre="Les histoires de Teyvat commencent ici" donnees={[donneesSite(Astro.site!)]}>
   <HeroAccueil slot="hero" />
 
-  <StatistiquesAccueil lectures={articles.length} themes={themes.length} />
+  <StatistiquesAccueil lectures={articles.length} rubriques={rubriques.length} />
 
   <EnTeteSection titre="Par où commencer ?" />
   <section class="grid gap-4 md:grid-cols-[minmax(0,1.7fr)_minmax(16rem,1fr)] lg:gap-6" aria-label="À découvrir" data-a-la-une>
@@ -44,7 +44,7 @@ const recents = articles.slice(0, NOMBRE_RECENTS);
       <a class="lien-texte shrink-0" href="/lore">Toute la bibliothèque <Icon nom="fleche" taille={18} /></a>
     </EnTeteSection>
     <div class="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4" data-entrees>
-      {entrees.map(({ id, accroche, teinte }) => <TuileTheme theme={tag(id)} accroche={accroche} teinte={teinte} />)}
+      {entrees.map(({ id, accroche, teinte }) => <TuileRubrique rubrique={tag(id)} accroche={accroche} teinte={teinte} />)}
     </div>
   </section>
 

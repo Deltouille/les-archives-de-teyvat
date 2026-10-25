@@ -1,0 +1,18 @@
+---
+import Icon from './Icon.astro';
+import { cheminTag, type Tag } from '../lib/contenu';
+// Carte d'une rubrique ou d'un sujet (page « Rubriques et sujets ») : libellé, description, nombre de lectures.
+// Seule une rubrique a son icône. La description est coupée à deux lignes (texte complet sur la page du tag).
+// Un seul lien, étendu à toute la carte, qui porte le contour de focus.
+interface Props { tag: Tag; lectures: number; }
+const { tag, lectures } = Astro.props;
+const { data } = tag;
+---
+<li class="group relative flex items-start gap-4 rounded-carte bg-surface p-5 transition-shadow hover:shadow-niveau-2 has-[a:focus-visible]:outline-3 has-[a:focus-visible]:outline-offset-2 has-[a:focus-visible]:outline-primaire">
+  {data.rubrique && data.icone && <span class="grid size-12 shrink-0 place-items-center rounded-grand bg-tonal text-sur-tonal"><Icon nom={data.icone} /></span>}
+  <span class="min-w-0">
+    <a href={cheminTag(tag.id)} class="text-titre-m block after:absolute after:inset-0 after:content-[''] focus-visible:outline-none group-hover:text-primaire">{data.libelle}</a>
+    <span class="text-corps-m mt-1 line-clamp-2 text-discret">{data.description}</span>
+    <span class="text-etiquette-m mt-2 block text-primaire">{lectures} lecture{lectures > 1 ? 's' : ''}</span>
+  </span>
+</li>
