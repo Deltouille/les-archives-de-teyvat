@@ -4,7 +4,7 @@ description: "Les exploits d'Ajax, héros des contes de Snezhnaya, et les pistes
 image: snezhnaya
 imageAlt: "Les étendues enneigées de Snezhnaya"
 publieLe: 2026-10-22
-brouillon: true
+brouillon: false 
 tags: [personnages, theories]
 spoilers: "Révèle des informations issues de l'Histoire générale de Snezhnaya, des Hymnes du grand nord et des notes de l'Ordo de Narzissenkreuz, ainsi que l'identité du Troisième Descendeur."
 resume:
