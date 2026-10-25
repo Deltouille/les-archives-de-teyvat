@@ -4,8 +4,8 @@ import Marque from './Marque.astro';
 import BoutonTheme from './BoutonTheme.astro';
 import MenuMobile from './MenuMobile.astro';
 import { registreDesTags, cheminTag } from '../lib/contenu';
-import { lienActif, dansLeLore, pageExacte, CHEMIN_QUETES, CHEMIN_THEORIES } from '../lib/navigation.mjs';
-import { NOM } from '../lib/projet.mjs';
+import { lienActif, dansLeLore, pageExacte, CHEMIN_QUETES, CHEMIN_THEORIES } from '../lib/navigation.ts';
+import { NOM } from '../lib/projet.ts';
 
 interface Props { surHero?: boolean; }
 const { surHero = false } = Astro.props;
@@ -48,7 +48,7 @@ const boutonIcone = 'grid size-10 place-items-center rounded-full text-discret t
   <div class="mx-auto flex min-h-16 max-w-site flex-wrap items-center gap-x-4 gap-y-2 px-4 py-3 sm:px-6 lg:gap-x-6 lg:px-10">
     <a href="/" class="text-titre-m flex min-w-0 flex-1 items-center gap-2 font-normal whitespace-nowrap md:flex-none" aria-label={`${NOM}, accueil`}>
       <Marque class="rotate-12 text-primaire sur-image:text-ciel" />
-      {/* Le nom (NOM, src/lib/projet.mjs) en deux graisses : à mettre à jour avec lui. */}
+      {/* Le nom (NOM, src/lib/projet.ts) en deux graisses : à mettre à jour avec lui. */}
       <span class="truncate">Les Archives <strong class="font-bold">de Teyvat</strong></span>
     </a>
 

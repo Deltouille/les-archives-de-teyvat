@@ -1,5 +1,5 @@
 @import "tailwindcss";
-/* Couleurs : générées depuis une couleur source (scripts/palette.mjs). Elles basculent seules avec le thème :
+/* Couleurs : générées depuis une couleur source (scripts/palette.ts). Elles basculent seules avec le thème :
    inutile d'écrire dark: pour elles. */
 @import "./palette.css";
 

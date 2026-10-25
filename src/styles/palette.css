@@ -1,4 +1,4 @@
-/* Généré par scripts/palette.mjs depuis #355f98 : ne pas modifier à la main (npm run palette). */
+/* Généré par scripts/palette.ts depuis #355f98 : ne pas modifier à la main (npm run palette). */
 
 :root { color-scheme: light; --fond: #f9f9ff; --surface: #f3f3fa; --doux: #e7e8ee; --tonal: #d9e3f8; --sur-tonal: #3d4758; --ligne: #c4c6cf; --contour: #74777f; --texte: #191c20; --discret: #43474e; --primaire: #3e5f90; --sur-primaire: #ffffff; --conteneur-primaire: #d5e3ff; --sur-conteneur-primaire: #244777; --conteneur-tertiaire: #f8d8fe; --sur-conteneur-tertiaire: #553e5d; --or: #7d571d; --sur-or: #ffffff; --conteneur-or: #ffddb3; --sur-conteneur-or: #291800; --jade: #3b6755; --sur-jade: #ffffff; --conteneur-jade: #bdedd6; --sur-conteneur-jade: #002116; }
 /* Sans JavaScript, data-theme est absent : on suit alors la préférence système. */

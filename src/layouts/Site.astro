@@ -3,29 +3,45 @@ import '../styles/global.css';
 import Navbar from '../components/Navbar.astro';
 import PiedDePage from '../components/PiedDePage.astro';
 import Recherche from '../components/Recherche.astro';
-import { genererPalette } from '../../scripts/palette.mjs';
-import { LICENCE_WIKI } from '../lib/credits.mjs';
-import { NOM } from '../lib/projet.mjs';
+import { genererPalette } from '../../scripts/palette.ts';
+import { LICENCE_WIKI } from '../lib/credits.ts';
+import { NOM } from '../lib/projet.ts';
+import { donneesArticle, jsonLd } from '../lib/referencement.ts';
 
 interface Props {
   titre: string;
   description?: string;
   /** Image de partage (chemin public ou URL d'image optimisée). */
   image?: string;
-  article?: boolean;
+  /** Description de l'image de partage (og:image:alt), quand elle en a une. */
+  imageAlt?: string;
+  /** Dimensions de l'image de partage, quand elles sont connues : l'aperçu s'affiche dès le premier partage. */
+  imageTaille?: { largeur: number; hauteur: number };
+  /** Page d'article : dates et sujets pour Open Graph (article:*) et les données structurées (BlogPosting), D50. */
+  article?: { publieLe: Date; modifieLe?: Date; section: string; tags: string[] };
+  /** Autres données structurées schema.org de la page (JSON-LD). */
+  donnees?: object[];
   noindex?: boolean;
 }
 const {
   titre,
   description = 'Le lore de Genshin Impact, raconté simplement. Quêtes, personnages et mystères de Teyvat, en français.',
   image = '/social.webp',
-  article = false,
+  imageAlt = '',
+  imageTaille,
+  article,
+  donnees = [],
   noindex = false,
 } = Astro.props;
 
 const NOM_DU_SITE = NOM;
 const titreComplet = `${titre} · ${NOM_DU_SITE}`;
 const canonique = new URL(Astro.url.pathname, Astro.site);
+const imageAbsolue = new URL(image, Astro.site).href;
+const structurees = [
+  ...(article ? [donneesArticle({ url: canonique.href, titre, description, image: imageAbsolue, publieLe: article.publieLe, modifieLe: article.modifieLe, section: article.section, motsCles: article.tags, site: Astro.site! })] : []),
+  ...donnees,
+];
 const { clair, sombre } = genererPalette();
 
 // Avec une bannière, la barre de navigation passe en surimpression transparente.
@@ -52,9 +68,20 @@ const avecHero = hero.trim() !== '';
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonique} />
     <meta property="og:type" content={article ? 'article' : 'website'} />
-    <meta property="og:image" content={new URL(image, Astro.site)} />
+    <meta property="og:image" content={imageAbsolue} />
+    {imageTaille && <><meta property="og:image:width" content={String(imageTaille.largeur)} /><meta property="og:image:height" content={String(imageTaille.hauteur)} /></>}
+    {imageAlt && <><meta property="og:image:alt" content={imageAlt} /><meta name="twitter:image:alt" content={imageAlt} /></>}
     <meta property="og:locale" content="fr_FR" />
+    {article && <>
+      <meta property="article:published_time" content={article.publieLe.toISOString()} />
+      <meta property="article:modified_time" content={(article.modifieLe ?? article.publieLe).toISOString()} />
+      <meta property="article:section" content={article.section} />
+      {article.tags.map(t => <meta property="article:tag" content={t} />)}
+    </>}
     <meta name="twitter:card" content="summary_large_image" />
+    <link rel="alternate" type="application/rss+xml" title={NOM_DU_SITE} href="/rss.xml" />
+    {/* eslint-disable-next-line astro/no-set-html-directive -- JSON échappé par jsonLd() : « < » ne peut fermer la balise */}
+    {structurees.map(d => <script type="application/ld+json" is:inline set:html={jsonLd(d)} />)}
     <meta name="theme-color" content={clair.fond} media="(prefers-color-scheme: light)" />
     <meta name="theme-color" content={sombre.fond} media="(prefers-color-scheme: dark)" />
     {/* Anti-flash : le thème est posé avant le premier rendu. Le choix mémorisé l'emporte sur la préférence système. */}
@@ -90,6 +117,7 @@ const avecHero = hero.trim() !== '';
     <a href="#contenu" class="text-etiquette-g fixed -top-20 left-4 z-50 rounded-full bg-primaire px-5 py-3 text-sur-primaire focus:top-4">Aller au contenu</a>
     <Navbar surHero={avecHero} />
     {/* Bannière rendue hors du <main>, directement en pleine largeur : pas de 100vw (qui inclut la barre de défilement). */}
+    {/* eslint-disable-next-line astro/no-set-html-directive -- HTML du slot, déjà rendu par Astro */}
     {avecHero && <Fragment set:html={hero} />}
     <main id="contenu" tabindex="-1" class="mx-auto min-h-[65svh] max-w-site px-4 pt-6 pb-16 focus:outline-none sm:px-6 lg:px-10">
       <slot />

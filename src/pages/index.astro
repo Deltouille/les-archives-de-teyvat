@@ -10,7 +10,8 @@ import TuileTheme from '../components/TuileTheme.astro';
 import GrilleArticles from '../components/GrilleArticles.astro';
 import BandeauTags from '../components/BandeauTags.astro';
 import { bibliotheque } from '../lib/contenu';
-import { articleALaUne } from '../lib/bibliotheque.mjs';
+import { articleALaUne } from '../lib/bibliotheque.ts';
+import { donneesSite } from '../lib/referencement.ts';
 
 const { articles, themes, tag, avecTag } = await bibliotheque();
 
@@ -27,7 +28,7 @@ const entrees = [
 const NOMBRE_RECENTS = 6;
 const recents = articles.slice(0, NOMBRE_RECENTS);
 ---
-<Site titre="Les histoires de Teyvat commencent ici">
+<Site titre="Les histoires de Teyvat commencent ici" donnees={[donneesSite(Astro.site!)]}>
   <HeroAccueil slot="hero" />
 
   <StatistiquesAccueil lectures={articles.length} themes={themes.length} />

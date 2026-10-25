@@ -1,7 +1,7 @@
 ---
 // Planche du système de design (/demo, en dev uniquement) : sert à juger la palette et aux captures visuelles.
 import '../styles/global.css';
-import { genererPalette } from '../../scripts/palette.mjs';
+import { genererPalette } from '../../scripts/palette.ts';
 
 const { clair } = genererPalette();
 const jetons = Object.keys(clair);
@@ -84,7 +84,7 @@ const niveaux = ['shadow-niveau-1', 'shadow-niveau-2', 'shadow-niveau-3'];
         <span class="sur-titre">Sur-titre</span>
         <span class="pastille">Pastille</span>
         <span class="fleche-ronde" aria-hidden="true">→</span>
-        <a class="lien-texte" href="#">Lien texte →</a>
+        <a class="lien-texte" href="/lore">Lien texte →</a>
         <button class="text-etiquette-g rounded-full bg-primaire px-6 py-2.5 text-sur-primaire hover:bg-primaire-survol">Bouton plein</button>
         <button class="text-etiquette-g rounded-full border border-contour px-6 py-2.5 text-primaire hover:bg-doux">Bouton contour</button>
         <kbd>Ctrl K</kbd>
@@ -95,7 +95,7 @@ const niveaux = ['shadow-niveau-1', 'shadow-niveau-2', 'shadow-niveau-3'];
       <h2 class="mb-4">Prose (Markdown rendu)</h2>
       <article class="prose max-w-[68ch] rounded-carte bg-surface p-6 sm:p-10">
         <h2>La chute de Khaenri’ah</h2>
-        <p>Il y a cinq cents ans, une nation sans dieu s’est dressée contre <em>les Cieux</em>. Ce que l’on sait de sa chute tient en quelques <a href="#">témoignages</a>, souvent <strong>contradictoires</strong>.</p>
+        <p>Il y a cinq cents ans, une nation sans dieu s’est dressée contre <em>les Cieux</em>. Ce que l’on sait de sa chute tient en quelques <a href="/lore">témoignages</a>, souvent <strong>contradictoires</strong>.</p>
         <h3>Ce que l’on sait</h3>
         <ul><li>Une nation souterraine, sans Archon.</li><li>Une catastrophe qui a touché tout Teyvat.</li></ul>
         <ol><li>Premier témoignage.</li><li>Second témoignage.</li></ol>

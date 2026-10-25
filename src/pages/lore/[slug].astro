@@ -18,7 +18,7 @@ import ProgressionLecture from '../../components/ProgressionLecture.astro';
 import EnTeteSection from '../../components/EnTeteSection.astro';
 import GrilleArticles from '../../components/GrilleArticles.astro';
 import { bibliotheque, cheminTag, imageDe, transitionImage, type Article } from '../../lib/contenu';
-import { articlesLies, episodesVoisins, minutesDeLecture, dateFr } from '../../lib/bibliotheque.mjs';
+import { articlesLies, episodesVoisins, minutesDeLecture, dateFr } from '../../lib/bibliotheque.ts';
 
 export async function getStaticPaths() {
   const { articles } = await bibliotheque();
@@ -40,7 +40,8 @@ const avecSommaire = titres.length > 0;
 const jour = (d: Date) => d.toISOString().slice(0, 10);
 const minutes = minutesDeLecture(article.body ?? '');
 ---
-<Site titre={data.titre} description={data.description} image={partage.src} article>
+<Site titre={data.titre} description={data.description} image={partage.src} imageAlt={data.imageAlt} imageTaille={{ largeur: 1200, hauteur: 630 }}
+  article={{ publieLe: data.publieLe, modifieLe: data.modifieLe, section: theme.data.libelle, tags: data.tags.map(id => tag(id).data.libelle) }}>
   <Banniere slot="hero" image={image} alt={data.imageAlt} titre="article-titre" transition={transitionImage(article)} class="min-h-[35rem] md:h-[clamp(32rem,78svh,48rem)]">
     {/* Même gouttière que le <main> : le titre commence au même bord que la colonne de lecture.
          pt-28 : la barre de navigation fixe (64 px) recouvre le haut de la bannière. */}

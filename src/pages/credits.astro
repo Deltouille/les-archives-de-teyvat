@@ -2,9 +2,9 @@
 import Site from '../layouts/Site.astro';
 import EnTetePage from '../components/EnTetePage.astro';
 import { bibliotheque, cheminArticle, type Article } from '../lib/contenu';
-import { presenterCredit, LICENCE_WIKI } from '../lib/credits.mjs';
-import { DEPOT, NOM, PLATEFORME } from '../lib/projet.mjs';
-import { TIERS, TEXTES_LICENCES, cheminLicence } from '../lib/tiers.mjs';
+import { presenterCredit, LICENCE_WIKI } from '../lib/credits.ts';
+import { DEPOT, NOM, PLATEFORME } from '../lib/projet.ts';
+import { TIERS, TEXTES_LICENCES, cheminLicence } from '../lib/tiers.ts';
 
 // Le texte vient de Deltouille (contenus originaux sous CC BY-SA 3.0 : decisions.md, D18 ; code sous GPL : D19) ; les deux listes du bas sont générées depuis le frontmatter des articles (champ credits).
 const { articles } = await bibliotheque();

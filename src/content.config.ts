@@ -1,11 +1,12 @@
-import { defineCollection } from 'astro:content';
 import { file, glob } from 'astro/loaders';
 import { z } from 'astro/zod';
+import { defineCollection } from 'astro:content';
+
 import { NOMS_ICONES } from './lib/icones';
-import { identifiantDe } from './lib/identifiant.mjs';
+import { identifiantDe } from './lib/identifiant.ts';
 
 // Un article = un fichier, rangé où l'on veut sous src/content/articles. Son URL est /lore/<nom-du-fichier> : elle ne
-// dépend ni des dossiers ni des tags, donc déplacer ou retaguer un article ne casse jamais un lien. Règles croisées (tags connus, thème, image, crédits) : src/lib/validation.mjs.
+// dépend ni des dossiers ni des tags, donc déplacer ou retaguer un article ne casse jamais un lien. Règles croisées (tags connus, thème, image, crédits) : src/lib/validation.ts.
 const articles = defineCollection({
   loader: glob({ base: './src/content/articles', pattern: '**/*.md', generateId: ({ entry }) => identifiantDe(entry) }),
   schema: z.object({
@@ -28,7 +29,7 @@ const articles = defineCollection({
     resume: z.array(z.string()).default([]),
     spoilers: z.string().optional(),
     sources: z.array(z.object({ titre: z.string(), detail: z.string() })).default([]),
-    // Contenus repris d'ailleurs, crédités en fin d'article et sur /credits. Règles d'URL et de licence : src/lib/credits.mjs.
+    // Contenus repris d'ailleurs, crédités en fin d'article et sur /credits. Règles d'URL et de licence : src/lib/credits.ts.
     credits: z.array(z.discriminatedUnion('type', [
       // Adaptation d'une page du Genshin Impact Wiki (Fandom) : l'article passe sous CC BY-SA 3.0.
       z.object({ type: z.literal('wiki'), titre: z.string(), url: z.url(), modifications: z.string() }),

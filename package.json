@@ -1,38 +1,59 @@
 {
-  "name": "les-archives-de-teyvat",
-  "type": "module",
-  "version": "0.0.1",
-  "engines": {
-    "node": ">=22.12.0"
-  },
-  "scripts": {
-    "dev": "astro dev",
-    "build": "astro build && pagefind --site dist",
-    "check": "astro check",
-    "test": "node --test tests/*.test.mjs",
-    "verify": "npm run check && npm run build && npm test",
-    "preview": "astro preview",
-    "astro": "astro",
-    "palette": "node scripts/palette.mjs",
-    "captures": "node scripts/captures.mjs",
-    "vercel": "node scripts/vercel.mjs",
-    "image": "node scripts/image.mjs"
-  },
-  "dependencies": {
-    "@astrojs/markdown-satteri": "^0.4.5",
-    "@astrojs/sitemap": "^3.7.4",
-    "@tailwindcss/vite": "^4.3.3",
-    "astro": "^7.3.8",
-    "tailwindcss": "^4.3.3"
-  },
-  "devDependencies": {
-    "@astrojs/check": "^0.9.10",
-    "@material-symbols/svg-400": "^0.48.0",
-    "@material/material-color-utilities": "^0.3.0",
-    "axe-core": "^4.14.0",
-    "pagefind": "^1.5.2",
-    "sharp": "^0.35.5",
-    "typescript": "^6.0.3"
-  },
-  "license": "GPL-3.0-or-later"
+    "name": "les-archives-de-teyvat",
+    "type": "module",
+    "version": "0.0.1",
+    "engines": {
+        "node": ">=22.18.0"
+    },
+    "scripts": {
+        "dev": "astro dev",
+        "build": "astro build && pagefind --site dist",
+        "check": "astro check",
+        "test": "vitest run",
+        "verify": "npm run check && npm run lint && npm run build && npm test",
+        "preview": "astro preview",
+        "astro": "astro",
+        "palette": "node scripts/palette.ts",
+        "captures": "node scripts/captures.ts",
+        "vercel": "node scripts/vercel.ts",
+        "lint": "eslint .",
+        "image": "node scripts/image.ts"
+    },
+    "dependencies": {
+        "@astrojs/markdown-satteri": "^0.4.5",
+        "@astrojs/rss": "^4.0.19",
+        "@astrojs/sitemap": "^3.7.4",
+        "@tailwindcss/vite": "^4.3.3",
+        "astro": "^7.3.8",
+        "tailwindcss": "^4.3.3"
+    },
+    "devDependencies": {
+        "@astrojs/check": "^0.9.10",
+        "@eslint/js": "^10.0.1",
+        "@material-symbols/svg-400": "^0.48.0",
+        "@material/material-color-utilities": "^0.3.0",
+        "@types/node": "^24.19.2",
+        "astro-eslint-parser": "^3.2.0",
+        "axe-core": "^4.14.0",
+        "eslint": "^10.13.0",
+        "eslint-config-prettier": "^10.1.8",
+        "eslint-import-resolver-typescript": "^4.4.5",
+        "eslint-plugin-astro": "^3.2.1",
+        "eslint-plugin-import-x": "^4.17.1",
+        "eslint-plugin-jsx-a11y": "^6.10.2",
+        "eslint-plugin-sonarjs": "^4.2.2",
+        "eslint-plugin-unused-imports": "^4.4.1",
+        "globals": "^17.13.0",
+        "pagefind": "^1.5.2",
+        "sharp": "^0.35.5",
+        "typescript": "^6.0.3",
+        "typescript-eslint": "^8.72.0",
+        "vitest": "^5.0.5"
+    },
+    "license": "GPL-3.0-or-later",
+    "overrides": {
+        "eslint-plugin-jsx-a11y": {
+            "eslint": "$eslint"
+        }
+    }
 }

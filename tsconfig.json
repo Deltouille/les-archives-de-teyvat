@@ -1,5 +1,10 @@
 {
   "extends": "astro/tsconfigs/strict",
+  "compilerOptions": {
+    // Les scripts sont exécutés tels quels par Node, qui efface les types : pas d'enum, de namespace ni de propriété
+    // de paramètre (D51).
+    "erasableSyntaxOnly": true
+  },
   "include": [".astro/types.d.ts", "**/*"],
   "exclude": ["dist", "old"]
 }

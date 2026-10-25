@@ -1,8 +1,11 @@
 ---
 import Icon from './Icon.astro';
-// Le dernier élément est la page courante : sans lien, signalé par aria-current.
+import { donneesFil, jsonLd } from '../lib/referencement.ts';
+// Le dernier élément est la page courante : sans lien, signalé par aria-current. Le fil est aussi décrit aux moteurs
+// (BreadcrumbList, D50).
 interface Props { etapes: { libelle: string; href?: string }[]; class?: string; }
 const { etapes, class: classe } = Astro.props;
+const page = new URL(Astro.url.pathname, Astro.site).href;
 ---
 <nav class:list={['text-corps-m text-discret', classe]} aria-label="Fil d’Ariane">
   <ol class="flex flex-wrap items-center gap-1">
@@ -13,4 +16,6 @@ const { etapes, class: classe } = Astro.props;
       </li>
     ))}
   </ol>
+  {/* eslint-disable-next-line astro/no-set-html-directive -- JSON échappé par jsonLd() : « < » ne peut fermer la balise */}
+  <script type="application/ld+json" is:inline set:html={jsonLd(donneesFil(etapes, page, Astro.site!))} />
 </nav>

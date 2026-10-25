@@ -1,7 +1,7 @@
 ---
 import Icon from './Icon.astro';
 import { cheminTag, type Tag } from '../lib/contenu';
-import { lienActif, CHEMIN_QUETES, CHEMIN_THEORIES } from '../lib/navigation.mjs';
+import { lienActif, CHEMIN_QUETES, CHEMIN_THEORIES } from '../lib/navigation.ts';
 
 interface Props { themes: Tag[]; }
 const { themes } = Astro.props;

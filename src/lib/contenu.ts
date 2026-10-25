@@ -1,10 +1,12 @@
 import { getCollection, type CollectionEntry } from 'astro:content';
+
+import { articlesPublies, themePrincipal } from './bibliotheque.ts';
+import { doublonsDIdentifiants } from './identifiant.ts';
+import { doublonsDImages, nomDImage } from './images.ts';
+import { trierParLibelle } from './navigation.ts';
+import { validerContenus } from './validation.ts';
+
 import type { ImageMetadata } from 'astro';
-import { trierParLibelle } from './navigation.mjs';
-import { validerContenus } from './validation.mjs';
-import { articlesPublies, themePrincipal } from './bibliotheque.mjs';
-import { doublonsDIdentifiants } from './identifiant.mjs';
-import { doublonsDImages, nomDImage } from './images.mjs';
 
 // Chemins de tous les fichiers d'articles, pour repérer deux fichiers de même nom dans deux dossiers : ils voudraient
 // la même URL, et le chargeur de contenu garderait l'un en écrasant l'autre sans erreur.
@@ -24,10 +26,10 @@ export const transitionImage = (article: Article) => `image-${article.id}`;
 // le dossier ne compte pas. Astro les optimise à l'usage (<Image />).
 const modulesImages = import.meta.glob<{ default: ImageMetadata }>('../assets/images/**/*.webp', { eager: true });
 const FICHIERS_IMAGES = Object.keys(modulesImages).map(c => c.replace(/^\.\.\//, 'src/'));
-const images = Object.fromEntries(Object.entries(modulesImages).map(([chemin, module]) => [nomDImage(chemin), module.default]));
+const images = new Map(Object.entries(modulesImages).map(([chemin, module]) => [nomDImage(chemin), module.default]));
 
 export function imageDe(nom: string): ImageMetadata {
-  const image = images[nom];
+  const image = images.get(nom);
   if (!image) throw new Error(`Image inconnue : aucun fichier ${nom}.webp sous src/assets/images`);
   return image;
 }
@@ -48,7 +50,7 @@ export async function bibliotheque() {
   if (doublons.length) throw new Error(doublons.map(d => `Même URL /lore/${d.identifiant} pour ${d.chemins.join(' et ')} : renommez l'un des fichiers`).join('\n'));
   const memesImages = doublonsDImages(FICHIERS_IMAGES);
   if (memesImages.length) throw new Error(memesImages.map(d => `Même image « ${d.nom} » pour ${d.chemins.join(' et ')} : renommez l'un des fichiers`).join('\n'));
-  validerContenus(tous, tags, new Set(Object.keys(images)));
+  validerContenus(tous, tags, new Set(images.keys()));
   const articles = articlesPublies(tous, { dev: import.meta.env.DEV });
   const parId = new Map(tags.map(t => [t.id, t]));
   const tag = (id: string) => {

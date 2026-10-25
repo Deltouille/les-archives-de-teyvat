@@ -6,7 +6,7 @@ import FilAriane from '../../../components/FilAriane.astro';
 import Puces from '../../../components/Puces.astro';
 import GrilleArticles from '../../../components/GrilleArticles.astro';
 import { bibliotheque, cheminTag, type Tag } from '../../../lib/contenu';
-import { ordreDeLecture } from '../../../lib/bibliotheque.mjs';
+import { ordreDeLecture } from '../../../lib/bibliotheque.ts';
 
 export async function getStaticPaths() {
   const { tags } = await bibliotheque();

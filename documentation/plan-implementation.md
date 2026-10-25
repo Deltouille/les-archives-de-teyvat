@@ -9,7 +9,7 @@
 
 Chaque étape se termine seulement quand :
 
-1. **`npm run verify` passe** (`astro check` + build + `node --test`), à partir de l'étape 0.
+1. **`npm run verify` passe** (`astro check` + ESLint + build + Vitest, D51 et D52 ; `node --test` jusqu'à l'étape 20), à partir de l'étape 0.
 2. Les tests de l'étape sont **écrits et verts** — et, pour un garde-fou, on l'a
    vu **échouer** en le cassant volontairement.
 3. Les décisions prises sont **consignées** dans `decisions.md` (contexte, choix,
@@ -188,6 +188,20 @@ Chaque étape se termine seulement quand :
 - [x] Pages de tag dans l'ordre de l'histoire ; liens « Épisode précédent / suivant » en fin d'épisode (scène `episodes-voisins`).
 - [x] Les huit actes du prologue et du chapitre I placés.
 - **Décision** : D41.
+
+## Étape 20 — Référencement : données structurées, dates, flux RSS ✅ (ajoutée à la demande)
+
+- [x] JSON-LD : `BlogPosting` (article), `BreadcrumbList` (fil d'Ariane), `WebSite` (accueil) ; auteur et éditeur = le site.
+- [x] Open Graph : `article:*`, dimensions et texte alternatif de l'image de partage.
+- [x] `lastmod` des articles dans le sitemap ; flux `/rss.xml` annoncé sur chaque page.
+- **Décision** : D50.
+
+## Étape 21 — TypeScript, Vitest et ESLint ✅ (ajoutée à la demande)
+
+- [x] `src/lib`, scripts, tests et `astro.config` en `.ts` ; `astro check` strict sur tout le dépôt (0 erreur).
+- [x] Tests sous Vitest (`getViteConfig`), assertions en `expect`, mêmes 140 tests.
+- [x] ESLint en état de marche, 0 erreur et 0 avertissement, ajouté à `npm run verify`.
+- **Décisions** : D51, D52.
 
 ## Questions ouvertes (CDC §10)
 
