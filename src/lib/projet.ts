@@ -1,5 +1,9 @@
-// Nom et adresses du projet, écrits une seule fois (decisions.md, D22, D24 et D26).
+// Nom et adresses du projet, écrits une seule fois (decisions.md, D22, D24, D26 et D54).
 export const NOM = 'Les Archives de Teyvat';
+/** Adresse du site en production : canoniques, Open Graph, données structurées, sitemap, robots.txt et flux RSS
+ *  (`site` d'astro.config.ts). La variable d'environnement SITE_URL la remplace au besoin. À changer si le projet
+ *  Vercel est renommé ou si le site prend son propre nom de domaine (D54). */
+export const SITE = 'https://les-archives-de-teyvat.vercel.app';
 /** Plateforme qui héberge le dépôt, nommée dans les pages (changer de plateforme = ces trois lignes, D26). */
 export const PLATEFORME = 'GitHub';
 export const DEPOT = 'https://github.com/Deltouille/les-archives-de-teyvat';

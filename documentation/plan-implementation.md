@@ -103,7 +103,7 @@ Chaque étape se termine seulement quand :
 ## Étape 8 — Finitions et mise en ligne ✅ (sauf le déploiement, fait par Deltouille)
 
 - [x] Audit accessibilité automatisé (axe-core dans les captures) et budgets de poids (`tests/poids.test.mjs`).
-- [ ] Déploiement, `SITE_URL` de production — **par Deltouille** (cf. README, « Mise en ligne »).
+- [ ] Déploiement — **par Deltouille** (cf. README, « Mise en ligne »). Adresse de production : `SITE` dans `src/lib/projet.ts` (D54).
 - [x] Vraies redirections 301 côté Vercel : `vercel.json` généré depuis `src/lib/redirections.mjs` (D15).
 - [x] Une seule forme d'URL, sans barre finale (D15).
 - **Tests** : `npm run verify` + captures complètes de toutes les pages ; Lighthouse sur 3 pages types, scores consignés (100 partout, D15).

@@ -9,6 +9,7 @@ import { defineConfig } from 'astro/config';
 import { homonymes } from './src/lib/identifiant.ts';
 import { imagesParNom, variantesDesImages } from './src/lib/images-markdown.ts';
 import { imagesDuCorps, nomDImage } from './src/lib/images.ts';
+import { SITE } from './src/lib/projet.ts';
 import { REDIRECTIONS } from './src/lib/redirections.ts';
 import { datesDeModification } from './src/lib/referencement.ts';
 
@@ -90,7 +91,7 @@ const avecDate = (entree: SitemapItem) => {
 export default defineConfig({
   // `||` et non `??` : une variable définie mais vide vaut absente.
   // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
-  site: process.env.SITE_URL || 'https://l-histoire-de-genshin-expliquee.vercel.app',
+  site: process.env.SITE_URL || SITE,
   output: 'static',
   // Une seule forme d'URL, sans barre finale, comme tous les liens internes : canonique et sitemap comprises (D15).
   trailingSlash: 'never',

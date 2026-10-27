@@ -33,6 +33,27 @@ test('le favicon ICO reprend l’étoile SVG, sans ancien logo de secours', asyn
   expect(html).toMatch(/href="\/favicon\.svg\?v=2" sizes="any"/);
 });
 
+test('les adresses publiées (canonique, Open Graph, robots.txt, sitemap, flux) sont celles du domaine de production (D54)', async () => {
+  const { SITE } = await import('../src/lib/projet.ts');
+  // SITE_URL remplace SITE au build (aperçu sur un autre domaine) ; vide, elle vaut absente, comme dans astro.config.ts.
+  // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
+  const attendu = process.env.SITE_URL || SITE;
+  const accueil = await lire('index.html');
+  expect(accueil).toContain(`<link rel="canonical" href="${attendu}/">`);
+  expect(accueil).toContain(`<meta property="og:url" content="${attendu}/">`);
+  expect(await lire('robots.txt')).toMatch(new RegExp(`^Sitemap: ${attendu}/sitemap-index\\.xml$`, 'm'));
+  expect([...(await lire('sitemap-index.xml')).matchAll(/<loc>([^<]+)<\/loc>/g)].every(m => m[1].startsWith(`${attendu}/`))).toBeTruthy();
+  expect([...(await lire('rss.xml')).matchAll(/<link>([^<]+)<\/link>/g)].every(m => m[1] === attendu || m[1].startsWith(`${attendu}/`))).toBeTruthy();
+});
+
+test('l’ancien domaine, qui répond 404, n’apparaît nulle part dans le site publié (D54)', async () => {
+  const { readdir } = await import('node:fs/promises');
+  const fichiers = (await readdir(racine, { recursive: true })).filter(f => /\.(html|xml|txt|json)$/.test(f) && !f.startsWith('pagefind'));
+  const avecAncien = [];
+  for (const fichier of fichiers) if ((await lire(fichier)).includes('l-histoire-de-genshin-expliquee')) avecAncien.push(fichier);
+  expect(avecAncien).toStrictEqual([]);
+});
+
 test('le sitemap et l’index de recherche sont générés', async () => {
   for (const fichier of ['sitemap-index.xml', 'pagefind/pagefind.js']) expect(await existe(path.join(racine, fichier)), fichier).toBeTruthy();
 });

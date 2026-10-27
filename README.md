@@ -34,7 +34,7 @@ Pour faire rédiger un article par un agent à partir d'un lien (page du wiki, v
 ## Mise en ligne (Vercel)
 
 1. Importer le dépôt dans Vercel : Astro est détecté, et `vercel.json` impose `npm run build` (qui génère aussi l'index de recherche) et le dossier `dist`.
-2. Domaine autre que `l-histoire-de-genshin-expliquee.vercel.app` : définir la variable d'environnement `SITE_URL` (URL canoniques, Open Graph, sitemap, `robots.txt`).
+2. L'adresse de production (`https://les-archives-de-teyvat.vercel.app`) est écrite dans `src/lib/projet.ts` (`SITE`) : elle donne les URL canoniques, l'Open Graph, les données structurées, le sitemap, `robots.txt` et le flux RSS. À changer là si le projet Vercel est renommé ou si le site prend son propre domaine ; la variable d'environnement `SITE_URL` la remplace au besoin (aperçu sur un autre domaine).
 3. Après le premier déploiement, vérifier une ancienne adresse (par exemple `/lore/regions/mondstadt`) : elle doit répondre par une redirection 301.
 
 ## Licences
