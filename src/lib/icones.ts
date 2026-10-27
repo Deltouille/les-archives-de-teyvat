@@ -1,6 +1,7 @@
 // Icônes Material Symbols (arrondies, graisse 400), lues dans @material-symbols/svg-400 au build :
 // aucun fichier d'icône ni webfont n'est chargé par le navigateur, le tracé est inséré dans le HTML.
 // Pour en ajouter une : une ligne ici (nom français → nom Material Symbols), cf. https://fonts.google.com/icons.
+import temple from '@material-symbols/svg-400/rounded/account_balance.svg?raw';
 import fleche from '@material-symbols/svg-400/rounded/arrow_forward.svg?raw';
 import calendrier from '@material-symbols/svg-400/rounded/calendar_today.svg?raw';
 import coche from '@material-symbols/svg-400/rounded/check.svg?raw';
@@ -23,7 +24,7 @@ import video from '@material-symbols/svg-400/rounded/smart_display.svg?raw';
 import strates from '@material-symbols/svg-400/rounded/stacks.svg?raw';
 import oeil from '@material-symbols/svg-400/rounded/visibility.svg?raw';
 
-const sources = { maison, livre, boussole, personne, strates, horloge, etincelle, recherche, fleche, chevron, lune, soleil, fermer, tag, menu, coche, oeil, minuteur, calendrier, ampoule, video };
+const sources = { maison, livre, boussole, personne, strates, horloge, etincelle, recherche, fleche, chevron, lune, soleil, fermer, tag, menu, coche, oeil, minuteur, calendrier, ampoule, video, temple };
 
 export type NomIcone = keyof typeof sources;
 export const NOMS_ICONES = Object.keys(sources) as [NomIcone, ...NomIcone[]];

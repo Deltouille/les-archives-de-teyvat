@@ -32,6 +32,12 @@ theories:
   description: Hypothèses et lectures des mystères de Teyvat, à distinguer de ce que le jeu affirme.
   rubrique: true
   icone: ampoule
+civilisations:
+  libelle: Civilisations
+  singulier: Civilisation
+  description: Les grandes civilisations de Teyvat, de leur essor à leur chute, et ce qu'il en reste.
+  rubrique: true
+  icone: temple
 
 # Sujets
 teyvat:

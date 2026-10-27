@@ -58,8 +58,9 @@ Le registre est `src/content/tags.yaml` : <https://raw.githubusercontent.com/Del
 - **Obligatoire** : n'utilise que des identifiants qui y figurent. Un tag inconnu fait échouer le build. S'il en manque un, ne l'invente pas dans l'article : propose-le dans tes points à vérifier (identifiant, `libelle`, `description`).
 Deux sortes de tags, à ne pas confondre :
 
-- **Obligatoire** : **une et une seule rubrique**, le *genre* de l'article (tag marqué `rubrique: true`). Rubriques actuelles : `quetes`, `personnages`, `theories`, `bandes-annonces`. Elle donne le badge de l'article, son fil d'Ariane et son filtre de recherche. Zéro ou deux rubriques font échouer le build.
+- **Obligatoire** : **une et une seule rubrique**, le *genre* de l'article (tag marqué `rubrique: true`). Rubriques actuelles : `quetes`, `personnages`, `theories`, `bandes-annonces`, `civilisations`. Elle donne le badge de l'article, son fil d'Ariane et son filtre de recherche. Zéro ou deux rubriques font échouer le build.
 - **`theories`** : pour un article qui défend une hypothèse ou une lecture non confirmée par le jeu, même s'il porte sur un personnage : le lecteur sait ainsi d'emblée que ce n'est pas du lore établi.
+- **`civilisations`** : pour un article de fond sur une civilisation ou un royaume (l'Hyperborée, par exemple) : son histoire, de son essor à sa chute, et ce qu'il en reste.
 - Puis les **sujets**, ce dont parle l'article, autant que nécessaire. Chacun appartient à une famille : lieu (`mondstadt`, `liyue`), série (`quete-d-archons`), groupe (`descendeurs`), notion (`elements`), sélection (`premiers-pas` pour une lecture d'introduction). Les articles qui partagent le plus de tags sont proposés en fin de lecture : des sujets pertinents valent mieux que beaucoup de sujets.
 - Un sujet manquant se propose dans les points à vérifier avec sa famille (identifiant, `libelle`, `description`, `famille`).
 
