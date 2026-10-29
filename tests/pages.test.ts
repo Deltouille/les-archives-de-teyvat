@@ -351,6 +351,12 @@ test('le site s’appelle « Les Archives de Teyvat » partout, et plus jamais p
   }
 });
 
+test('la signature des articles est le nom du site, pas un ancien nom', async () => {
+  const { NOM } = await import('../src/lib/projet.ts');
+  expect(await lire(EXEMPLE)).toContain(`<span>${NOM}</span><span aria-hidden="true">·</span><time`);
+  for (const fichier of pages) expect(await readFile(fichier, 'utf8'), path.relative(racine, fichier)).not.toMatch(/chroniques de Teyvat/i);
+});
+
 test('le dépôt est sur GitHub : plus aucune mention de l’ancienne plateforme GitLab (D26)', async () => {
   const { PLATEFORME, DEPOT, TICKETS } = await import('../src/lib/projet.ts');
   expect(PLATEFORME).toBe('GitHub');

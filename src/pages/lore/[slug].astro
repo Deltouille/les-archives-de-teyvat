@@ -19,6 +19,7 @@ import EnTeteSection from '../../components/EnTeteSection.astro';
 import GrilleArticles from '../../components/GrilleArticles.astro';
 import { bibliotheque, cheminTag, imageDe, transitionImage, type Article } from '../../lib/contenu';
 import { articlesLies, episodesVoisins, minutesDeLecture, dateFr } from '../../lib/bibliotheque.ts';
+import { NOM } from '../../lib/projet.ts';
 
 export async function getStaticPaths() {
   const { articles } = await bibliotheque();
@@ -53,7 +54,7 @@ const minutes = minutesDeLecture(article.body ?? '');
       <p class="mt-4 max-w-2xl text-white/85" data-pagefind-meta="description">{data.description}</p>
       <p class="text-corps-m mt-6 flex flex-wrap items-center gap-2 text-white/75">
         <span class="grid size-8 place-items-center rounded-full border border-white/20 bg-white/10 text-ciel backdrop-blur-md"><Marque taille={16} /></span>
-        <span>Les chroniques de Teyvat</span><span aria-hidden="true">·</span><time datetime={jour(data.publieLe)}>{dateFr(data.publieLe)}</time>
+        <span>{NOM}</span><span aria-hidden="true">·</span><time datetime={jour(data.publieLe)}>{dateFr(data.publieLe)}</time>
         {data.modifieLe && <><span aria-hidden="true">·</span><span>mis à jour le <time datetime={jour(data.modifieLe)}>{dateFr(data.modifieLe)}</time></span></>}
       </p>
       </div>
