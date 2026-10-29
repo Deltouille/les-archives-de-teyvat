@@ -60,6 +60,10 @@ descendeurs:
   libelle: Descendeurs
   description: Venus de la mer d'étoiles, les Descendeurs échappent aux lois de l'ordre divin et à la mémoire d'Irminsul. Quatre ont marqué l'histoire de Teyvat, assez puissants pour en changer le destin.
   famille: groupe
+anges:
+  libelle: Anges
+  description: Les messagers de l'Ordre divin auprès des peuples de Teyvat, de leur création à la malédiction qui les a frappés.
+  famille: groupe
 elements:
   libelle: Éléments
   description: Les sept éléments qui structurent Teyvat et ses nations.

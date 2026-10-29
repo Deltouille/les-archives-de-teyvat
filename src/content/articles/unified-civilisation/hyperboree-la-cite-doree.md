@@ -3,7 +3,8 @@ titre: "Hyperborée : la cité dorée disparue"
 description: "Il y a environ six mille ans, la Cité d'or d'Hyperborée se soulève contre l'Ordre divin, avant d'être anéantie et engloutie dans le Royaume de pénombre."
 image: snezhnaya
 publieLe: 2026-10-27
-tags: [civilisations, histoire]
+modifieLe: 2026-10-29
+tags: [civilisations, histoire, anges]
 spoilers: "Révèle l'histoire ancienne de l'Hyperborée et des Descendants de givrelune, les quêtes d'Archons de Nod-Krai jusqu'à l'acte VIII du Chant de l'astre de la nuit, et la quête monde « Une arche qui était jadis une âme » de Snezhnaya."
 resume:
   - "L'Hyperborée, cité dorée du nord de Teyvat, se soulève contre l'Ordre divin sous la conduite de Koitar, le premier des anges, et d'Anacharsis, un jeune homme dont une voyageuse venue des étoiles occupe le corps."
@@ -57,7 +58,7 @@ La révolte dure trente ans. Elle s'achève par la destruction de la cité, frap
 
 ## Une cité sous la tutelle des anges
 
-Comme les autres peuples de la civilisation unifiée, les Hyperboréens vénèrent l'Ordre divin et reçoivent ses enseignements par l'intermédiaire de ses messagers, les anges. **Koitar**, la première et la plus éminente d'entre eux, est l'envoyée de l'Hyperborée. Elle réside sous la cité, au pied de son Irminsul. Le grand prêtre de la cité a reçu d'elle l'arme appelée Étoile aurorale de Shahar.
+Comme les autres peuples de la civilisation unifiée, les Hyperboréens vénèrent l'Ordre divin et reçoivent ses enseignements par l'intermédiaire de ses messagers, les anges. **Koitar**, la première et la plus éminente d'entre eux, est l'envoyée de l'Hyperborée. Elle réside sous la cité, au pied de son Irminsul. C'est elle qui a confié au grand prêtre son sceau sacré, l'Étoile aurorale de Shahar, et avec lui le droit de diriger la Cité d'or. Son histoire est racontée dans l'article [Koitar, le premier ange](/lore/koitar-le-premier-ange).
 
 Les textes décrivent une ville prospère, avec une cité sainte, une ancienne capitale et une grande tour dorée. Sous la surface, dans les galeries profondes, des fourneaux fonctionnent jour et nuit.
 
